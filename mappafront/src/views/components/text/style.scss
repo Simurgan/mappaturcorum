@@ -1,0 +1,431 @@
+@use "../../../assets/mixins.scss" as *;
+
+.text {
+  &.fw100 {
+    font-weight: 100;
+  }
+
+  &.fw300 {
+    font-weight: 300;
+  }
+
+  &.fw400 {
+    font-weight: 400;
+  }
+
+  &.fw500 {
+    font-weight: 500;
+  }
+
+  &.fw700 {
+    font-weight: 700;
+  }
+
+  &.fw900 {
+    font-weight: 900;
+  }
+
+  &.lgfw100 {
+    @include lg {
+      font-weight: 100;
+    }
+  }
+
+  &.lgfw300 {
+    @include lg {
+      font-weight: 300;
+    }
+  }
+
+  &.lgfw400 {
+    @include lg {
+      font-weight: 400;
+    }
+  }
+
+  &.lgfw500 {
+    @include lg {
+      font-weight: 500;
+    }
+  }
+
+  &.lgfw700 {
+    @include lg {
+      font-weight: 700;
+    }
+  }
+
+  &.lgfw900 {
+    @include lg {
+      font-weight: 900;
+    }
+  }
+
+  &.mdfw100 {
+    @include md {
+      font-weight: 100;
+    }
+  }
+
+  &.mdfw300 {
+    @include md {
+      font-weight: 300;
+    }
+  }
+
+  &.mdfw400 {
+    @include md {
+      font-weight: 400;
+    }
+  }
+
+  &.mdfw500 {
+    @include md {
+      font-weight: 500;
+    }
+  }
+
+  &.mdfw700 {
+    @include md {
+      font-weight: 700;
+    }
+  }
+
+  &.mdfw900 {
+    @include md {
+      font-weight: 900;
+    }
+  }
+
+  &.smfw100 {
+    @include sm {
+      font-weight: 100;
+    }
+  }
+
+  &.smfw300 {
+    @include sm {
+      font-weight: 300;
+    }
+  }
+
+  &.smfw400 {
+    @include sm {
+      font-weight: 400;
+    }
+  }
+
+  &.smfw500 {
+    @include sm {
+      font-weight: 500;
+    }
+  }
+
+  &.smfw700 {
+    @include sm {
+      font-weight: 700;
+    }
+  }
+
+  &.smfw900 {
+    @include sm {
+      font-weight: 900;
+    }
+  }
+
+  &.fs12 {
+    font-size: 0.12rem;
+  }
+
+  &.fs14 {
+    font-size: 0.14rem;
+  }
+
+  &.fs16 {
+    font-size: 0.16rem;
+  }
+
+  &.fs18 {
+    font-size: 0.18rem;
+  }
+
+  &.fs20 {
+    font-size: 0.2rem;
+  }
+
+  &.fs22 {
+    font-size: 0.22rem;
+  }
+
+  &.fs24 {
+    font-size: 0.24rem;
+  }
+
+  &.fs28 {
+    font-size: 0.28rem;
+  }
+
+  &.fs30 {
+    font-size: 0.3rem;
+  }
+
+  &.fs32 {
+    font-size: 0.32rem;
+  }
+
+  &.fs36 {
+    font-size: 0.36rem;
+  }
+
+  &.fs40 {
+    font-size: 0.4rem;
+  }
+
+  &.lgfs12 {
+    @include lg {
+      font-size: 0.12rem;
+    }
+  }
+
+  &.lgfs14 {
+    @include lg {
+      font-size: 0.14rem;
+    }
+  }
+
+  &.lgfs16 {
+    @include lg {
+      font-size: 0.16rem;
+    }
+  }
+
+  &.lgfs18 {
+    @include lg {
+      font-size: 0.18rem;
+    }
+  }
+
+  &.lgfs20 {
+    @include lg {
+      font-size: 0.2rem;
+    }
+  }
+
+  &.lgfs22 {
+    @include lg {
+      font-size: 0.22rem;
+    }
+  }
+
+  &.lgfs24 {
+    @include lg {
+      font-size: 0.24rem;
+    }
+  }
+
+  &.lgfs28 {
+    @include lg {
+      font-size: 0.28rem;
+    }
+  }
+
+  &.lgfs30 {
+    @include lg {
+      font-size: 0.3rem;
+    }
+  }
+
+  &.lgfs32 {
+    @include lg {
+      font-size: 0.32rem;
+    }
+  }
+
+  &.lgfs36 {
+    @include lg {
+      font-size: 0.36rem;
+    }
+  }
+
+  &.lgfs40 {
+    @include lg {
+      font-size: 0.4rem;
+    }
+  }
+
+  &.mdfs12 {
+    @include md {
+      font-size: 0.12rem;
+    }
+  }
+
+  &.mdfs14 {
+    @include md {
+      font-size: 0.14rem;
+    }
+  }
+
+  &.mdfs16 {
+    @include md {
+      font-size: 0.16rem;
+    }
+  }
+
+  &.mdfs18 {
+    @include md {
+      font-size: 0.18rem;
+    }
+  }
+
+  &.mdfs20 {
+    @include md {
+      font-size: 0.2rem;
+    }
+  }
+
+  &.mdfs22 {
+    @include md {
+      font-size: 0.22rem;
+    }
+  }
+
+  &.mdfs24 {
+    @include md {
+      font-size: 0.24rem;
+    }
+  }
+
+  &.mdfs28 {
+    @include md {
+      font-size: 0.28rem;
+    }
+  }
+
+  &.mdfs30 {
+    @include md {
+      font-size: 0.3rem;
+    }
+  }
+
+  &.mdfs32 {
+    @include md {
+      font-size: 0.32rem;
+    }
+  }
+
+  &.mdfs36 {
+    @include md {
+      font-size: 0.36rem;
+    }
+  }
+
+  &.mdfs40 {
+    @include md {
+      font-size: 0.4rem;
+    }
+  }
+
+  &.smfs12 {
+    @include sm {
+      font-size: 0.12rem;
+    }
+  }
+
+  &.smfs14 {
+    @include sm {
+      font-size: 0.14rem;
+    }
+  }
+
+  &.smfs16 {
+    @include sm {
+      font-size: 0.16rem;
+    }
+  }
+
+  &.smfs18 {
+    @include sm {
+      font-size: 0.18rem;
+    }
+  }
+
+  &.smfs20 {
+    @include sm {
+      font-size: 0.2rem;
+    }
+  }
+
+  &.smfs22 {
+    @include sm {
+      font-size: 0.22rem;
+    }
+  }
+
+  &.smfs24 {
+    @include sm {
+      font-size: 0.24rem;
+    }
+  }
+
+  &.smfs28 {
+    @include sm {
+      font-size: 0.28rem;
+    }
+  }
+
+  &.smfs30 {
+    @include sm {
+      font-size: 0.3rem;
+    }
+  }
+
+  &.smfs32 {
+    @include sm {
+      font-size: 0.32rem;
+    }
+  }
+
+  &.smfs36 {
+    @include sm {
+      font-size: 0.36rem;
+    }
+  }
+
+  &.smfs40 {
+    @include sm {
+      font-size: 0.4rem;
+    }
+  }
+
+  &.lh125 {
+    line-height: 1.25em;
+  }
+
+  &.lh14 {
+    line-height: 1.4em;
+  }
+
+  &.black {
+    color: rgba(4, 0, 0, 0.9);
+  }
+
+  &.burgundy {
+    color: rgba(178, 43, 36, 1);
+  }
+
+  &.papirus {
+    color: rgba(255, 249, 231, 0.9);
+  }
+
+  &.dark-gray {
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  &.gray {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  &.center {
+    text-align: center;
+  }
+}
