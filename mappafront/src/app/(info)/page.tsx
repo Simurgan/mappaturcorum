@@ -18,7 +18,7 @@ export default function Home() {
           color="burgundy"
           isCenter={true}
         >
-          Hello mf!
+          Hello World!
         </Text>
       </div>
     </section>
