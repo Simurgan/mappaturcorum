@@ -3,6 +3,7 @@ using System;
 using Mappa.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace mappa.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250114153554_MinorClassRelationsAndRelationsBetweenPersons")]
+    partial class MinorClassRelationsAndRelationsBetweenPersons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,23 +59,6 @@ namespace mappa.Migrations
                     b.ToTable("Genders");
                 });
 
-            modelBuilder.Entity("Mappa.Entities.Genre", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Genres");
-                });
-
             modelBuilder.Entity("Mappa.Entities.IntraOrdinary", b =>
                 {
                     b.Property<int>("PersonIdA")
@@ -101,33 +87,6 @@ namespace mappa.Migrations
                     b.HasIndex("PersonIdB");
 
                     b.ToTable("IntraUnordinary");
-                });
-
-            modelBuilder.Entity("Mappa.Entities.Language", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("SecondarySourceId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("WrittenSourceId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SecondarySourceId");
-
-                    b.HasIndex("WrittenSourceId");
-
-                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Mappa.Entities.OrdinaryPerson", b =>
@@ -165,9 +124,6 @@ namespace mappa.Migrations
                     b.Property<string>("ExplanationOfEthnicity")
                         .HasColumnType("text");
 
-                    b.Property<int?>("FormerReligionId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("GenderId")
                         .HasColumnType("integer");
 
@@ -202,8 +158,6 @@ namespace mappa.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EthnicityId");
-
-                    b.HasIndex("FormerReligionId");
 
                     b.HasIndex("GenderId");
 
@@ -267,68 +221,6 @@ namespace mappa.Migrations
                     b.ToTable("Religions");
                 });
 
-            modelBuilder.Entity("Mappa.Entities.SecondarySource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string[]>("AlternateNames")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<string>("Author")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BibliographyInformation")
-                        .HasColumnType("text");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("OtherInformation")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Topic")
-                        .HasColumnType("text");
-
-                    b.Property<int>("TypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("University")
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly?>("YearWritten")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("SecondarySources");
-                });
-
-            modelBuilder.Entity("Mappa.Entities.Type", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Types");
-                });
-
             modelBuilder.Entity("Mappa.Entities.UnordinaryPerson", b =>
                 {
                     b.Property<int>("Id")
@@ -355,9 +247,6 @@ namespace mappa.Migrations
                     b.Property<int?>("EthnicityId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("FormerReligionId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("GenderId")
                         .HasColumnType("integer");
 
@@ -374,8 +263,6 @@ namespace mappa.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EthnicityId");
-
-                    b.HasIndex("FormerReligionId");
 
                     b.HasIndex("GenderId");
 
@@ -448,62 +335,6 @@ namespace mappa.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Mappa.Entities.WrittenSource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string[]>("AlternateNames")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<string>("Author")
-                        .HasColumnType("text");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
-
-                    b.Property<string[]>("KnownCopies")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LibraryInformation")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OtherInformation")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Patronage")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("RemarkableWorksOnTheBook")
-                        .HasColumnType("text");
-
-                    b.Property<string[]>("SurvivedCopies")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<DateOnly?>("YearWritten")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GenreId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("WrittenSources");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -683,26 +514,11 @@ namespace mappa.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Mappa.Entities.Language", b =>
-                {
-                    b.HasOne("Mappa.Entities.SecondarySource", null)
-                        .WithMany("TranslatedLanguages")
-                        .HasForeignKey("SecondarySourceId");
-
-                    b.HasOne("Mappa.Entities.WrittenSource", null)
-                        .WithMany("TranslatedLanguages")
-                        .HasForeignKey("WrittenSourceId");
-                });
-
             modelBuilder.Entity("Mappa.Entities.OrdinaryPerson", b =>
                 {
                     b.HasOne("Mappa.Entities.Ethnicity", "Ethnicity")
                         .WithMany()
                         .HasForeignKey("EthnicityId");
-
-                    b.HasOne("Mappa.Entities.Religion", "FormerReligion")
-                        .WithMany()
-                        .HasForeignKey("FormerReligionId");
 
                     b.HasOne("Mappa.Entities.Gender", "Gender")
                         .WithMany()
@@ -722,8 +538,6 @@ namespace mappa.Migrations
 
                     b.Navigation("Ethnicity");
 
-                    b.Navigation("FormerReligion");
-
                     b.Navigation("Gender");
 
                     b.Navigation("Profession");
@@ -733,34 +547,11 @@ namespace mappa.Migrations
                     b.Navigation("Religion");
                 });
 
-            modelBuilder.Entity("Mappa.Entities.SecondarySource", b =>
-                {
-                    b.HasOne("Mappa.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mappa.Entities.Type", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Type");
-                });
-
             modelBuilder.Entity("Mappa.Entities.UnordinaryPerson", b =>
                 {
                     b.HasOne("Mappa.Entities.Ethnicity", "Ethnicity")
                         .WithMany()
                         .HasForeignKey("EthnicityId");
-
-                    b.HasOne("Mappa.Entities.Religion", "FormerReligion")
-                        .WithMany()
-                        .HasForeignKey("FormerReligionId");
 
                     b.HasOne("Mappa.Entities.Gender", "Gender")
                         .WithMany()
@@ -776,32 +567,11 @@ namespace mappa.Migrations
 
                     b.Navigation("Ethnicity");
 
-                    b.Navigation("FormerReligion");
-
                     b.Navigation("Gender");
 
                     b.Navigation("Profession");
 
                     b.Navigation("Religion");
-                });
-
-            modelBuilder.Entity("Mappa.Entities.WrittenSource", b =>
-                {
-                    b.HasOne("Mappa.Entities.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mappa.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genre");
-
-                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -868,16 +638,6 @@ namespace mappa.Migrations
                         .HasForeignKey("InteractionsWithUnordinaryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Mappa.Entities.SecondarySource", b =>
-                {
-                    b.Navigation("TranslatedLanguages");
-                });
-
-            modelBuilder.Entity("Mappa.Entities.WrittenSource", b =>
-                {
-                    b.Navigation("TranslatedLanguages");
                 });
 #pragma warning restore 612, 618
         }

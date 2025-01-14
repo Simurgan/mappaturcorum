@@ -1,9 +1,9 @@
-using AuthenticationApi.Dtos;
-using AuthenticationApi.Services;
+using Mappa.Dtos;
+using Mappa.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AuthenticationApi.Controllers;
+namespace Mappa.Controllers;
 
 [ApiController]
 [Route("[controller]")]

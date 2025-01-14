@@ -1,12 +1,12 @@
 using System.Text;
-using AuthenticationApi.Db;
-using AuthenticationApi.Entities;
+using Mappa.Db;
+using Mappa.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using AuthenticationApi.Services;
+using Mappa.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

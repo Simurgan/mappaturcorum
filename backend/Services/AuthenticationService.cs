@@ -1,12 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AuthenticationApi.Dtos;
-using AuthenticationApi.Entities;
+using Mappa.Dtos;
+using Mappa.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AuthenticationApi.Services;
+namespace Mappa.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
