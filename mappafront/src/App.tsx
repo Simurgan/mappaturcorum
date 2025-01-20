@@ -1,10 +1,6 @@
-import { Button } from "@/components/ui/button";
+import MainRouter from "@/routers/main-router";
 
 const App = () => {
-  return (
-    <div>
-      <Button>Try me</Button>
-    </div>
-  );
+  return <MainRouter />;
 };
 export default App;
