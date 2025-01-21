@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const ToolHeader = () => {
   return (
     <header className="bg-primary py-[8px]">
-      <div className="max-w-[1440px] px-[80px] flex justify-between items-center">
+      <div className="max-w-[1440px] px-[80px] flex justify-between items-center mx-auto">
         <div className="logo-container">
           <img
             src={negativeLogo}

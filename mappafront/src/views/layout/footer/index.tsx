@@ -6,7 +6,7 @@ import MappaLogo from "@/assets/images/mappa-logo-negative.png";
 const Footer = () => {
   return (
     <footer className="w-full  bg-primary h-[137px] text-white pt-[22px] pb-[50px]">
-      <div className="w-full flex items-center justify-between px-[210px] max-w-[1440px]">
+      <div className="w-full flex items-center justify-between max-w-[1440px] px-[80px] mx-auto">
         <div className="flex gap-[195px]">
           <img src={MappaLogo} width={164} height={66} alt="Mappa Logo" />
           <address className="flex flex-col gap-[5px] not-italic">
