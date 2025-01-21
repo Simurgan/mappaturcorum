@@ -98,6 +98,23 @@
   src: url("./fonts/Roboto-BlackItalic.ttf") format("truetype");
 }
 
+@layer components {
+  .section {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    background-color: #fffaea;
+    width: 100%;
+  }
+
+  .container {
+    max-width: 1440px;
+    padding-left: 180px;
+    padding-right: 180px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
