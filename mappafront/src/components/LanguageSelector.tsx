@@ -1,25 +1,22 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { useState } from "react";
+import { Button } from "./ui/button";
 
 const LanguageSelector = () => {
+  const languages = ["EN", "TR"];
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+
+  const changeLanguage = () => {
+    setSelectedLanguage(selectedLanguage === "EN" ? "TR" : "EN");
+  };
+
   return (
-    <Select defaultValue="turkish">
-      <SelectTrigger className="w-[82px] h-[30px] bg-secondary border-none shadow-[#00000040]">
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectItem value="turkish">Türkçe</SelectItem>
-          <SelectItem value="english">English</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <Button
+      className="h-[30px] rounded-3xl shadow-sm shadow-black"
+      onClick={changeLanguage}
+      variant={"secondary"}
+    >
+      {selectedLanguage}
+    </Button>
   );
 };
 
