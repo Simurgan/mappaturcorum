@@ -1,7 +1,7 @@
 const AboutPage = () => {
   return (
     <section className="section">
-      <div className="max-w-[1440px] px-[180px] mx-auto">
+      <div className="container">
         <h1 className="text-[37px] font-medium text-primary">
           About the Project
         </h1>
