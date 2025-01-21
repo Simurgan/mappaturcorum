@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 
 import MappaLogo from "@/assets/images/mappa-logo.png";
 import searchIcon from "@/assets/icons/search.svg";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const Header = () => {
   return (
@@ -31,6 +32,7 @@ const Header = () => {
             >
               Sign Up
             </Button>
+            <LanguageSelector />
           </div>
         </div>
       </div>
