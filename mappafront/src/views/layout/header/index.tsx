@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="border-t-[25px] border-[#B22B24] h-[167px] bg-[#FFFAEA] absolute top-0 left-0 right-0">
+    <header className="border-t-[25px] border-[#B22B24] h-[167px] bg-[#FFFAEA] w-full">
       <div className="flex w-full justify-between px-[192px] pt-[40px]">
         <div>
           <img src={MappaLogo} width={205} height={86} />
