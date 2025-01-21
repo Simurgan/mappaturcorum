@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 
 import MappaLogo from "@/assets/images/mappa-logo.png";
 import searchIcon from "@/assets/icons/search.svg";
+import { Urls } from "@/routers/routes";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -35,11 +37,11 @@ const Header = () => {
         </div>
       </div>
       <nav className="flex justify-end gap-[41px] pr-[192px] text-[#B22B24] text-[21px] font-medium leading-[24px]">
-        <p>Home</p>
-        <p>About</p>
-        <p>People</p>
-        <p>Publications</p>
-        <p>Contant</p>
+        <NavLink to={Urls.Home}>Home</NavLink>
+        <NavLink to={Urls.About}>About</NavLink>
+        <NavLink to={Urls.Members}>People</NavLink>
+        <NavLink to={Urls.Publications}>Publications</NavLink>
+        <NavLink to={Urls.Contact}>Contant</NavLink>
       </nav>
     </header>
   );
