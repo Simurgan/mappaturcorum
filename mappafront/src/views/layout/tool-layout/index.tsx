@@ -5,7 +5,9 @@ const ToolLayout = () => {
   return (
     <>
       <ToolHeader />
-      <Outlet />
+      <div className="content-body min-h-[calc(100vh-52px)]">
+        <Outlet />
+      </div>
     </>
   );
 };
