@@ -1,12 +1,6 @@
-import { Button } from "@/components/ui/button";
-import Header from "./views/layout/header";
+import MainRouter from "@/routers/main-router";
 
 const App = () => {
-  return (
-    <div>
-      <Header />
-      <Button>Try me</Button>
-    </div>
-  );
+  return <MainRouter />;
 };
 export default App;
