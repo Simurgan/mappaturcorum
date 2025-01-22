@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Mappa.Entities;
 
-public class Genre
+public class Genre : IEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

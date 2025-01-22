@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Mappa.Entities;
 
-public class Profession
+public class Profession : IEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

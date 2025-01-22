@@ -7,10 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Mappa.Services;
+using Mappa.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+builder.Services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
 // 1. DbContext
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(
     configuration.GetConnectionString("db")));
@@ -19,6 +21,24 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+var audience = configuration["JWT:ValidAudience"];
+if (string.IsNullOrEmpty(audience))
+{
+    throw new ArgumentNullException(nameof(audience), "JWT audience cannot be null or empty.");
+}
+
+var issuer = configuration["JWT:ValidIssuer"];
+if (string.IsNullOrEmpty(issuer))
+{
+    throw new ArgumentNullException(nameof(issuer), "JWT issuer cannot be null or empty.");
+}
+
+var secret = configuration["JWT:Secret"];
+if (string.IsNullOrEmpty(secret))
+{
+    throw new ArgumentNullException(nameof(secret), "JWT secret cannot be null or empty.");
+}
 
 // 3. Adding Authentication
 builder.Services.AddAuthentication(options =>
@@ -37,14 +57,21 @@ builder.Services.AddAuthentication(options =>
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidAudience = configuration["JWT:ValidAudience"],
-            ValidIssuer = configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+            ValidAudience = audience,
+            ValidIssuer = issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
         };
     });
 
-// Add scoped service for authentication
+// Add scoped services
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IEntityService<Ethnicity, EthnicityDto>, EthnicityService>();
+builder.Services.AddScoped<IEntityService<Gender, GenderDto>, GenderService>();
+builder.Services.AddScoped<IEntityService<Genre, GenreDto>, GenreService>();
+builder.Services.AddScoped<IEntityService<Language, LanguageDto>, LanguageService>();
+builder.Services.AddScoped<IEntityService<Profession, ProfessionDto>, ProfessionService>();
+builder.Services.AddScoped<IEntityService<Religion, ReligionDto>, ReligionService>();
+builder.Services.AddScoped<IEntityService<Mappa.Entities.Type, TypeDto>, TypeService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -107,11 +134,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+
 app.UseHttpsRedirection();
 
 
 // In Configure method
-app.UseCors("AllowAll");
+//app.UseCors("AllowAll");
 
 // 8. Authentication
 app.UseAuthentication();

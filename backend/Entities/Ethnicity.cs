@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Mappa.Entities;
 
-public class Ethnicity
+public class Ethnicity : IEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

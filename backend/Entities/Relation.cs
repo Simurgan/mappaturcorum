@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Mappa.Entities;
 
-public class Relation 
+public class Relation  : IEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

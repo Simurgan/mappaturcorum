@@ -16,7 +16,6 @@ public class UserController : ControllerBase
         _authenticationService = authenticationService;
     }
 
-    [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -28,7 +27,6 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
-    [AllowAnonymous]
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
