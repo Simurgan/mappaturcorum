@@ -1,51 +1,54 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 import MappaLogo from "@/assets/images/mappa-logo.png";
 import searchIcon from "@/assets/icons/search.svg";
 import { Urls } from "@/routers/routes";
 import { NavLink } from "react-router-dom";
+import Button from "@/views/components/button";
+import "./style.scss";
+import Text from "@/views/components/text";
 
 const Header = () => {
   return (
-    <header className="border-t-[25px] border-[#B22B24] h-[167px] bg-[#FFFAEA] w-full pt-[40px] relative shadow-lg">
-      <div className="flex flex-col max-w-[1440px] px-[80px] mx-auto pb-[5px]">
-        <div className="header-content flex w-full justify-between">
-          <div>
-            <img src={MappaLogo} width={205} height={86} />
+    <header className="section header-section">
+      <div className="container">
+        <div className="header-content">
+          <div className="logo-container">
+            <img src={MappaLogo} className="logo-image" />
           </div>
-          <div className="flex gap-8">
-            <div className="relative h-[30px]">
-              <Input
-                placeholder="Search"
-                className="border-[#B22B24] rounded-3xl h-[30px]"
-              />
-              <img
-                src={searchIcon}
-                width={20}
-                height={20}
-                className="absolute bottom-[4px] right-3"
-              />
+          <div className="header-actions">
+            <div className="search-container">
+              <input placeholder="Search" className="search-input" />
+              <img src={searchIcon} className="search-icon" />
             </div>
-            <div className="flex gap-8">
-              <Button
-                variant={"default"}
-                className="w-[110px] h-[30px]  text-white rounded-3xl"
-              >
-                Sign Up
-              </Button>
-            </div>
+            <Button style={"primary"}>Sign Up</Button>
           </div>
         </div>
-        <div className="nav-container flex justify-end">
-          <nav className="flex gap-[41px] text-[#B22B24] text-[21px] font-medium leading-[24px]">
-            <NavLink to={Urls.Home}>Home</NavLink>
-            <NavLink to={Urls.About}>About</NavLink>
-            <NavLink to={Urls.Members}>People</NavLink>
-            <NavLink to={Urls.Publications}>Publications</NavLink>
-            <NavLink to={Urls.Contact}>Contant</NavLink>
-          </nav>
-        </div>
+        <nav className="nav">
+          <NavLink to={Urls.Home} className={"nav-item"}>
+            <Text fw={500} fs={20} lh={125} color="burgundy">
+              Home
+            </Text>
+          </NavLink>
+          <NavLink to={Urls.About} className={"nav-item"}>
+            <Text fw={500} fs={20} lh={125} color="burgundy">
+              About
+            </Text>
+          </NavLink>
+          <NavLink to={Urls.Members} className={"nav-item"}>
+            <Text fw={500} fs={20} lh={125} color="burgundy">
+              People
+            </Text>
+          </NavLink>
+          <NavLink to={Urls.Publications} className={"nav-item"}>
+            <Text fw={500} fs={20} lh={125} color="burgundy">
+              Publications
+            </Text>
+          </NavLink>
+          <NavLink to={Urls.Contact} className={"nav-item"}>
+            <Text fw={500} fs={20} lh={125} color="burgundy">
+              Contant
+            </Text>
+          </NavLink>
+        </nav>
       </div>
     </header>
   );
