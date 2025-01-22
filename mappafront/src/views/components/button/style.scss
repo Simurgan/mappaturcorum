@@ -1,0 +1,19 @@
+@use "../../../assets/mixins.scss" as *;
+
+.button {
+  &.button-primary {
+  }
+  &.button-secondary {
+  }
+  &.button-square {
+  }
+  &.button-transparent {
+  }
+}
+
+.anchor {
+  &.anchor-disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+}
