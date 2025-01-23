@@ -19,7 +19,11 @@ const HomeAboutSection = () => {
           Anatolia, and their elaborate and complex relations with the
           settlements in Anatolia.
         </Text>
-        <Link to={Urls.About}>Read more...</Link>
+        <Link to={Urls.About} className="read-more">
+          <Text fw={300} fs={24} lh={125} isCenter={true}>
+            Read more...
+          </Text>
+        </Link>
       </div>
     </section>
   );

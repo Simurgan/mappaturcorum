@@ -24,27 +24,27 @@ const Header = () => {
         </div>
         <nav className="nav">
           <NavLink to={Urls.Home} className={"nav-item"}>
-            <Text fw={500} fs={20} lh={125} color="burgundy">
+            <Text tag="p" fw={500} fs={20} lh={125} color="burgundy">
               Home
             </Text>
           </NavLink>
           <NavLink to={Urls.About} className={"nav-item"}>
-            <Text fw={500} fs={20} lh={125} color="burgundy">
+            <Text tag="p" fw={500} fs={20} lh={125} color="burgundy">
               About
             </Text>
           </NavLink>
           <NavLink to={Urls.Members} className={"nav-item"}>
-            <Text fw={500} fs={20} lh={125} color="burgundy">
+            <Text tag="p" fw={500} fs={20} lh={125} color="burgundy">
               People
             </Text>
           </NavLink>
           <NavLink to={Urls.Publications} className={"nav-item"}>
-            <Text fw={500} fs={20} lh={125} color="burgundy">
+            <Text tag="p" fw={500} fs={20} lh={125} color="burgundy">
               Publications
             </Text>
           </NavLink>
           <NavLink to={Urls.Contact} className={"nav-item"}>
-            <Text fw={500} fs={20} lh={125} color="burgundy">
+            <Text tag="p" fw={500} fs={20} lh={125} color="burgundy">
               Contant
             </Text>
           </NavLink>

@@ -19,7 +19,7 @@ interface TextProps {
 }
 
 const Text = ({
-  tag = "span",
+  tag = "p",
   fw = 400,
   lgfw = 400,
   mdfw = 400,

@@ -100,23 +100,42 @@
 html {
   font-family: "Roboto" !important;
   font-size: 100px; // html font-size is defined as 100px for rem measurements of the stylings
+  background-color: $color-secondary;
 
-  * {
+  body {
     margin: 0;
     padding: 0;
+    /* 4. Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  *,
+  *::before,
+  *::after {
+    font-family: "Roboto" !important;
+    margin: 0;
     box-sizing: border-box;
+  }
+
+  /* 5. Improve media defaults */
+  img,
+  picture,
+  video,
+  canvas,
+  a,
+  svg {
+    display: block;
   }
 
   .section {
     padding: 0.8rem 0;
-    background-color: $color-secondary;
-    width: 100%;
   }
 
   .container {
+    display: flex;
+    width: 100%;
     max-width: 14.4rem;
     margin: 0 auto;
     padding: 0 1.8rem;
-    display: flex;
   }
 }
