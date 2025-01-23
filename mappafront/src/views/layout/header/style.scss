@@ -8,7 +8,7 @@ header.section.header-section {
   background-position: 0 0, 0 0.24rem;
   background-size: 100% 0.24rem, 100% 100%;
 
-  padding: 0.65rem 0 0.04rem;
+  padding: 0.64rem 0 0.08rem;
   position: relative;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -16,6 +16,7 @@ header.section.header-section {
   .container {
     flex-direction: column;
     align-items: flex-end;
+    gap: 0.36rem;
 
     .header-content {
       width: 100%;
@@ -69,6 +70,10 @@ header.section.header-section {
 
       .nav-item {
         text-decoration: none;
+
+        &.active {
+          border-bottom: 0.02rem solid $color-primary;
+        }
       }
     }
   }
