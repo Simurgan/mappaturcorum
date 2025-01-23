@@ -11,7 +11,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.16rem;
 
+    .contact-info {
+      display: flex;
+      flex-direction: row;
+      gap: 0.12rem;
+    }
     .contact-email {
       text-decoration: none;
     }
@@ -34,6 +40,11 @@
         border: 1px solid #b22b2480;
         height: 0.36rem;
         width: 100%;
+      }
+
+      .text-area {
+        resize: none;
+        height: 2.16rem;
       }
     }
   }
