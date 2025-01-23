@@ -23,9 +23,10 @@ header.section.header-section {
       justify-content: space-between;
 
       .logo-container {
+        width: 2rem;
+
         img.logo-image {
-          width: 2rem;
-          height: 0.68rem;
+          width: 100%;
         }
       }
 
