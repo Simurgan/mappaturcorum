@@ -22,9 +22,21 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var response = await _authenticationService.Login(request);
+        try
+        {
+            var response = await _authenticationService.Login(request);
+            return Ok(response);
+        }
+        catch (ArgumentException ex) when (ex.Message.Contains($"Unable to authenticate user {request.UserName}"))
+        {
+            return Unauthorized(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (optional)
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
 
-        return Ok(response);
     }
 
     [HttpPost("register")]
@@ -33,8 +45,19 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var response = await _authenticationService.Register(request);
-
-        return Ok(response);
+        try
+        {
+            var response = await _authenticationService.Register(request);
+            return Ok(response);
+        }
+        catch (ArgumentException ex) when (ex.Message.Contains($"User with email {request.Email} or username {request.UserName} already exists."))
+        {
+            return Conflict(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (optional)
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 }

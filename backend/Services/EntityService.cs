@@ -42,6 +42,15 @@ public class EntityService<TEntity, TDto> : IEntityService<TEntity, TDto>
 
     public async Task<TDto> CreateAsync(CreateRequest request)
     {
+        // Check if an entity with the given name already exists
+        bool exists = await _dbContext.Set<TEntity>()
+            .AnyAsync(e => EF.Property<string>(e, "Name") == request.Name);
+
+        if (exists)
+        {
+            throw new ArgumentException($"An entity with the name '{request.Name}' already exists.");
+        }
+        
         var entity = new TEntity();
         typeof(TEntity).GetProperty("Name")?.SetValue(entity, request.Name);
 

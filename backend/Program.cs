@@ -57,9 +57,11 @@ builder.Services.AddAuthentication(options =>
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidAudience = audience,
+            // ValidAudience = audience,
             ValidIssuer = issuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
     });
 
@@ -79,7 +81,7 @@ builder.Services.AddEndpointsApiExplorer();
 // 5. Swagger authentication
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wedding Planner API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mappa Anatolicorum API", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
@@ -129,7 +131,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mappa Anatolicum API v1"); // Path to the Swagger JSON
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mappa Anatolicorum API v1"); // Path to the Swagger JSON
         c.RoutePrefix = string.Empty;  // Set the Swagger UI at the root URL (optional)
     });
 }

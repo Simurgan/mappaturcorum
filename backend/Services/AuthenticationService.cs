@@ -77,8 +77,8 @@ public class AuthenticationService : IAuthenticationService
 
         var token = new JwtSecurityToken(
             issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(3),
+            // audience: _configuration["JWT:ValidAudience"],
+            expires: DateTime.UtcNow.AddHours(Convert.ToDouble(_configuration["JWT:TokenExpirationInHours"])),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 

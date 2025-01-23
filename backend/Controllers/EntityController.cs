@@ -26,31 +26,79 @@ public class EntityController<TEntity, TDto> : ControllerBase where TDto : BaseD
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var item = await _service.GetByIdAsync(id);
-        return Ok(item);
+        try
+        {
+            var item = await _service.GetByIdAsync(id);
+            return Ok(item);
+        }
+        catch (ArgumentException ex) when (ex.Message.Contains($"Entity with ID {id} not found."))
+        {
+            return NotFound(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (optional)
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateRequest request)
     {
-        var item = await _service.CreateAsync(request);
-        return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
+        try
+        {
+            var item = await _service.CreateAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
+        }
+        catch (ArgumentException ex) when (ex.Message.Contains($"An entity with the name '{request.Name}' already exists."))
+        {
+            return Conflict(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (optional)
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateRequest request)
     {
-        var item = await _service.UpdateAsync(id, request);
-        return Ok(item);
+        try
+        {
+            var item = await _service.UpdateAsync(id, request);
+            return Ok(item);
+        }
+        catch (ArgumentException ex) when (ex.Message.Contains($"Entity with ID {id} not found."))
+        {
+            return NotFound(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (optional)
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _service.DeleteAsync(id);
-        return NoContent();
+        try
+        {
+            await _service.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (ArgumentException ex) when (ex.Message.Contains($"Entity with ID {id} not found."))
+        {
+            return NotFound(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (optional)
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 }
