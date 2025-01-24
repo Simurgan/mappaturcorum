@@ -21,6 +21,10 @@ footer.section.footer-section {
         flex-direction: column;
         gap: 0.04rem;
         font-style: normal;
+
+        .mail-link {
+          text-decoration: none !important;
+        }
       }
     }
 

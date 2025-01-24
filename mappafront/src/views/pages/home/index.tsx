@@ -12,13 +12,13 @@ const HomePage = () => {
       style={{
         background: `linear-gradient(
                 180deg,
-              #FFF9E9 85%,
-              rgba(255, 249, 233, 0.650485) 92%,
+              #FFF9E9 90%,
+              rgba(255, 249, 233, 0.650485) 98%,
               rgba(255, 249, 233, 0) 105%
               ), url(${require("@/assets/images/motif.jpg")})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
-        backgroundPosition: "0 60%",
+        backgroundPosition: "0 170%",
       }}
     >
       <BannerSection />
