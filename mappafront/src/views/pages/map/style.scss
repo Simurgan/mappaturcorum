@@ -1,4 +1,21 @@
-.leaflet-container {
-  width: 7.2rem;
-  height: 3.6rem;
+section.section.map-section {
+  .container {
+    .map-container {
+      width: 6.4rem;
+      height: 100vh;
+      .leaflet-container {
+        height: 100%;
+
+        .leaflet-control {
+          display: flex;
+          gap: 0.04rem;
+          font-size: 0.12rem;
+        }
+      }
+    }
+
+    .map-tools-container {
+      width: 3.6rem;
+    }
+  }
 }
