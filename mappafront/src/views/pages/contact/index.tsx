@@ -1,21 +1,21 @@
 import Text from "@/views/components/text";
 import { Link } from "react-router-dom";
 
-import mailIcon from "@/assets/icons/mail-icon.svg";
-import phoneIcon from "@/assets/icons/phone-icon.svg";
+// import mailIcon from "@/assets/icons/mail-icon.svg";
+// import phoneIcon from "@/assets/icons/phone-icon.svg";
 
 import "./style.scss";
 
 const ContactPage = () => {
   return (
-    <div className="section">
+    <div className="section contact-section">
       <div className="container">
         <div className="contact-header">
           <Text fs={36} fw={700} lh={125} color="burgundy">
             Contact
           </Text>
           <div className="contact-info">
-            <img src={mailIcon} width={24} height={18} />
+            {/* <img src={mailIcon} width={24} height={18} /> */}
             <Link
               to={"mailto:info@mappaanatolicum.com"}
               className="contact-email"
@@ -26,7 +26,7 @@ const ContactPage = () => {
             </Link>
           </div>
           <div className="contact-info">
-            <img src={phoneIcon} width={24} height={18} />
+            {/* <img src={phoneIcon} width={24} height={18} /> */}
             <Text fs={24} fw={400} lh={125} color="burgundy">
               +90 123 456 78 90
             </Text>
