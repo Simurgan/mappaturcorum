@@ -1,21 +1,31 @@
 import negativeLogo from "@/assets/images/mappa-logo-negative.png";
 import { Urls } from "@/routers/routes";
 import { NavLink } from "react-router-dom";
+import "./style.scss";
+import Text from "@/views/components/text";
 
 const ToolHeader = () => {
   return (
-    <header className="bg-primary py-[8px]">
-      <div className="max-w-[1440px] px-[80px] flex justify-between items-center mx-auto">
+    <header className="section tool-header-section">
+      <div className="container">
         <div className="logo-container">
           <img
             src={negativeLogo}
             alt="Mapp Anatolicorum logo"
-            className="w-[92px] h-[36px]"
+            className="negative-logo"
           />
         </div>
         <nav className="tools-nav flex gap-[88px] text-secondary font-medium text-[18px]">
-          <NavLink to={Urls.Home}>Home</NavLink>
-          <NavLink to={Urls.About}>About</NavLink>
+          <NavLink to={Urls.Home} className="nav-item">
+            <Text fw={500} fs={18} lh={125} color="papirus">
+              Home
+            </Text>
+          </NavLink>
+          <NavLink to={Urls.About} className="nav-item">
+            <Text fw={500} fs={18} lh={125} color="papirus">
+              About
+            </Text>
+          </NavLink>
         </nav>
       </div>
     </header>
