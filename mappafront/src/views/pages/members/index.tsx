@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import "./style.scss";
-import { Team } from "@/models/members";
+import { Member, Team } from "@/models/members";
 import Text from "@/views/components/text";
 import { useEffect } from "react";
 import Button from "@/views/components/button";
@@ -15,7 +15,7 @@ const MembersPage = () => {
   }, [searchParams, setSearchParams]);
 
   return (
-    <div className="section">
+    <section className="section members-section">
       <div className="container">
         <nav className="navbar">
           {teams.map((item) => (
@@ -23,7 +23,15 @@ const MembersPage = () => {
               classNames="navbar-button"
               onClick={() => setSearchParams({ team: item.name })}
             >
-              <Text fs={24} fw={400} color="burgundy" lh={125}>
+              <Text
+                fs={24}
+                fw={400}
+                color="burgundy"
+                lh={125}
+                classNames={`${
+                  item.name === searchParams.get("team") ? "active-button" : ""
+                }`}
+              >
                 {item.name}
               </Text>
             </Button>
@@ -39,32 +47,29 @@ const MembersPage = () => {
                     {subteam.name}
                   </Text>
                   <div className="members-container">
-                    {subteam.members.map((member) => (
-                      <div className="member-container">
-                        <div className="image-container" />
-                        <Text fs={16} fw={500} lh={140} color="burgundy">
-                          {member.name}
-                        </Text>
-                        <Text
-                          fs={12}
-                          fw={300}
-                          lh={125}
-                          classNames="member-description"
-                        >
-                          {member.role}
-                        </Text>
-                      </div>
-                    ))}
+                    {subteam.members.map((member) => MemberCard(member))}
                   </div>
                 </div>
               ))
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 export default MembersPage;
+
+const MemberCard = (member: Member) => (
+  <div className="member-container">
+    <div className="image-container" />
+    <Text fs={16} fw={500} lh={140} color="burgundy">
+      {member.name}
+    </Text>
+    <Text fs={12} fw={300} lh={125} classNames="member-description">
+      {member.role}
+    </Text>
+  </div>
+);
 
 const teams: Team[] = [
   {
@@ -141,6 +146,16 @@ const teams: Team[] = [
           {
             name: "Said Yolcu",
             role: "Backend Developer",
+            image: "https://randomuser",
+          },
+        ],
+      },
+      {
+        name: "Designers",
+        members: [
+          {
+            name: "Seher Doğan",
+            role: "Designer",
             image: "https://randomuser",
           },
         ],
