@@ -1,0 +1,41 @@
+@use "@/assets/mixins.scss" as *;
+@use "@/assets/variables.scss" as *;
+
+footer.section.footer-section {
+  background-color: $color-primary;
+
+  .container {
+    justify-content: space-between;
+    align-items: center;
+
+    .left-content {
+      display: flex;
+      gap: 1.8rem;
+
+      img.logo-img {
+        width: 1.64rem;
+      }
+
+      address.address-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.04rem;
+        font-style: normal;
+      }
+    }
+
+    .social-links {
+      display: flex;
+      gap: 0.24rem;
+
+      .social-icons {
+        display: flex;
+        gap: 0.04rem;
+
+        .social-icon {
+          width: 0.14rem;
+        }
+      }
+    }
+  }
+}

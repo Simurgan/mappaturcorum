@@ -1,58 +1,48 @@
 import { Link } from "react-router-dom";
-
 import linkedinLogo from "@/assets/icons/linkedin-logo.svg";
+import "./style.scss";
+import Text from "@/views/components/text";
 
 const Footer = () => {
   return (
-    <footer className="w-full  bg-primary h-[137px] text-white pt-[22px] pb-[50px]">
-      <div className="w-full flex items-center justify-between max-w-[1440px] px-[80px] mx-auto">
-        <div className="flex gap-[195px]">
+    <footer className="section footer-section">
+      <div className="container">
+        <div className="left-content flex gap-[195px]">
           <img
             src={require("@/assets/images/mappa-logo-negative.png")}
-            width={164}
-            height={66}
+            className="logo-img"
             alt="Mappa Logo"
           />
-          <address className="flex flex-col gap-[5px] not-italic">
-            <p className="text-[20px] font-medium leading-6">Contact Us</p>
-            <Link
-              to="mailto:info@mappaanatolicum.com"
-              className="text-[14px] font-normal leading-[18px]"
-            >
-              info@mappaanatolicum.com
+          <address className="address-container">
+            <Text fw={500} fs={20} lh={125} color="papirus">
+              Contact Us
+            </Text>
+            <Link to="mailto:info@mappaanatolicum.com">
+              <Text fw={400} fs={14} lh={125} color="papirus">
+                info@mappaanatolicum.com
+              </Text>
             </Link>
           </address>
         </div>
-        <div className="flex flex-col items-center justify-center">
-          {/* <LanguageSelector /> */}
-          <div className="flex gap-6">
-            <p>Follow us on</p>
-            <div className="flex items-center gap-[5px]">
-              <Link
-                to="https://www.linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={linkedinLogo}
-                  width={15}
-                  height={12}
-                  alt="LinkedIn Logo"
-                />
-              </Link>
-              <Link
-                to="https://www.linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={linkedinLogo}
-                  width={15}
-                  height={12}
-                  alt="LinkedIn Logo"
-                />
-              </Link>
-            </div>
+        <div className="social-links">
+          <Text fw={400} fs={12} lh={125} color="papirus">
+            Follow us on
+          </Text>
+          <div className="social-icons flex items-center gap-[5px]">
+            <Link to="https://www.linkedin.com">
+              <img
+                src={linkedinLogo}
+                className="social-icon"
+                alt="LinkedIn Logo"
+              />
+            </Link>
+            <Link to="https://www.linkedin.com">
+              <img
+                src={linkedinLogo}
+                className="social-icon"
+                alt="LinkedIn Logo"
+              />
+            </Link>
           </div>
         </div>
       </div>

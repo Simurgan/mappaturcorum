@@ -3,7 +3,7 @@ import "./style.scss";
 
 const AboutPage = () => {
   return (
-    <section className="section">
+    <section className="section about-section">
       <div className="container">
         <Text tag="h1" fs={36} fw={500} lh={125} color="burgundy">
           About the Project
