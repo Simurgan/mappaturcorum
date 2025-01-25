@@ -1,8 +1,19 @@
+$tools-width: 2.4rem;
+
 section.section.map-section {
+  padding: 0;
+
   .container {
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
+    height: calc(100vh - 0.47rem);
+
     .map-container {
-      width: 6.4rem;
-      height: 100vh;
+      width: calc(100% - $tools-width);
+      height: 100%;
+
       .leaflet-container {
         height: 100%;
 
@@ -15,7 +26,9 @@ section.section.map-section {
     }
 
     .map-tools-container {
-      width: 3.6rem;
+      width: $tools-width;
+      height: 100%;
+      background-color: blue;
     }
   }
 }
