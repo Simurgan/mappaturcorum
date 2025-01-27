@@ -1,0 +1,70 @@
+@use "@/assets/mixins.scss" as *;
+@use "@/assets/variables.scss" as *;
+
+$tools-width: 2.4rem;
+
+section.section.map-section {
+  padding: 0;
+
+  .container {
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
+    height: calc(100vh - 0.47rem);
+
+    .map-container {
+      width: calc(100% - $tools-width);
+      height: 100%;
+
+      .leaflet-container {
+        height: 100%;
+
+        .leaflet-control {
+          display: flex;
+          gap: 0.04rem;
+          font-size: 0.12rem;
+        }
+
+        .leaflet-div-icon {
+          background: transparent;
+          border: none;
+          border-radius: 100%;
+          border: 0.01rem solid white;
+        }
+
+        .leaflet-popup {
+          left: 100% !important;
+
+          .leaflet-popup-content-wrapper {
+            background-color: $color-secondary;
+            border-radius: 0.08rem;
+            padding: 0.04rem;
+
+            .leaflet-popup-content {
+              padding: 0;
+              margin: 0;
+            }
+          }
+
+          .leaflet-popup-tip-container {
+            display: none;
+            .leaflet-popup-tip {
+              display: none;
+            }
+          }
+
+          .leaflet-popup-close-button {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .map-tools-container {
+      width: $tools-width;
+      height: 100%;
+      background-color: blue;
+    }
+  }
+}
