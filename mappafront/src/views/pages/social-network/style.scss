@@ -1,0 +1,27 @@
+@use "@/assets/mixins.scss" as *;
+@use "@/assets/variables.scss" as *;
+
+$tools-width: 2.4rem;
+
+section.section.social-network-section {
+  padding: 0;
+
+  .container {
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
+    height: calc(100vh - 0.47rem);
+
+    .network-container {
+      width: calc(100% - $tools-width);
+      height: 100%;
+    }
+
+    .network-tools-container {
+      width: $tools-width;
+      height: 100%;
+      background-color: blue;
+    }
+  }
+}
