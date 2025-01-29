@@ -1,27 +1,24 @@
 import React, { useMemo } from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import "./style.scss";
 
-// Generate random graph data
 function generateRandomGraph() {
-  // random number of nodes from 80 to 100
   const nodeCount = Math.floor(Math.random() * 21) + 80;
-
-  // random number of edges from 100 to 120
   const linkCount = Math.floor(Math.random() * 21) + 100;
 
-  // build array of nodes
+  // Build array of nodes. Mark some of them red, others blue
   const nodes = Array.from({ length: nodeCount }, (_, i) => ({
     id: i,
-    // You can add any custom field (for labeling, etc.)
     name: `Node ${i}`,
+    // Example: random 30% chance for a node to be red
+    isRed: Math.random() < 0.3,
   }));
 
-  // build array of links
+  // Build array of links
   const links = Array.from({ length: linkCount }, () => {
     const source = Math.floor(Math.random() * nodeCount);
     let target = Math.floor(Math.random() * nodeCount);
 
-    // ensure source != target (avoid loops)
     while (target === source) {
       target = Math.floor(Math.random() * nodeCount);
     }
@@ -33,41 +30,41 @@ function generateRandomGraph() {
 }
 
 const GraphPage: React.FC = () => {
-  // memoize so we don't regenerate on every render
   const data = useMemo(() => generateRandomGraph(), []);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <ForceGraph2D
-        // Supply the graph data
-        graphData={data}
-        // Automatically show tooltip on hover (using the 'name' field)
-        nodeLabel="name"
-        // By default, nodes are draggable and the force simulation is updated
-        // You can customize simulation parameters if desired
-        enableNodeDrag={true}
-
-        // You can also tune the velocity decay, repulsion, etc.
-        // For example, to slow down the freeze after dragging:
-        // d3AlphaDecay={0.01}
-        // d3VelocityDecay={0.3}
-
-        // (Optional) Adjust how the node is drawn if you'd like.
-        // nodeCanvasObject={(node, ctx, globalScale) => {
-        //   const label = node.name;
-        //   // Draw a simple circle
-        //   ctx.beginPath();
-        //   ctx.arc(node.x!, node.y!, 5, 0, 2 * Math.PI);
-        //   ctx.fillStyle = '#6fc';
-        //   ctx.fill();
-        //   // Optionally draw label always (not just on hover)
-        //   // const fontSize = 12/globalScale;
-        //   // ctx.font = `${fontSize}px Sans-Serif`;
-        //   // ctx.fillStyle = 'black';
-        //   // ctx.fillText(label, node.x! + 8, node.y! + 3);
-        // }}
-      />
-    </div>
+    <section className="section social-network-section">
+      <div className="container">
+        <div className="graph-container">
+          <ForceGraph2D
+            graphData={data}
+            // We'll still use nodeLabel for the tooltip hover text.
+            nodeLabel="name"
+            // Color the node either red or blue
+            nodeColor={(node: any) => (node.isRed ? "red" : "blue")}
+            // We want to add a permanent label for red nodes. We do this using nodeCanvasObject.
+            nodeCanvasObject={(node: any, ctx, globalScale) => {
+              // Only draw a permanent label for red nodes
+              if (node.isRed) {
+                const label = node.name;
+                const fontSize = 12 / globalScale;
+                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.fillStyle = "black";
+                ctx.fillText(label, node.x + 8, node.y + 3);
+              }
+            }}
+            // nodeCanvasObjectMode returns either "after", "before", or "replace".
+            // Using "after" means the default circle is drawn first;
+            // then we "augment" the node with our label if it's red.
+            nodeCanvasObjectMode={(node: any) =>
+              node.isRed ? "after" : undefined
+            }
+            enableNodeDrag={true}
+          />
+        </div>
+        <div className="graph-tools-container"></div>
+      </div>
+    </section>
   );
 };
 
