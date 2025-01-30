@@ -8,10 +8,7 @@ const OrdinaryPeoplePage = () => {
       <div className="container">
         <div className="page-head">
           <Text fs={36} fw={700} lh={125} color="papirus">
-            Unordinary People <br />
-            <Text fs={22} fw={300} lh={125} color="papirus">
-              in the context of their relationship with ordinary people
-            </Text>
+            Ordinary People
           </Text>
 
           <div className="page-head-actions-container">
