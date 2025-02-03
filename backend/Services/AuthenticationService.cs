@@ -1,12 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AuthenticationApi.Dtos;
-using AuthenticationApi.Entities;
+using Mappa.Dtos;
+using Mappa.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AuthenticationApi.Services;
+namespace Mappa.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
@@ -77,8 +77,8 @@ public class AuthenticationService : IAuthenticationService
 
         var token = new JwtSecurityToken(
             issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(3),
+            // audience: _configuration["JWT:ValidAudience"],
+            expires: DateTime.UtcNow.AddHours(Convert.ToDouble(_configuration["JWT:TokenExpirationInHours"])),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 

@@ -1,0 +1,23 @@
+services:
+  web_api:
+    container_name: mappa_backend
+    build: ./backend
+    ports:
+      - 8080:8080
+    depends_on:
+      - "db"
+  db:
+    image: postgres
+    container_name: mappa_db
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_DB=MappaDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=formatlatan123.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    

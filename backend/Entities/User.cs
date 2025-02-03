@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace AuthenticationApi.Entities;
+namespace Mappa.Entities;
 
 public class User : IdentityUser
 {

@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
-using AuthenticationApi.Dtos;
+using Mappa.Dtos;
 
-namespace AuthenticationApi.Services;
+namespace Mappa.Services;
 
 public interface IAuthenticationService
 {

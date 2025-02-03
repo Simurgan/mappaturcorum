@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace mappa.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UserAndPerson : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,50 @@ namespace mappa.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrdinaryPersons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReligionExplanation = table.Column<string>(type: "text", nullable: true),
+                    ProfessionExplanation = table.Column<string>(type: "text", nullable: true),
+                    InterestingFeature = table.Column<string>(type: "text", nullable: true),
+                    InteractionWithOrdinaryExplanation = table.Column<string>(type: "text", nullable: true),
+                    InteractionWithUnordinaryExplanation = table.Column<string>(type: "text", nullable: true),
+                    Biography = table.Column<string>(type: "text", nullable: true),
+                    DepictionInTheSource = table.Column<string>(type: "text", nullable: true),
+                    ExplanationOfEthnicity = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    AlternateName = table.Column<string>(type: "text", nullable: true),
+                    Depiction = table.Column<string>(type: "text", nullable: true),
+                    BirthYear = table.Column<DateOnly>(type: "date", nullable: true),
+                    DeathYear = table.Column<DateOnly>(type: "date", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrdinaryPersons", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UnordinaryPersons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    AlternateName = table.Column<string>(type: "text", nullable: true),
+                    Depiction = table.Column<string>(type: "text", nullable: true),
+                    BirthYear = table.Column<DateOnly>(type: "date", nullable: true),
+                    DeathYear = table.Column<DateOnly>(type: "date", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnordinaryPersons", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,6 +256,12 @@ namespace mappa.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "OrdinaryPersons");
+
+            migrationBuilder.DropTable(
+                name: "UnordinaryPersons");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

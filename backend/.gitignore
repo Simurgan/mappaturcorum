@@ -4,6 +4,7 @@
 ## Get latest from `dotnet new gitignore`
 
 appsettings.Development.json
+appsettings.json
 efbundle
 
 # dotenv files
