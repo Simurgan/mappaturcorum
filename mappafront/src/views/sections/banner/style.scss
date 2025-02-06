@@ -1,0 +1,12 @@
+@use "@/assets/mixins.scss" as *;
+@use "@/assets/variables.scss" as *;
+
+section.section.banner-section {
+  padding: 0.8rem 0;
+
+  .container {
+    .banner-text {
+      padding-top: 0.8rem;
+    }
+  }
+}

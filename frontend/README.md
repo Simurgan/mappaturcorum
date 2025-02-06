@@ -1,1 +1,0 @@
-# mappaturcorum frontend readme

@@ -1,0 +1,14 @@
+@use "@/assets/mixins.scss" as *;
+@use "@/assets/variables.scss" as *;
+
+section.section.home-about-section {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+
+    .read-more {
+      max-height: fit-content;
+    }
+  }
+}
