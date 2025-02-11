@@ -7,11 +7,14 @@ namespace Mappa.Entities;
 public class UnordinaryPerson : Person
 {
     [Required]
-    public List<OrdinaryPerson> InteractionsWithOrdinary{get; set;}
+    public List<OrdinaryPerson>? InteractionsWithOrdinary{get; set;}
     [Required]
-    public List<UnordinaryPerson> InteractionsWithUnordinaryA{get; set;}
+    public List<UnordinaryPerson>? InteractionsWithUnordinaryA{get; set;}
     [Required]
-    public List<UnordinaryPerson> InteractionsWithUnordinaryB{get; set;}
+    public List<UnordinaryPerson>? InteractionsWithUnordinaryB{get; set;}
+    public City? BirthPlace {get; set;}
+    public City? DeathPlace {get; set;}
+
 }
 
 public class IntraUnordinary

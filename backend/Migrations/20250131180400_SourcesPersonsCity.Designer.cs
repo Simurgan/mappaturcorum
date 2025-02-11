@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mappa.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace mappa.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250131180400_SourcesPersonsCity")]
+    partial class SourcesPersonsCity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -333,8 +336,8 @@ namespace mappa.Migrations
                     b.Property<string>("University")
                         .HasColumnType("text");
 
-                    b.Property<int?>("YearWritten")
-                        .HasColumnType("integer");
+                    b.Property<DateOnly?>("YearWritten")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 

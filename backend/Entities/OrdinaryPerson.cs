@@ -12,13 +12,16 @@ public class OrdinaryPerson : Person
     public string? Biography{get; set;}
     public string? DepictionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
-    public Relation? Relation{get; set;}
+    // public Relation? Relation{get; set;}
     [Required]
-    public List<OrdinaryPerson> InteractionsWithOrdinaryA{get; set;}
+    public List<OrdinaryPerson>? InteractionsWithOrdinaryA{get; set;}
     [Required]
-    public List<OrdinaryPerson> InteractionsWithOrdinaryB{get; set;}
+    public List<OrdinaryPerson>? InteractionsWithOrdinaryB{get; set;}
     [Required]
-    public List<UnordinaryPerson> InteractionsWithUnordinary{get; set;}
+    public List<UnordinaryPerson>? InteractionsWithUnordinary{get; set;}
+    public City? Location {get; set;}
+    public City? BackgroundCity {get; set;}
+    
 }
 
 public class IntraOrdinary

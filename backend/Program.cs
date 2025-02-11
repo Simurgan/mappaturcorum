@@ -1,6 +1,7 @@
 using System.Text;
 using Mappa.Db;
 using Mappa.Entities;
+using Mappa.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Mappa.Services;
 using Mappa.Dtos;
+using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -57,7 +59,7 @@ builder.Services.AddAuthentication(options =>
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            // ValidAudience = audience,
+            ValidAudience = audience,
             ValidIssuer = issuer,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
             ValidateLifetime = true,
@@ -74,6 +76,11 @@ builder.Services.AddScoped<IEntityService<Language, LanguageDto>, LanguageServic
 builder.Services.AddScoped<IEntityService<Profession, ProfessionDto>, ProfessionService>();
 builder.Services.AddScoped<IEntityService<Religion, ReligionDto>, ReligionService>();
 builder.Services.AddScoped<IEntityService<Mappa.Entities.Type, TypeDto>, TypeService>();
+builder.Services.AddScoped<IComplexEntityService<City, CityGeneralDto, CityDetailDto, CityCreateRequest, CityUpdateRequest>, CityService>();
+builder.Services.AddScoped<IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest>, WrittenSourceService>();
+builder.Services.AddScoped<IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, SecondarySourceUpdateRequest>, SecondarySourceService>();
+builder.Services.AddScoped<IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest>, OrdinaryPersonService>();
+builder.Services.AddScoped<IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest>, UnordinaryPersonService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -122,12 +129,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    IdentityModelEventSource.ShowPII = true;
+    IdentityModelEventSource.LogCompleteSecurityArtifact = true;
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -140,6 +150,10 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
+    // if (dbContext.Database.GetPendingMigrations().Any())
+    // {
+    //     dbContext.Database.Migrate();
+    // }
 }
 
 app.UseHttpsRedirection();

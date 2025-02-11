@@ -11,19 +11,14 @@ public class SecondarySource
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id {get; set;}
     [Required]
-    public string[] AlternateNames {get; set;}
+    public List<string>? AlternateNames {get; set;}
     public string? Author {get; set;}
     public string? Topic {get; set;}
-    public DateOnly? YearWritten {get; set;}
+    public int? YearWritten {get; set;}
     public string? University {get; set;}
     public string? BibliographyInformation {get; set;}
     public string? OtherInformation {get; set;}
-    [Required]
-    public Type Type {get; set;}
-    [Required]
-    public Language Language {get; set;}
-    [Required]
-    public List<Language> TranslatedLanguages {get; set;}
-
-
+    public Type? Type {get; set;}
+    public Language? Language {get; set;}
+    public List<Language>? TranslatedLanguages {get; set;}
 }
