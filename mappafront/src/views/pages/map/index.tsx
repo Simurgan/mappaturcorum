@@ -70,10 +70,26 @@ const MapPage = () => {
           </div>
         </ReactModal>
         <div className="map-container">
-          <MapContainer center={[39.83, 34.96]} zoom={6} scrollWheelZoom={true}>
+          <MapContainer
+            center={[39.83, 34.96]}
+            zoom={6}
+            scrollWheelZoom={true}
+            // maxBounds={[
+            //   [30, 20],
+            //   [50, 50],
+            // ]}
+          >
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              // url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+              url="https://maps-for-free.com/layer/relief/z{z}/row{y}/{z}_{x}-{y}.jpg"
+              maxZoom={11}
+            />
+            <TileLayer
+              // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              // url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+              url="https://maps-for-free.com/layer/water/z{z}/row{y}/{z}_{x}-{y}.gif"
+              maxZoom={11}
             />
             {markers.map((item) => (
               <Marker
