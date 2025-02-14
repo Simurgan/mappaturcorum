@@ -8,9 +8,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mappa.Services;
 
-public class CityService : IComplexEntityService<City, 
-    CityGeneralDto, CityDetailDto, 
-    CityCreateRequest, CityUpdateRequest>
+public class CityService : IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
+    CityCreateRequest, CityUpdateRequest, CityFilterDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -122,5 +121,10 @@ public class CityService : IComplexEntityService<City,
         _dbContext.Set<City>().Remove(city);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public Task<PaginationResponse<CityGeneralDto>> GetPageAsync(int pageNumber, int pageSize, CityFilterDto filter)
+    {
+        throw new NotImplementedException();
     }
 }

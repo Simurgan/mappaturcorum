@@ -8,7 +8,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mappa.Services;
 
-public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest>
+public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, 
+    UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
+    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -22,10 +24,10 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
     public async Task<IEnumerable<UnordinaryPersonGeneralDto>> GetAllAsync()
     {
         return await _dbContext.Set<UnordinaryPerson>()
-            .Include(ws => ws.Religion)
-            .Include(ws => ws.Ethnicity)
-            .Include(ws => ws.DeathPlace)
-            .Include(ws => ws.InteractionsWithOrdinary)
+            .Include(up => up.Religion)
+            .Include(up => up.Ethnicity)
+            .Include(up => up.DeathPlace)
+            .Include(up => up.InteractionsWithOrdinary)
             .Select(e => new UnordinaryPersonGeneralDto
             {
                 Id = e.Id,
@@ -36,6 +38,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
                 DeathPlace = _mapper.Map<CityBaseDto>(e.DeathPlace),
                 InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(e.InteractionsWithOrdinary)
             })
+            .OrderBy(up => up.Id)
             .ToListAsync();
     }
 
@@ -410,5 +413,113 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
         _dbContext.Set<UnordinaryPerson>().Remove(unordinaryPerson);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+    /*
+
+public class UnordinaryPersonFilterDto 
+{
+    public int? Religion {get; set;}
+    public int? Ethnicity {get; set;}
+    public List<int>? DeathYear {get; set;}
+    public int? DeathPlace {get; set;}
+    public List<int>? InteractionsWithOrdinary {get; set;}
+}
+    */
+    public async Task<PaginationResponse<UnordinaryPersonGeneralDto>> GetPageAsync(
+        int pageNumber, int pageSize, UnordinaryPersonFilterDto? filter)
+    {
+        var query = _dbContext.Set<UnordinaryPerson>()
+            .Include(op => op.Religion).Include(op => op.Ethnicity)
+            .Include(op => op.DeathPlace)
+            .Include(op => op.InteractionsWithOrdinary)
+            .AsQueryable();
+
+        if(filter != null)
+        {
+            if(filter.Religion != null) 
+                query = query.Where(op => op.Religion != null && (op.Religion.Id == filter.Religion));
+
+            if(filter.Ethnicity != null)
+                query = query.Where(op => op.Ethnicity != null && (op.Ethnicity.Id == filter.Ethnicity));
+
+            if(filter.DeathYear != null && filter.DeathYear.Count > 0)
+            {
+                if(filter.DeathYear.Count == 1)
+                    query = query.Where(op => op.ProbableDeathYear != null && 
+                        (op.ProbableDeathYear >= filter.DeathYear[0]));
+                else // For case 2, further elements are ignored
+                    query = query.Where(op => op.ProbableDeathYear != null && 
+                        (op.ProbableDeathYear >= filter.DeathYear[0]) && 
+                        (op.ProbableDeathYear <= filter.DeathYear[1]));
+            }
+            
+            if(filter.DeathPlace != null)
+                query = query.Where(op => op.DeathPlace != null && (op.DeathPlace.Id == filter.DeathPlace));
+        
+            if(filter.InteractionsWithOrdinary != null)
+            {
+                var innerItems = query.Include(op => op.InteractionsWithOrdinary).AsEnumerable()
+                    .Where(op => (op.InteractionsWithOrdinary != null) 
+                    && filter.InteractionsWithOrdinary.
+                        Any(fs => op.InteractionsWithOrdinary.Select(s => s.Id).Contains(fs))
+                        )
+                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(p => new UnordinaryPersonGeneralDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Religion = _mapper.Map<ReligionDto>(p.Religion),
+                        Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                        DeathYear = p.DeathYear,
+                        DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
+                        InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary)
+                    })
+                    .ToList();
+
+                Console.WriteLine("items", innerItems);
+
+                int totalCount1 = innerItems.Count;
+
+                return new PaginationResponse<UnordinaryPersonGeneralDto>
+                {
+                    Data = innerItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalCount = totalCount1,
+                };
+            }
+        }
+        else
+        {
+            throw new ArgumentException("Filter is not provided.");
+        }
+
+        int totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(p => p.Id)  // Sort by Id (or other field)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new UnordinaryPersonGeneralDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Religion = _mapper.Map<ReligionDto>(p.Religion),
+                Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                DeathYear = p.DeathYear,
+                DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
+                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary)
+            })
+            .ToListAsync();
+
+        return new PaginationResponse<UnordinaryPersonGeneralDto>
+        {
+            Data = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+        };
     }
 }

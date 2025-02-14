@@ -58,3 +58,8 @@ public class SecondarySourceUpdateRequest
     public string? Language {get; set;}
     public List<string>? TranslatedLanguages {get; set;}
 }
+
+public class SecondarySourceFilterDto
+{
+    public int? Type {get; set;}
+}

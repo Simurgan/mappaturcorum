@@ -44,5 +44,27 @@ public class AppDbContext : IdentityDbContext<User>
                 e => e.HasOne<UnordinaryPerson>().WithMany().HasForeignKey(e => e.PersonIdA),
                 e => e.HasOne<UnordinaryPerson>().WithMany().HasForeignKey(e => e.PersonIdB)    
             );
+
+        builder.Entity<OrdinaryPerson>()
+            .HasMany(o => o.InteractionsWithUnordinary)
+            .WithMany(u => u.InteractionsWithOrdinary);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.OrdinaryPersons)
+            .WithMany(p => p.Sources);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.UnordinaryPersons)
+            .WithMany(p => p.Sources);
+
+        builder.Entity<Religion>().HasMany(ws => ws.FormerOrdinaryPersons)
+            .WithMany(p => p.FormerReligion);
+
+        builder.Entity<Religion>().HasMany(ws => ws.FormerUnordinaryPersons)
+            .WithMany(p => p.FormerReligion);
+
+        builder.Entity<OrdinaryPerson>().HasOne(op => op.Religion)
+            .WithMany();
+
+        builder.Entity<UnordinaryPerson>().HasOne(up => up.Religion)
+            .WithMany();
     }
 }

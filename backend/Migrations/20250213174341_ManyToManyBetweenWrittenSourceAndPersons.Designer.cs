@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mappa.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace mappa.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213174341_ManyToManyBetweenWrittenSourceAndPersons")]
+    partial class ManyToManyBetweenWrittenSourceAndPersons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,12 +46,6 @@ namespace mappa.Migrations
 
                     b.Property<string>("GeoNamesId")
                         .HasColumnType("text");
-
-                    b.Property<double?>("Latitude")
-                        .HasColumnType("double precision");
-
-                    b.Property<double?>("Longitude")
-                        .HasColumnType("double precision");
 
                     b.Property<int?>("WrittenSourceId")
                         .HasColumnType("integer");
@@ -291,7 +288,17 @@ namespace mappa.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("OrdinaryPersonId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UnordinaryPersonId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OrdinaryPersonId");
+
+                    b.HasIndex("UnordinaryPersonId");
 
                     b.ToTable("Religions");
                 });
@@ -520,9 +527,6 @@ namespace mappa.Migrations
                     b.Property<string>("OtherInformation")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ProbableYearWritten")
-                        .HasColumnType("integer");
-
                     b.Property<string>("RemarkableWorksOnTheBook")
                         .HasColumnType("text");
 
@@ -673,21 +677,6 @@ namespace mappa.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrdinaryPersonReligion", b =>
-                {
-                    b.Property<int>("FormerOrdinaryPersonsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FormerReligionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("FormerOrdinaryPersonsId", "FormerReligionId");
-
-                    b.HasIndex("FormerReligionId");
-
-                    b.ToTable("OrdinaryPersonReligion");
-                });
-
             modelBuilder.Entity("OrdinaryPersonUnordinaryPerson", b =>
                 {
                     b.Property<int>("InteractionsWithOrdinaryId")
@@ -716,21 +705,6 @@ namespace mappa.Migrations
                     b.HasIndex("SourcesId");
 
                     b.ToTable("OrdinaryPersonWrittenSource");
-                });
-
-            modelBuilder.Entity("ReligionUnordinaryPerson", b =>
-                {
-                    b.Property<int>("FormerReligionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FormerUnordinaryPersonsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("FormerReligionId", "FormerUnordinaryPersonsId");
-
-                    b.HasIndex("FormerUnordinaryPersonsId");
-
-                    b.ToTable("ReligionUnordinaryPerson");
                 });
 
             modelBuilder.Entity("UnordinaryPersonWrittenSource", b =>
@@ -837,6 +811,17 @@ namespace mappa.Migrations
                     b.Navigation("Profession");
 
                     b.Navigation("Religion");
+                });
+
+            modelBuilder.Entity("Mappa.Entities.Religion", b =>
+                {
+                    b.HasOne("Mappa.Entities.OrdinaryPerson", null)
+                        .WithMany("FormerReligion")
+                        .HasForeignKey("OrdinaryPersonId");
+
+                    b.HasOne("Mappa.Entities.UnordinaryPerson", null)
+                        .WithMany("FormerReligion")
+                        .HasForeignKey("UnordinaryPersonId");
                 });
 
             modelBuilder.Entity("Mappa.Entities.SecondarySource", b =>
@@ -959,21 +944,6 @@ namespace mappa.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrdinaryPersonReligion", b =>
-                {
-                    b.HasOne("Mappa.Entities.OrdinaryPerson", null)
-                        .WithMany()
-                        .HasForeignKey("FormerOrdinaryPersonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mappa.Entities.Religion", null)
-                        .WithMany()
-                        .HasForeignKey("FormerReligionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("OrdinaryPersonUnordinaryPerson", b =>
                 {
                     b.HasOne("Mappa.Entities.OrdinaryPerson", null)
@@ -1004,21 +974,6 @@ namespace mappa.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ReligionUnordinaryPerson", b =>
-                {
-                    b.HasOne("Mappa.Entities.Religion", null)
-                        .WithMany()
-                        .HasForeignKey("FormerReligionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mappa.Entities.UnordinaryPerson", null)
-                        .WithMany()
-                        .HasForeignKey("FormerUnordinaryPersonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("UnordinaryPersonWrittenSource", b =>
                 {
                     b.HasOne("Mappa.Entities.WrittenSource", null)
@@ -1034,9 +989,19 @@ namespace mappa.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Mappa.Entities.OrdinaryPerson", b =>
+                {
+                    b.Navigation("FormerReligion");
+                });
+
             modelBuilder.Entity("Mappa.Entities.SecondarySource", b =>
                 {
                     b.Navigation("TranslatedLanguages");
+                });
+
+            modelBuilder.Entity("Mappa.Entities.UnordinaryPerson", b =>
+                {
+                    b.Navigation("FormerReligion");
                 });
 
             modelBuilder.Entity("Mappa.Entities.WrittenSource", b =>

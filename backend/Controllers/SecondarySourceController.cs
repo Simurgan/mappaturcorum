@@ -10,11 +10,15 @@ namespace Mappa.Controllers;
 [Route("[controller]")]
 public class SecondarySourceController : ControllerBase
 {
-    private readonly IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, SecondarySourceUpdateRequest>
+    private readonly IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, 
+        SecondarySourceDetailDto, SecondarySourceCreateRequest, 
+        SecondarySourceUpdateRequest, SecondarySourceFilterDto>
         _service;
 
-    public SecondarySourceController(IComplexEntityService<SecondarySource, SecondarySourceGeneralDto,
-        SecondarySourceDetailDto, SecondarySourceCreateRequest, SecondarySourceUpdateRequest> service)
+    public SecondarySourceController(IComplexEntityService<SecondarySource, 
+        SecondarySourceGeneralDto, SecondarySourceDetailDto, 
+        SecondarySourceCreateRequest, SecondarySourceUpdateRequest,
+        SecondarySourceFilterDto> service)
     {
         _service = service;
     }

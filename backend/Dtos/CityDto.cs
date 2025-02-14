@@ -35,3 +35,8 @@ public class CityUpdateRequest
     public List<string>? AlternateNames { get; set; }
     public string? CountryCode { get; set; }
 }
+
+public class CityFilterDto
+{
+    public List<string>? AlternateNames { get; set; }
+}

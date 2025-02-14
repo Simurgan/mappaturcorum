@@ -79,3 +79,12 @@ public class UnordinaryPersonUpdateRequest
     public List<int>? InteractionsWithUnordinaryA {get; set;}
     public List<int>? Sources {get; set;}
 }
+
+public class UnordinaryPersonFilterDto 
+{
+    public int? Religion {get; set;}
+    public int? Ethnicity {get; set;}
+    public List<int>? DeathYear {get; set;}
+    public int? DeathPlace {get; set;}
+    public List<int>? InteractionsWithOrdinary {get; set;}
+}

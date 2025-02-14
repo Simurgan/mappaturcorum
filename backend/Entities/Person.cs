@@ -20,8 +20,6 @@ public abstract class Person
     public string? Description {get; set;}
     public Ethnicity? Ethnicity {get; set;}
     public Religion? Religion {get; set;}
-    public List<Religion>? FormerReligion {get; set;}
     public Profession? Profession {get; set;}
     public Gender? Gender {get; set;}
-    public List<WrittenSource>? Sources {get; set;}
 }

@@ -19,6 +19,7 @@ public class OrdinaryPersonGeneralDto : OrdinaryPersonBaseDto
     public CityBaseDto? Location {get; set;}
     public List<WrittenSourceBaseDto>? Sources {get; set;}
     public GenderDto? Gender {get; set;}
+    public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinary{get; set;}
 }
 
 public class OrdinaryPersonDetailDto : OrdinaryPersonGeneralDto
@@ -39,7 +40,6 @@ public class OrdinaryPersonDetailDto : OrdinaryPersonGeneralDto
     public string? DepictionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinaryA{get; set;}
-    public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinary{get; set;}
     public CityBaseDto? BackgroundCity {get; set;}
 }
 
@@ -100,4 +100,16 @@ public class OrdinaryPersonUpdateRequest
     public List<int>? InteractionsWithOrdinaryA{get; set;}
     public List<int>? InteractionsWithUnordinary{get; set;}
     public string? BackgroundCity {get; set;}  
+}
+
+public class OrdinaryPersonFilterDto 
+{
+    public int? Religion {get; set;}
+    public int? Ethnicity {get; set;}
+    public int? Profession {get; set;}
+    public int? Location {get; set;}
+    public List<int>? Sources {get; set;}
+    public int? Gender {get; set;}
+    public List<int>? InteractionsWithUnordinary{get; set;}
+
 }

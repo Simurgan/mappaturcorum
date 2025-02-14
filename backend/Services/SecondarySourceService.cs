@@ -7,8 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Mappa.Services;
 
-public class SecondarySourceService : IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
-    SecondarySourceUpdateRequest>
+public class SecondarySourceService : IComplexEntityService<SecondarySource, 
+    SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
+    SecondarySourceUpdateRequest, SecondarySourceFilterDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -32,6 +33,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
                 University = e.University,
                 Type = _mapper.Map<TypeDto>(e.Type)
             })
+            .OrderBy(ss => ss.Id)
             .ToListAsync();
     }
 
@@ -64,7 +66,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
 
     public async Task<SecondarySourceDetailDto> CreateAsync(SecondarySourceCreateRequest request)
     {
-        if ((request.AlternateNames != null) && (request.AlternateNames.Count == 0) )
+        if ((request.AlternateNames == null) || (request.AlternateNames.Count == 0) )
             throw new ArgumentException("Alternate names is not provided");
 
         bool exists = await _dbContext.Set<SecondarySource>()
@@ -226,5 +228,10 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
         _dbContext.Set<SecondarySource>().Remove(secondarySource);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public Task<PaginationResponse<SecondarySourceGeneralDto>> GetPageAsync(int pageNumber, int pageSize, SecondarySourceFilterDto filter)
+    {
+        throw new NotImplementedException();
     }
 }

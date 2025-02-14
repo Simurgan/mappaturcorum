@@ -25,5 +25,8 @@ public class WrittenSource
     public List<Language>? TranslatedLanguages {get; set;}
     public List<City>? CitiesMentioningTheSources {get; set;}
     public List<City>? CitiesWhereSourcesAreWritten {get; set;}
+    public List<OrdinaryPerson>? OrdinaryPersons {get; set;} 
+    public List<UnordinaryPerson>? UnordinaryPersons {get; set;} 
+    public int? ProbableYearWritten {get; set;}
 
 }

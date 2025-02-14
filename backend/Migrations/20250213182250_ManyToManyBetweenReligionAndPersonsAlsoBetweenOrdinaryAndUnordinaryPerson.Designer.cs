@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mappa.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace mappa.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213182250_ManyToManyBetweenReligionAndPersonsAlsoBetweenOrdinaryAndUnordinaryPerson")]
+    partial class ManyToManyBetweenReligionAndPersonsAlsoBetweenOrdinaryAndUnordinaryPerson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,12 +46,6 @@ namespace mappa.Migrations
 
                     b.Property<string>("GeoNamesId")
                         .HasColumnType("text");
-
-                    b.Property<double?>("Latitude")
-                        .HasColumnType("double precision");
-
-                    b.Property<double?>("Longitude")
-                        .HasColumnType("double precision");
 
                     b.Property<int?>("WrittenSourceId")
                         .HasColumnType("integer");
@@ -519,9 +516,6 @@ namespace mappa.Migrations
 
                     b.Property<string>("OtherInformation")
                         .HasColumnType("text");
-
-                    b.Property<int?>("ProbableYearWritten")
-                        .HasColumnType("integer");
 
                     b.Property<string>("RemarkableWorksOnTheBook")
                         .HasColumnType("text");

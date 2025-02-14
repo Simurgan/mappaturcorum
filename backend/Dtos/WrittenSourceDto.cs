@@ -31,6 +31,9 @@ public class WrittenSourceDetailDto : WrittenSourceGeneralDto
     public List<LanguageDto>? TranslatedLanguages {get; set;}
     public List<CityBaseDto>? CitiesMentioningTheSources {get; set;}
     public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
+    public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;} 
+    public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;} 
+    public int? ProbableYearWritten {get; set;}
 }
 
 public class WrittenSourceCreateRequest
@@ -69,4 +72,14 @@ public class WrittenSourceUpdateRequest
     public List<string>? TranslatedLanguages {get; set;}
     public List<string>? CitiesMentioningTheSources {get; set;}
     public List<string>? CitiesWhereSourcesAreWritten {get; set;}
+}
+
+public class WrittenSourceFilterDto
+{
+    public int? Genre {get; set;}
+    public List<int>? YearWritten {get; set;}
+    public string? Author {get; set;}
+    public int? Language {get; set;}
+    public List<int>? OrdinaryPersons {get; set;}
+    public List<int>? UnordinaryPersons {get; set;}
 }

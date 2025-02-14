@@ -21,6 +21,8 @@ public class OrdinaryPerson : Person
     public List<UnordinaryPerson>? InteractionsWithUnordinary{get; set;}
     public City? Location {get; set;}
     public City? BackgroundCity {get; set;}
+    public List<WrittenSource>? Sources {get; set;}
+    public List<Religion>? FormerReligion {get; set;}
     
 }
 
