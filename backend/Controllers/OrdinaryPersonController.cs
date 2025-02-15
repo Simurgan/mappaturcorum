@@ -1,17 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Mappa.Services;
 using Mappa.Dtos;
+using Mappa.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Mappa.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EntityController<TEntity, TDto> : ControllerBase where TDto : BaseDto
+public class OrdinaryPersonController : ControllerBase
 {
-    private readonly IEntityService<TEntity, TDto> _service;
+    private readonly IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, 
+    OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest>
+        _service;
 
-    public EntityController(IEntityService<TEntity, TDto> service)
+    public OrdinaryPersonController(IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto,
+        OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest> service)
     {
         _service = service;
     }
@@ -44,14 +48,14 @@ public class EntityController<TEntity, TDto> : ControllerBase where TDto : BaseD
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateRequest request)
+    public async Task<IActionResult> Create([FromBody] OrdinaryPersonCreateRequest request)
     {
         try
         {
             var item = await _service.CreateAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
         }
-        catch (ArgumentException ex) when (ex.Message.Contains($"An entity with the name '{request.Name}' already exists."))
+        catch (ArgumentException ex)
         {
             return Conflict(new { Message = ex.Message });
         }
@@ -64,14 +68,14 @@ public class EntityController<TEntity, TDto> : ControllerBase where TDto : BaseD
 
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> Update(int id, [FromBody] OrdinaryPersonUpdateRequest request)
     {
         try
         {
             var item = await _service.UpdateAsync(id, request);
             return Ok(item);
         }
-        catch (ArgumentException ex) when (ex.Message.Contains($"Entity with ID {id} not found."))
+        catch (ArgumentException ex)
         {
             return NotFound(new { Message = ex.Message });
         }
@@ -90,7 +94,7 @@ public class EntityController<TEntity, TDto> : ControllerBase where TDto : BaseD
         {
             var result = await _service.DeleteAsync(id);
             if (!result)
-                return NotFound(new {Message = $"Item with ${id} not found"});
+                return NotFound(new {Message = $"Item with {id} not found"});
 
             return NoContent();
         }
@@ -100,4 +104,5 @@ public class EntityController<TEntity, TDto> : ControllerBase where TDto : BaseD
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
+
 }

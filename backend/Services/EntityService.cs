@@ -81,13 +81,14 @@ public class EntityService<TEntity, TDto> : IEntityService<TEntity, TDto>
         };
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var entity = await _dbContext.Set<TEntity>().FindAsync(id);
         if (entity == null)
-            throw new ArgumentException($"Entity with ID {id} not found.");
+            return false;
 
         _dbContext.Set<TEntity>().Remove(entity);
         await _dbContext.SaveChangesAsync();
+        return true;
     }
 }
