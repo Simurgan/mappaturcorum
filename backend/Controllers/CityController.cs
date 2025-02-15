@@ -11,11 +11,12 @@ namespace Mappa.Controllers;
 public class CityController : ControllerBase
 {
     private readonly IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-        CityCreateRequest, CityUpdateRequest, CityFilterDto>
+        CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto>
         _service;
 
     public CityController(IComplexEntityService<City, CityGeneralDto,CityDetailDto, 
-        CityCreateRequest, CityUpdateRequest, CityFilterDto> service)
+        CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto> 
+        service)
     {
         _service = service;
     }
@@ -25,6 +26,36 @@ public class CityController : ControllerBase
     {
         var items = await _service.GetAllAsync();
         return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("filter")]
+    public async Task<IActionResult> GetAllFiltered(CityFilterDto filter)
+    {
+        var items = await _service.GetAllFilteredAsync(filter);
+        return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("page")]
+    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<CityFilterDto> filter)
+    {
+        if (filter.PageNumber < 1 || filter.PageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0.");
+        }
+        
+        try
+        {
+            var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
+                filter.PageSize, filter.Filter);
+
+            return Ok(paginatedResult);
+        }
+        catch(ArgumentException ex) when (ex.Message.Contains($"Filter is not provided."))
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 
     [HttpGet("{id}")]

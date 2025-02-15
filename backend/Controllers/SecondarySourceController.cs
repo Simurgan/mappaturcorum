@@ -12,13 +12,13 @@ public class SecondarySourceController : ControllerBase
 {
     private readonly IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, 
         SecondarySourceDetailDto, SecondarySourceCreateRequest, 
-        SecondarySourceUpdateRequest, SecondarySourceFilterDto>
+        SecondarySourceUpdateRequest, SecondarySourceFilterDto, SecondarySourceFilterResponseDto>
         _service;
 
     public SecondarySourceController(IComplexEntityService<SecondarySource, 
         SecondarySourceGeneralDto, SecondarySourceDetailDto, 
         SecondarySourceCreateRequest, SecondarySourceUpdateRequest,
-        SecondarySourceFilterDto> service)
+        SecondarySourceFilterDto, SecondarySourceFilterResponseDto> service)
     {
         _service = service;
     }

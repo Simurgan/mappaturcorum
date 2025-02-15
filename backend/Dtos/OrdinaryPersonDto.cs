@@ -113,3 +113,5 @@ public class OrdinaryPersonFilterDto
     public List<int>? InteractionsWithUnordinary{get; set;}
 
 }
+
+public class OrdinaryPersonFilterResponseDto : OrdinaryPersonGeneralDto {}

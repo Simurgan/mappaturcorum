@@ -10,7 +10,7 @@ namespace Mappa.Services;
 
 public class WrittenSourceService : IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
-    WrittenSourceUpdateRequest, WrittenSourceFilterDto>
+    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -45,7 +45,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .Include(ws => ws.Genre)
             .Include(ws => ws.Language)
             .Include(ws => ws.TranslatedLanguages)
-            .Include(ws => ws.CitiesMentioningTheSources)
+            .Include(ws => ws.CitiesMentionedByTheSource)
             .Include(ws => ws.CitiesWhereSourcesAreWritten)
             .Include(ws => ws.OrdinaryPersons)
             .Include(ws => ws.UnordinaryPersons)
@@ -69,7 +69,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             RemarkableWorksOnTheBook = entity.RemarkableWorksOnTheBook,
             Image = entity.Image,
             TranslatedLanguages = _mapper.Map<List<LanguageDto>>(entity.TranslatedLanguages),
-            CitiesMentioningTheSources = _mapper.Map<List<CityBaseDto>>(entity.CitiesMentioningTheSources),
+            CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(entity.CitiesMentionedByTheSource),
             CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(entity.CitiesWhereSourcesAreWritten),
             OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.OrdinaryPersons),
             UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.UnordinaryPersons),
@@ -130,16 +130,16 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             writtenSource.TranslatedLanguages = translatedLanguages;
         }
 
-        // Update CitiesMentioningTheSources (List of CityBaseDto)
-        if (request.CitiesMentioningTheSources != null)
+        // Update CitiesMentionedByTheSource (List of CityBaseDto)
+        if (request.CitiesMentionedByTheSource != null)
         {
             var mentionedCities = await _dbContext.Set<City>()
-                .Where(c => request.CitiesMentioningTheSources.Contains(c.AsciiName))
+                .Where(c => request.CitiesMentionedByTheSource.Contains(c.AsciiName))
                 .ToListAsync();
 
-            if (mentionedCities.Count != request.CitiesMentioningTheSources.Count)
-                throw new ArgumentException("One or more provided CitiesMentioningTheSources are invalid.");
-            writtenSource.CitiesMentioningTheSources = mentionedCities;
+            if (mentionedCities.Count != request.CitiesMentionedByTheSource.Count)
+                throw new ArgumentException("One or more provided CitiesMentionedByTheSource are invalid.");
+            writtenSource.CitiesMentionedByTheSource = mentionedCities;
         }
 
         // Update CitiesWhereSourcesAreWritten (List of CityBaseDto)
@@ -172,7 +172,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             RemarkableWorksOnTheBook = writtenSource.RemarkableWorksOnTheBook,
             Image = writtenSource.Image,
             TranslatedLanguages = _mapper.Map<List<LanguageDto>>(writtenSource.TranslatedLanguages),
-            CitiesMentioningTheSources = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesMentioningTheSources),
+            CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesMentionedByTheSource),
             CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesWhereSourcesAreWritten)
         };
     }
@@ -183,7 +183,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .Include(ws => ws.Genre)
             .Include(ws => ws.Language)
             .Include(ws => ws.TranslatedLanguages)
-            .Include(ws => ws.CitiesMentioningTheSources)
+            .Include(ws => ws.CitiesMentionedByTheSource)
             .Include(ws => ws.CitiesWhereSourcesAreWritten)
             .FirstOrDefaultAsync(ws => ws.Id == id);
 
@@ -250,17 +250,17 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             writtenSource.TranslatedLanguages = translatedLanguages;
         }
 
-        // Update CitiesMentioningTheSources (List of CityBaseDto)
-        if (request.CitiesMentioningTheSources != null)
+        // Update CitiesMentionedByTheSource (List of CityBaseDto)
+        if (request.CitiesMentionedByTheSource != null)
         {
             var mentionedCities = await _dbContext.Set<City>()
-                .Where(c => request.CitiesMentioningTheSources.Contains(c.AsciiName))
+                .Where(c => request.CitiesMentionedByTheSource.Contains(c.AsciiName))
                 .ToListAsync();
 
-            if (mentionedCities.Count != request.CitiesMentioningTheSources.Count)
-                throw new ArgumentException("One or more provided CitiesMentioningTheSources are invalid.");
+            if (mentionedCities.Count != request.CitiesMentionedByTheSource.Count)
+                throw new ArgumentException("One or more provided CitiesMentionedByTheSource are invalid.");
 
-            writtenSource.CitiesMentioningTheSources = mentionedCities;
+            writtenSource.CitiesMentionedByTheSource = mentionedCities;
         }
 
         // Update CitiesWhereSourcesAreWritten (List of CityBaseDto)
@@ -293,7 +293,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             RemarkableWorksOnTheBook = writtenSource.RemarkableWorksOnTheBook,
             Image = writtenSource.Image,
             TranslatedLanguages = _mapper.Map<List<LanguageDto>>(writtenSource.TranslatedLanguages),
-            CitiesMentioningTheSources = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesMentioningTheSources),
+            CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesMentionedByTheSource),
             CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesWhereSourcesAreWritten)
         };
     }
@@ -309,7 +309,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         return true;
     }
     
-    public async Task<PaginationResponse<WrittenSourceGeneralDto>> GetPageAsync(
+    public async Task<PaginationResponse<WrittenSourceFilterResponseDto>> GetPageAsync(
         int pageNumber, int pageSize, WrittenSourceFilterDto filter)
     {
         var query = _dbContext.Set<WrittenSource>()
@@ -351,7 +351,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                     .OrderBy(p => p.Id)  // Sort by Id (or other field)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(p => new WrittenSourceGeneralDto
+                    .Select(p => new WrittenSourceFilterResponseDto
                     {
                         Id = p.Id,
                         AlternateNames = p.AlternateNames,
@@ -366,7 +366,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
                 int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<WrittenSourceGeneralDto>
+                return new PaginationResponse<WrittenSourceFilterResponseDto>
                 {
                     Data = innerItems,
                     PageNumber = pageNumber,
@@ -385,7 +385,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                     .OrderBy(p => p.Id)  // Sort by Id (or other field)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(p => new WrittenSourceGeneralDto
+                    .Select(p => new WrittenSourceFilterResponseDto
                     {
                         Id = p.Id,
                         AlternateNames = p.AlternateNames,
@@ -400,7 +400,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
                 int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<WrittenSourceGeneralDto>
+                return new PaginationResponse<WrittenSourceFilterResponseDto>
                 {
                     Data = innerItems,
                     PageNumber = pageNumber,
@@ -420,7 +420,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(p => new WrittenSourceGeneralDto
+            .Select(p => new WrittenSourceFilterResponseDto
             {
                 Id = p.Id,
                 AlternateNames = p.AlternateNames,
@@ -431,12 +431,17 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             })
             .ToListAsync();
 
-        return new PaginationResponse<WrittenSourceGeneralDto>
+        return new PaginationResponse<WrittenSourceFilterResponseDto>
         {
             Data = items,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalCount = totalCount,
         };
+    }
+
+    public Task<IEnumerable<WrittenSourceFilterResponseDto>> GetAllFilteredAsync(WrittenSourceFilterDto filter)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -12,7 +12,8 @@ namespace Mappa.Services;
 
 public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson, 
     OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, 
-    OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto>
+    OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto,
+    OrdinaryPersonFilterResponseDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -466,7 +467,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         return true;
     }
 
-    public async Task<PaginationResponse<OrdinaryPersonGeneralDto>> GetPageAsync(
+    public async Task<PaginationResponse<OrdinaryPersonFilterResponseDto>> GetPageAsync(
         int pageNumber, int pageSize, OrdinaryPersonFilterDto? filter)
     {
         var query = _dbContext.Set<OrdinaryPerson>()
@@ -489,6 +490,9 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         
             if(filter.Location != null)
                 query = query.Where(op => op.Location != null && (op.Location.Id == filter.Location));
+
+            if(filter.Gender != null)
+                query = query.Where(op => op.Gender != null && (op.Gender.Id == filter.Gender));
         
             if(filter.Sources != null)
             {
@@ -500,7 +504,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     .OrderBy(p => p.Id)  // Sort by Id (or other field)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new OrdinaryPersonGeneralDto
+                .Select(p => new OrdinaryPersonFilterResponseDto
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -518,7 +522,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
 
                 int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<OrdinaryPersonGeneralDto>
+                return new PaginationResponse<OrdinaryPersonFilterResponseDto>
                 {
                     Data = innerItems,
                     PageNumber = pageNumber,
@@ -526,9 +530,6 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     TotalCount = totalCount1,
                 };
             }
-
-            if(filter.Gender != null)
-                query = query.Where(op => op.Gender != null && (op.Gender.Id == filter.Gender));
 
             if(filter.InteractionsWithUnordinary != null)
             {
@@ -540,7 +541,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     .OrderBy(p => p.Id)  // Sort by Id (or other field)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new OrdinaryPersonGeneralDto
+                .Select(p => new OrdinaryPersonFilterResponseDto
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -558,7 +559,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
 
                 int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<OrdinaryPersonGeneralDto>
+                return new PaginationResponse<OrdinaryPersonFilterResponseDto>
                 {
                     Data = innerItems,
                     PageNumber = pageNumber,
@@ -578,7 +579,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(p => new OrdinaryPersonGeneralDto
+            .Select(p => new OrdinaryPersonFilterResponseDto
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -592,12 +593,17 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             })
             .ToListAsync();
 
-        return new PaginationResponse<OrdinaryPersonGeneralDto>
+        return new PaginationResponse<OrdinaryPersonFilterResponseDto>
         {
             Data = items,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalCount = totalCount,
         };
+    }
+
+    public Task<IEnumerable<OrdinaryPersonFilterResponseDto>> GetAllFilteredAsync(OrdinaryPersonFilterDto filter)
+    {
+        throw new NotImplementedException();
     }
 }

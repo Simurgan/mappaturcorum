@@ -88,3 +88,5 @@ public class UnordinaryPersonFilterDto
     public int? DeathPlace {get; set;}
     public List<int>? InteractionsWithOrdinary {get; set;}
 }
+
+public class UnordinaryPersonFilterResponseDto : UnordinaryPersonGeneralDto {}

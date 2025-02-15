@@ -63,3 +63,5 @@ public class SecondarySourceFilterDto
 {
     public int? Type {get; set;}
 }
+
+public class SecondarySourceFilterResponseDto : SecondarySourceGeneralDto {}

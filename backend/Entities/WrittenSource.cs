@@ -23,7 +23,7 @@ public class WrittenSource
     public Genre? Genre {get; set;}
     public Language? Language {get; set;}
     public List<Language>? TranslatedLanguages {get; set;}
-    public List<City>? CitiesMentioningTheSources {get; set;}
+    public List<City>? CitiesMentionedByTheSource {get; set;}
     public List<City>? CitiesWhereSourcesAreWritten {get; set;}
     public List<OrdinaryPerson>? OrdinaryPersons {get; set;} 
     public List<UnordinaryPerson>? UnordinaryPersons {get; set;} 

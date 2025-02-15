@@ -77,20 +77,24 @@ builder.Services.AddScoped<IEntityService<Profession, ProfessionDto>, Profession
 builder.Services.AddScoped<IEntityService<Religion, ReligionDto>, ReligionService>();
 builder.Services.AddScoped<IEntityService<Mappa.Entities.Type, TypeDto>, TypeService>();
 builder.Services.AddScoped<IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-    CityCreateRequest, CityUpdateRequest, CityFilterDto>, CityService>();
+    CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto>, 
+    CityService>();
 builder.Services.AddScoped<IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
-    WrittenSourceUpdateRequest, WrittenSourceFilterDto>, WrittenSourceService>();
+    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto>, 
+    WrittenSourceService>();
 builder.Services.AddScoped<IComplexEntityService<SecondarySource, 
     SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
-    SecondarySourceUpdateRequest, SecondarySourceFilterDto>, SecondarySourceService>();
+    SecondarySourceUpdateRequest, SecondarySourceFilterDto, SecondarySourceFilterResponseDto>, 
+    SecondarySourceService>();
 builder.Services.AddScoped<IComplexEntityService<OrdinaryPerson, 
     OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
-    OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto>, OrdinaryPersonService>();
+    OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto>, 
+    OrdinaryPersonService>();
 builder.Services.AddScoped<IComplexEntityService<UnordinaryPerson, 
     UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
-    UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto>, 
-    UnordinaryPersonService>();
+    UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto,
+    UnordinaryPersonFilterResponseDto>, UnordinaryPersonService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

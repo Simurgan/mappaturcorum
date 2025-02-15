@@ -18,4 +18,10 @@ public class City
     public string? CountryCode {get; set;}
     public double? Latitude {get; set;}
     public double? Longitude {get; set;}
+    public List<OrdinaryPerson>? LocationOf {get; set;}
+    public List<OrdinaryPerson>? BackgroundCityOf {get; set;}
+    public List<UnordinaryPerson>? BirthPlaceOf {get; set;}
+    public List<UnordinaryPerson>? DeathPlaceOf {get; set;}
+    public List<WrittenSource>? SourcesMentioningTheCity {get; set;}
+    public List<WrittenSource>? SourcesWrittenInTheCity {get; set;}
 }

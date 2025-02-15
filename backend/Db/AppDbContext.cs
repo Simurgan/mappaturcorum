@@ -66,5 +66,27 @@ public class AppDbContext : IdentityDbContext<User>
 
         builder.Entity<UnordinaryPerson>().HasOne(up => up.Religion)
             .WithMany();
+
+        // ----------- <City Mappings> --------------
+
+        builder.Entity<OrdinaryPerson>().HasOne(op => op.Location)
+            .WithMany(c => c.LocationOf);
+
+        builder.Entity<OrdinaryPerson>().HasOne(op => op.BackgroundCity)
+            .WithMany(c => c.BackgroundCityOf);
+
+        builder.Entity<UnordinaryPerson>().HasOne(up => up.BirthPlace)
+            .WithMany(c => c.BirthPlaceOf);
+
+        builder.Entity<UnordinaryPerson>().HasOne(up => up.DeathPlace)
+            .WithMany(c => c.DeathPlaceOf);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.CitiesMentionedByTheSource)
+            .WithMany(c => c.SourcesMentioningTheCity);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.CitiesWhereSourcesAreWritten)
+            .WithMany(c => c.SourcesWrittenInTheCity);
+
+        // ----------- </City Mappings> --------------
     }
 }

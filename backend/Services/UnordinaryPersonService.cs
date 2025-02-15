@@ -10,7 +10,7 @@ namespace Mappa.Services;
 
 public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, 
     UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
-    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto>
+    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -414,18 +414,8 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         await _dbContext.SaveChangesAsync();
         return true;
     }
-    /*
-
-public class UnordinaryPersonFilterDto 
-{
-    public int? Religion {get; set;}
-    public int? Ethnicity {get; set;}
-    public List<int>? DeathYear {get; set;}
-    public int? DeathPlace {get; set;}
-    public List<int>? InteractionsWithOrdinary {get; set;}
-}
-    */
-    public async Task<PaginationResponse<UnordinaryPersonGeneralDto>> GetPageAsync(
+    
+    public async Task<PaginationResponse<UnordinaryPersonFilterResponseDto>> GetPageAsync(
         int pageNumber, int pageSize, UnordinaryPersonFilterDto? filter)
     {
         var query = _dbContext.Set<UnordinaryPerson>()
@@ -466,7 +456,7 @@ public class UnordinaryPersonFilterDto
                     .OrderBy(p => p.Id)  // Sort by Id (or other field)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(p => new UnordinaryPersonGeneralDto
+                    .Select(p => new UnordinaryPersonFilterResponseDto
                     {
                         Id = p.Id,
                         Name = p.Name,
@@ -482,7 +472,7 @@ public class UnordinaryPersonFilterDto
 
                 int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<UnordinaryPersonGeneralDto>
+                return new PaginationResponse<UnordinaryPersonFilterResponseDto>
                 {
                     Data = innerItems,
                     PageNumber = pageNumber,
@@ -502,7 +492,7 @@ public class UnordinaryPersonFilterDto
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(p => new UnordinaryPersonGeneralDto
+            .Select(p => new UnordinaryPersonFilterResponseDto
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -514,12 +504,17 @@ public class UnordinaryPersonFilterDto
             })
             .ToListAsync();
 
-        return new PaginationResponse<UnordinaryPersonGeneralDto>
+        return new PaginationResponse<UnordinaryPersonFilterResponseDto>
         {
             Data = items,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalCount = totalCount,
         };
+    }
+
+    public Task<IEnumerable<UnordinaryPersonFilterResponseDto>> GetAllFilteredAsync(UnordinaryPersonFilterDto filter)
+    {
+        throw new NotImplementedException();
     }
 }

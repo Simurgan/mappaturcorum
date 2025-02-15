@@ -29,7 +29,7 @@ public class WrittenSourceDetailDto : WrittenSourceGeneralDto
     public string? RemarkableWorksOnTheBook {get; set;}
     public string? Image {get; set;}
     public List<LanguageDto>? TranslatedLanguages {get; set;}
-    public List<CityBaseDto>? CitiesMentioningTheSources {get; set;}
+    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}
     public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
     public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;} 
     public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;} 
@@ -51,7 +51,7 @@ public class WrittenSourceCreateRequest
     public string? RemarkableWorksOnTheBook {get; set;}
     public string? Image {get; set;}
     public List<string>? TranslatedLanguages {get; set;}
-    public List<string>? CitiesMentioningTheSources {get; set;}
+    public List<string>? CitiesMentionedByTheSource {get; set;}
     public List<string>? CitiesWhereSourcesAreWritten {get; set;}
     
 }
@@ -70,7 +70,7 @@ public class WrittenSourceUpdateRequest
     public string? RemarkableWorksOnTheBook {get; set;}
     public string? Image {get; set;}
     public List<string>? TranslatedLanguages {get; set;}
-    public List<string>? CitiesMentioningTheSources {get; set;}
+    public List<string>? CitiesMentionedByTheSource {get; set;}
     public List<string>? CitiesWhereSourcesAreWritten {get; set;}
 }
 
@@ -83,3 +83,5 @@ public class WrittenSourceFilterDto
     public List<int>? OrdinaryPersons {get; set;}
     public List<int>? UnordinaryPersons {get; set;}
 }
+
+public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto {}

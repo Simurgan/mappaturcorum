@@ -17,6 +17,17 @@ public class CityDetailDto : CityGeneralDto
     public string? GeoNamesId {get; set;}
     public List<string>? AlternateNames {get; set;}
     public string? CountryCode {get; set;}
+    public double? Latitude {get; set;}
+    public double? Longitude {get; set;}
+    // OrdinaryPerson Ids
+    public List<OrdinaryPersonBaseDto>? LocationOf {get; set;}
+    public List<OrdinaryPersonBaseDto>? BackgroundCityOf {get; set;}
+    // UnordinaryPerson Ids
+    public List<UnordinaryPersonBaseDto>? BirthPlaceOf {get; set;}
+    public List<UnordinaryPersonBaseDto>? DeathPlaceOf {get; set;}
+    // WrittenSource Ids
+    public List<WrittenSourceBaseDto>? SourcesMentioningTheCity {get; set;}
+    public List<WrittenSourceBaseDto>? SourcesWrittenInTheCity {get; set;}
 }
 
 public class CityCreateRequest
@@ -26,6 +37,8 @@ public class CityCreateRequest
     public string? GeoNamesId { get; set; }
     public List<string>? AlternateNames { get; set; }
     public string? CountryCode { get; set; }
+    public double? Latitude {get; set;}
+    public double? Longitude {get; set;}
 }
 
 public class CityUpdateRequest
@@ -34,9 +47,23 @@ public class CityUpdateRequest
     public string? GeoNamesId { get; set; }
     public List<string>? AlternateNames { get; set; }
     public string? CountryCode { get; set; }
+    public double? Latitude {get; set;}
+    public double? Longitude {get; set;}
 }
 
 public class CityFilterDto
 {
+    public string? AsciiName { get; set; }
     public List<string>? AlternateNames { get; set; }
+    // OrdinaryPerson Ids
+    public List<int>? LocationOf {get; set;}
+    public List<int>? BackgroundCityOf {get; set;}
+    // UnordinaryPerson Ids
+    public List<int>? BirthPlaceOf {get; set;}
+    public List<int>? DeathPlaceOf {get; set;}
+    // WrittenSource Ids
+    public List<int>? SourcesMentioningTheCity {get; set;}
+    public List<int>? SourcesWrittenInTheCity {get; set;}
 }
+
+public class CityFilterResponseDto : CityDetailDto {}
