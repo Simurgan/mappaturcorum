@@ -76,9 +76,7 @@ builder.Services.AddScoped<IEntityService<Language, LanguageDto>, LanguageServic
 builder.Services.AddScoped<IEntityService<Profession, ProfessionDto>, ProfessionService>();
 builder.Services.AddScoped<IEntityService<Religion, ReligionDto>, ReligionService>();
 builder.Services.AddScoped<IEntityService<Mappa.Entities.Type, TypeDto>, TypeService>();
-builder.Services.AddScoped<IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-    CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto, 
-    CityGraphDto>, CityService>();
+builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
     WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,

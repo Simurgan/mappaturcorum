@@ -12,6 +12,5 @@ public interface IComplexEntityService<TEntity, TGeneralDto, TDetailDto,
     Task<bool> DeleteAsync(int id);
     Task<PaginationResponse<TFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize,
         TFilterDto filter);
-    Task<IEnumerable<TFilterResponseDto>> GetAllFilteredAsync(TFilterDto filter);
     Task<IEnumerable<TGraphDto>> GetAllForGraphAsync();
 }

@@ -8,9 +8,7 @@ public class CityBaseDto
     public string AsciiName { get; set; }
 }
 
-public class CityGeneralDto : CityBaseDto
-{
-}
+public class CityGeneralDto : CityBaseDto {}
 
 public class CityDetailDto : CityGeneralDto
 {
@@ -68,4 +66,19 @@ public class CityFilterDto
 
 public class CityFilterResponseDto : CityDetailDto {}
 
-public class CityGraphDto : CityBaseDto {}
+public class CityMapDto
+{
+    public int Id { get; set; }
+    public string AsciiName { get; set; }
+    public double? Latitude {get; set;}
+    public double? Longitude {get; set;}
+    // OrdinaryPerson Ids
+    public int? NumberOfLocationOf {get; set;}
+    public int? NumberOfBackgroundCityOf {get; set;}
+    // UnordinaryPerson Ids
+    public int? NumberOfBirthPlaceOf {get; set;}
+    public int? NumberOfDeathPlaceOf {get; set;}
+    // WrittenSource Ids
+    public int? NumberOfSourcesMentioningTheCity {get; set;}
+    public int? NumberOfSourcesWrittenInTheCity {get; set;}
+}

@@ -8,9 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mappa.Services;
 
-public class CityService : IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-    CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto,
-    CityGraphDto>
+public class CityService : ICityService
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -371,13 +369,41 @@ public class CityService : IComplexEntityService<City, CityGeneralDto, CityDetai
             .ToListAsync();
     }
 
-    public Task<PaginationResponse<CityFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize, CityFilterDto filter)
+    public async Task<IEnumerable<CityMapDto>> GetAllForMapAsync()
     {
-        throw new NotImplementedException();
+        return await _dbContext.Set<City>()
+            .Select(e => new CityMapDto
+            {
+                Id = e.Id,
+                AsciiName = e.AsciiName,
+                Latitude = e.Latitude,
+                Longitude = e.Longitude,
+                NumberOfLocationOf = (e.LocationOf != null) ? e.LocationOf.Count : 0,
+                NumberOfBackgroundCityOf = (e.BackgroundCityOf != null) ? 
+                    e.BackgroundCityOf.Count : 0,
+                NumberOfBirthPlaceOf = (e.BirthPlaceOf != null) ? e.BirthPlaceOf.Count : 0,
+                NumberOfDeathPlaceOf = (e.DeathPlaceOf != null) ? e.DeathPlaceOf.Count : 0,
+                NumberOfSourcesMentioningTheCity = (e.SourcesMentioningTheCity != null) 
+                    ? e.SourcesMentioningTheCity.Count : 0,
+                NumberOfSourcesWrittenInTheCity = (e.SourcesWrittenInTheCity != null) 
+                    ? e.SourcesWrittenInTheCity.Count : 0,
+
+            })
+            .OrderBy(e => e.Id)
+            .ToListAsync();
     }
 
-    public Task<IEnumerable<CityGraphDto>> GetAllForGraphAsync()
-    {
-        throw new NotImplementedException();
-    }
+    // public int Id { get; set; }
+    // public string AsciiName { get; set; }
+    // public double? Latitude {get; set;}
+    // public double? Longitude {get; set;}
+    // // OrdinaryPerson Ids
+    // public int? NumberOfLocationOf {get; set;}
+    // public int? NumberOfBackgroundCityOf {get; set;}
+    // // UnordinaryPerson Ids
+    // public int? NumberOfBirthPlaceOf {get; set;}
+    // public int? NumberOfDeathPlaceOf {get; set;}
+    // // WrittenSource Ids
+    // public int? NumberOfSourcesMentioningTheCity {get; set;}
+    // public int? NumberOfSourcesWrittenInTheCity {get; set;}
 }

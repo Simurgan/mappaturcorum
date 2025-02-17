@@ -454,11 +454,6 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         };
     }
 
-    public Task<IEnumerable<WrittenSourceFilterResponseDto>> GetAllFilteredAsync(WrittenSourceFilterDto filter)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IEnumerable<WrittenSourceGraphDto>> GetAllForGraphAsync()
     {
         throw new NotImplementedException();

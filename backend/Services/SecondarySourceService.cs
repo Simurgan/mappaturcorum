@@ -236,11 +236,6 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<SecondarySourceFilterResponseDto>> GetAllFilteredAsync(SecondarySourceFilterDto filter)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IEnumerable<SecondarySourceGraphDto>> GetAllForGraphAsync()
     {
         throw new NotImplementedException();

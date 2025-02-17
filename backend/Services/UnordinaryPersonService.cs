@@ -524,11 +524,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         };
     }
 
-    public Task<IEnumerable<UnordinaryPersonFilterResponseDto>> GetAllFilteredAsync(UnordinaryPersonFilterDto filter)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<UnordinaryPersonGraphDto>> GetAllForGraphAsync()
     {
         return await _dbContext.Set<UnordinaryPerson>()
