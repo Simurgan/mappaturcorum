@@ -12,12 +12,14 @@ public class OrdinaryPersonController : ControllerBase
 {
     private readonly IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, 
         OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
-        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto>
+        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
+        OrdinaryPersonGraphDto>
         _service;
 
     public OrdinaryPersonController(IComplexEntityService<OrdinaryPerson, 
         OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
-        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto> 
+        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
+        OrdinaryPersonGraphDto> 
         service)
     {
         _service = service;
@@ -27,6 +29,14 @@ public class OrdinaryPersonController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var items = await _service.GetAllAsync();
+        return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("graph")]
+    public async Task<IActionResult> GetAllForGraph()
+    {
+        var items = await _service.GetAllForGraphAsync();
         return Ok(items);
     }
 

@@ -12,13 +12,15 @@ public class UnordinaryPersonController : ControllerBase
 {
     private readonly IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, 
         UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
-        UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto>
+        UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
+        UnordinaryPersonGraphDto>
         _service;
 
     public UnordinaryPersonController(IComplexEntityService<UnordinaryPerson, 
         UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
         UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest,
-        UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto> service)
+        UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto> 
+        service)
     {
         _service = service;
     }
@@ -27,6 +29,14 @@ public class UnordinaryPersonController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var items = await _service.GetAllAsync();
+        return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("graph")]
+    public async Task<IActionResult> GetAllForGraph()
+    {
+        var items = await _service.GetAllForGraphAsync();
         return Ok(items);
     }
 

@@ -12,12 +12,13 @@ public class WrittenSourceController : ControllerBase
 {
     private readonly IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, 
         WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest,
-        WrittenSourceFilterDto, WrittenSourceFilterResponseDto>
+        WrittenSourceFilterDto, WrittenSourceFilterResponseDto, WrittenSourceGraphDto>
         _service;
 
     public WrittenSourceController(IComplexEntityService<WrittenSource, 
         WrittenSourceGeneralDto,WrittenSourceDetailDto, WrittenSourceCreateRequest, 
-        WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto> 
+        WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
+        WrittenSourceGraphDto> 
         service)
     {
         _service = service;

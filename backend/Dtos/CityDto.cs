@@ -67,3 +67,5 @@ public class CityFilterDto
 }
 
 public class CityFilterResponseDto : CityDetailDto {}
+
+public class CityGraphDto : CityBaseDto {}

@@ -10,7 +10,8 @@ namespace Mappa.Services;
 
 public class WrittenSourceService : IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
-    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto>
+    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
+    WrittenSourceGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -441,6 +442,11 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
     }
 
     public Task<IEnumerable<WrittenSourceFilterResponseDto>> GetAllFilteredAsync(WrittenSourceFilterDto filter)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<WrittenSourceGraphDto>> GetAllForGraphAsync()
     {
         throw new NotImplementedException();
     }

@@ -11,11 +11,13 @@ namespace Mappa.Controllers;
 public class CityController : ControllerBase
 {
     private readonly IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-        CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto>
+        CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto,
+        CityGraphDto>
         _service;
 
     public CityController(IComplexEntityService<City, CityGeneralDto,CityDetailDto, 
-        CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto> 
+        CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto,
+        CityGraphDto> 
         service)
     {
         _service = service;

@@ -9,7 +9,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Mappa.Services;
 
 public class CityService : IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-    CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto>
+    CityCreateRequest, CityUpdateRequest, CityFilterDto, CityFilterResponseDto,
+    CityGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -361,6 +362,11 @@ public class CityService : IComplexEntityService<City, CityGeneralDto, CityDetai
     }
 
     public Task<PaginationResponse<CityFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize, CityFilterDto filter)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<CityGraphDto>> GetAllForGraphAsync()
     {
         throw new NotImplementedException();
     }

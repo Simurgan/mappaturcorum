@@ -13,7 +13,7 @@ namespace Mappa.Services;
 public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson, 
     OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, 
     OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto,
-    OrdinaryPersonFilterResponseDto>
+    OrdinaryPersonFilterResponseDto, OrdinaryPersonGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -605,5 +605,30 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
     public Task<IEnumerable<OrdinaryPersonFilterResponseDto>> GetAllFilteredAsync(OrdinaryPersonFilterDto filter)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<OrdinaryPersonGraphDto>> GetAllForGraphAsync()
+    {
+        return await _dbContext.Set<OrdinaryPerson>()
+            .Select(e => new OrdinaryPersonGraphDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Religion = e.Religion == null ? null : e.Religion.Id,
+                Ethnicity = e.Ethnicity == null ? null : e.Ethnicity.Id,
+                Profession = e.Profession == null ? null : e.Profession.Id,
+                Location = e.Location == null ? null : e.Location.Id,
+                Sources = e.Sources == null ? null : e.Sources.Select(s => s.Id).
+                    ToList(),
+                Gender = e.Gender == null ? null : e.Gender.Id,
+                FormerReligion = e.FormerReligion == null ? null : e.FormerReligion.
+                    Select(fr => fr.Id).ToList(),
+                InteractionsWithUnordinary = e.InteractionsWithUnordinary == null ? null : 
+                    e.InteractionsWithUnordinary.Select(fr => fr.Id).ToList(),
+                InteractionsWithOrdinaryA = e.InteractionsWithOrdinaryA == null ? null : 
+                    e.InteractionsWithOrdinaryA.Select(fr => fr.Id).ToList(),
+            })
+            .OrderBy(op => op.Id)
+            .ToListAsync();
     }
 }

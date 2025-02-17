@@ -85,3 +85,5 @@ public class WrittenSourceFilterDto
 }
 
 public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto {}
+
+public class WrittenSourceGraphDto : WrittenSourceBaseDto {}

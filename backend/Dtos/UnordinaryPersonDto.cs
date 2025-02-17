@@ -90,3 +90,17 @@ public class UnordinaryPersonFilterDto
 }
 
 public class UnordinaryPersonFilterResponseDto : UnordinaryPersonGeneralDto {}
+
+public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto 
+{
+    public int? Religion {get; set;}
+    public int? Ethnicity {get; set;}
+    public int? Profession {get; set;}
+    public List<int>? Sources {get; set;}
+    public int? BirthPlace {get; set;}
+    public int? DeathPlace {get; set;}
+    public int? Gender {get; set;}
+    public List<int>? InteractionsWithUnordinaryA{get; set;}
+    public List<int>? FormerReligion {get; set;}
+    public List<int>? InteractionsWithOrdinary{get; set;}
+}

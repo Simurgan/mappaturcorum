@@ -10,7 +10,8 @@ namespace Mappa.Services;
 
 public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, 
     UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
-    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto>
+    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
+    UnordinaryPersonGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -516,5 +517,31 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
     public Task<IEnumerable<UnordinaryPersonFilterResponseDto>> GetAllFilteredAsync(UnordinaryPersonFilterDto filter)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<UnordinaryPersonGraphDto>> GetAllForGraphAsync()
+    {
+        return await _dbContext.Set<UnordinaryPerson>()
+            .Select(e => new UnordinaryPersonGraphDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Religion = e.Religion == null ? null : e.Religion.Id,
+                Ethnicity = e.Ethnicity == null ? null : e.Ethnicity.Id,
+                Profession = e.Profession == null ? null : e.Profession.Id,
+                BirthPlace = e.BirthPlace == null ? null : e.BirthPlace.Id,
+                DeathPlace = e.DeathPlace == null ? null : e.DeathPlace.Id,
+                Sources = e.Sources == null ? null : e.Sources.Select(s => s.Id).
+                    ToList(),
+                Gender = e.Gender == null ? null : e.Gender.Id,
+                FormerReligion = e.FormerReligion == null ? null : e.FormerReligion.
+                    Select(fr => fr.Id).ToList(),
+                InteractionsWithUnordinaryA = e.InteractionsWithUnordinaryA == null ? null : 
+                    e.InteractionsWithUnordinaryA.Select(fr => fr.Id).ToList(),
+                InteractionsWithOrdinary = e.InteractionsWithOrdinary == null ? null : 
+                    e.InteractionsWithOrdinary.Select(fr => fr.Id).ToList(),
+            })
+            .OrderBy(up => up.Id)
+            .ToListAsync();
     }
 }

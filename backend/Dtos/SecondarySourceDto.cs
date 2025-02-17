@@ -65,3 +65,5 @@ public class SecondarySourceFilterDto
 }
 
 public class SecondarySourceFilterResponseDto : SecondarySourceGeneralDto {}
+
+public class SecondarySourceGraphDto : SecondarySourceBaseDto {}
