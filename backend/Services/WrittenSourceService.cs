@@ -322,6 +322,14 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         if(filter != null)
         {
+            if(filter.Name != null)
+            {
+                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+                query = query.Where(e =>  (e.AlternateNames != null)
+                    && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "").
+                    Contains(checkedString)));
+            }
+
             if(filter.Genre != null) 
                 query = query.Where(op => op.Genre != null && (op.Genre.Id == filter.Genre));
 
@@ -337,7 +345,12 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             }
 
             if(filter.Author != null)
-                query = query.Where(op => op.Author != null && (op.Author == filter.Author));
+            {
+                var checkedString = filter.Author.ToLower().Replace(" ", "").Replace(" ","");
+                query = query.Where(op => op.Author != null && (op.Author.ToLower()
+                    .Replace(" ", "").Replace(" ","").Contains(checkedString)));
+            }
+                
             
             if(filter.Language != null)
                 query = query.Where(op => op.Language != null && (op.Language.Id == filter.Language));

@@ -479,6 +479,15 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
 
         if(filter != null)
         {
+            if(filter.Name != null)
+            {
+                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+                query = query.Where(e => e.Name.ToLower().Replace(" ", "").
+                    Replace("\t", "").Contains(checkedString) || (e.AlternateName != null)
+                    && e.AlternateName.ToLower().Replace(" ", "").Replace("\t", "").
+                    Contains(checkedString));
+            }
+
             if(filter.Religion != null) 
                 query = query.Where(op => op.Religion != null && (op.Religion.Id == filter.Religion));
 
@@ -514,7 +523,8 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     Location = _mapper.Map<CityBaseDto>(p.Location),
                     Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
                     Gender = _mapper.Map<GenderDto>(p.Gender),
-                    InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary)
+                    InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
+                AlternateName = p.AlternateName,
                 })
                 .ToList();
 
@@ -551,7 +561,8 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     Location = _mapper.Map<CityBaseDto>(p.Location),
                     Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
                     Gender = _mapper.Map<GenderDto>(p.Gender),
-                    InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary)
+                    InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
+                    AlternateName = p.AlternateName,
                 })
                 .ToList();
 
@@ -589,7 +600,8 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                 Location = _mapper.Map<CityBaseDto>(p.Location),
                 Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
                 Gender = _mapper.Map<GenderDto>(p.Gender),
-                InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary)
+                InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
+                AlternateName = p.AlternateName,
             })
             .ToListAsync();
 

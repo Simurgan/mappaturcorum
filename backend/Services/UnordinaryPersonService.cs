@@ -37,7 +37,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                 Ethnicity = _mapper.Map<EthnicityDto>(e.Ethnicity),
                 DeathYear = e.DeathYear,
                 DeathPlace = _mapper.Map<CityBaseDto>(e.DeathPlace),
-                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(e.InteractionsWithOrdinary)
+                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(e.InteractionsWithOrdinary),
             })
             .OrderBy(up => up.Id)
             .ToListAsync();
@@ -427,6 +427,14 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
 
         if(filter != null)
         {
+            if(filter.Name != null)
+            {
+                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+                query = query.Where(e => e.Name.ToLower().Replace(" ", "").
+                    Replace("\t", "").Contains(checkedString) || (e.AlternateName != null)
+                    && e.AlternateName.ToLower().Replace(" ", "").Replace("\t", "").
+                    Contains(checkedString));
+            }
             if(filter.Religion != null) 
                 query = query.Where(op => op.Religion != null && (op.Religion.Id == filter.Religion));
 
@@ -465,7 +473,8 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                         Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
                         DeathYear = p.DeathYear,
                         DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
-                        InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary)
+                        InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary),
+                        AlternateName = p.AlternateName,
                     })
                     .ToList();
 
@@ -501,7 +510,8 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                 Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
                 DeathYear = p.DeathYear,
                 DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
-                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary)
+                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary),
+                AlternateName = p.AlternateName,
             })
             .ToListAsync();
 

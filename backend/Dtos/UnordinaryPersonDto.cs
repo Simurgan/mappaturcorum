@@ -82,6 +82,7 @@ public class UnordinaryPersonUpdateRequest
 
 public class UnordinaryPersonFilterDto 
 {
+    public string Name {get; set;}
     public int? Religion {get; set;}
     public int? Ethnicity {get; set;}
     public List<int>? DeathYear {get; set;}
@@ -89,7 +90,10 @@ public class UnordinaryPersonFilterDto
     public List<int>? InteractionsWithOrdinary {get; set;}
 }
 
-public class UnordinaryPersonFilterResponseDto : UnordinaryPersonGeneralDto {}
+public class UnordinaryPersonFilterResponseDto : UnordinaryPersonGeneralDto 
+{
+    public string? AlternateName {get; set;}
+}
 
 public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto 
 {

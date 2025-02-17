@@ -183,6 +183,16 @@ public class CityService : IComplexEntityService<City, CityGeneralDto, CityDetai
 
         if(filter != null)
         {
+            if(filter.Name != null)
+            {
+                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+                query = query.Where(e => e.AsciiName.ToLower().Replace(" ", "").
+                    Replace("\t", "").Contains(checkedString) || 
+                    (e.AlternateNames != null &&
+                    e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "")
+                    .Contains(checkedString))));
+            }
+
             if(filter.LocationOf != null)
             {
                 var innerItems = query.Include(op => op.LocationOf).AsEnumerable()

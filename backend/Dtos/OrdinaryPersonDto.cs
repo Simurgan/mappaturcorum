@@ -104,6 +104,7 @@ public class OrdinaryPersonUpdateRequest
 
 public class OrdinaryPersonFilterDto 
 {
+    public string Name {get; set;}
     public int? Religion {get; set;}
     public int? Ethnicity {get; set;}
     public int? Profession {get; set;}
@@ -114,7 +115,10 @@ public class OrdinaryPersonFilterDto
 
 }
 
-public class OrdinaryPersonFilterResponseDto : OrdinaryPersonGeneralDto {}
+public class OrdinaryPersonFilterResponseDto : OrdinaryPersonGeneralDto 
+{
+    public string? AlternateName {get; set;}
+}
 
 public class OrdinaryPersonGraphDto: OrdinaryPersonBaseDto 
 {

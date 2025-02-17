@@ -76,6 +76,7 @@ public class WrittenSourceUpdateRequest
 
 public class WrittenSourceFilterDto
 {
+    public string? Name {get; set;}
     public int? Genre {get; set;}
     public List<int>? YearWritten {get; set;}
     public string? Author {get; set;}
