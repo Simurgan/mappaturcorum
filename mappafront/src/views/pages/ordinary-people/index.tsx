@@ -7,7 +7,20 @@ import {
   ordinaryTableHeaders,
 } from "@/helpers/data/ordinary-people";
 
+import { useState } from "react";
+import MappaModal from "@/views/components/modal";
+
 const OrdinaryPeoplePage = () => {
+  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedData, setSelectedData] = useState();
+
+  function openModal(data: any) {
+    setIsOpen(true);
+    setSelectedData(data);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
   return (
     <section className="section ordinary-section">
       <div className="container">
@@ -33,10 +46,16 @@ const OrdinaryPeoplePage = () => {
       </div>
       <div className="content">
         <Table
+          openModal={(data) => openModal(data)}
           tableHeaders={ordinaryTableHeaders}
           tableData={ordinaryTableData}
         />
       </div>
+      <MappaModal
+        isOpen={modalIsOpen}
+        closeModal={closeModal}
+        data={selectedData}
+      />
     </section>
   );
 };

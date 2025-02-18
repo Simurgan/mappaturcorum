@@ -6,9 +6,10 @@ import "./style.scss";
 interface TableProps {
   tableHeaders: string[];
   tableData: Object[];
+  openModal: (data: any) => void;
 }
 
-const Table = ({ tableHeaders, tableData }: TableProps) => {
+const Table = ({ tableHeaders, tableData, openModal }: TableProps) => {
   const {
     currentPage,
     totalPages,
@@ -23,7 +24,11 @@ const Table = ({ tableHeaders, tableData }: TableProps) => {
 
   return (
     <div className="table-container">
-      <TableData headers={tableHeaders} data={paginatedData} />
+      <TableData
+        headers={tableHeaders}
+        data={paginatedData}
+        openModal={(data: any) => openModal(data)}
+      />
       <TablePagination
         currentPage={currentPage}
         totalPage={totalPages}
