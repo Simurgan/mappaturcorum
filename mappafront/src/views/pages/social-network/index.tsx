@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import "./style.scss";
+import { useWindowSize } from "@react-hook/window-size";
 
 function generateRandomGraph() {
   const nodeCount = Math.floor(Math.random() * 21) + 80;
@@ -31,12 +32,15 @@ function generateRandomGraph() {
 
 const GraphPage: React.FC = () => {
   const data = useMemo(() => generateRandomGraph(), []);
+  const [width, height] = useWindowSize();
 
   return (
     <section className="section social-network-section">
       <div className="container">
         <div className="graph-container">
           <ForceGraph2D
+            width={width - 240}
+            height={height - 48}
             graphData={data}
             // We'll still use nodeLabel for the tooltip hover text.
             nodeLabel="name"
