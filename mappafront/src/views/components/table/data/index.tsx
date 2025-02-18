@@ -4,9 +4,10 @@ import "./style.scss";
 interface TableDataProps {
   headers: string[];
   data: { [key: string]: any }[];
+  openModal: (data: any) => void;
 }
 
-const TableData = ({ headers, data }: TableDataProps) => {
+const TableData = ({ headers, data, openModal }: TableDataProps) => {
   return (
     <table className="table">
       <thead className="table-header">
@@ -24,7 +25,11 @@ const TableData = ({ headers, data }: TableDataProps) => {
       <tbody className="table-body">
         {data.length > 0 ? (
           data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="data-row">
+            <tr
+              key={rowIndex}
+              className="data-row"
+              onClick={() => openModal(row)}
+            >
               {Object.keys(row).map((key) => (
                 <td key={key} className="data-row-item">
                   <Text fs={12} fw={500} lh={125} color="dark-gray">
