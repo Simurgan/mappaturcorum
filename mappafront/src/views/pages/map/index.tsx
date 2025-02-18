@@ -6,8 +6,34 @@ import Text from "@/views/components/text";
 import React, { useState } from "react";
 import Button from "@/views/components/button";
 import ReactModal from "react-modal";
+import { FilterGroup } from "@/models/map-filters";
 
 ReactModal.setAppElement("#root"); // For blocking not working modal styles in some browsers.
+
+const filters: FilterGroup[] = [
+  {
+    group: "Location Types",
+    key: "location",
+    options: ["Cities", "Villages", "Castles", "Caravansarries", "Other"],
+  },
+  {
+    group: "Document Types",
+    key: "documents",
+    options: [
+      "All",
+      "Waqfiyas",
+      "Manakibnames",
+      "Tawarikhs",
+      "Travel Books",
+      "Other",
+    ],
+  },
+  {
+    group: "Survival Status",
+    key: "survival",
+    options: ["All", "Survived", "Unsurvived"],
+  },
+];
 
 const MapPage = () => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -122,7 +148,26 @@ const MapPage = () => {
             ))}
           </MapContainer>
         </div>
-        <div className="map-tools-container"></div>
+        <div className="map-tools-container">
+          <input placeholder="search on map..." className="map-search-input" />
+          <div className="map-filters-container">
+            {filters.map((filterGroup) => (
+              <div key={filterGroup.key} className="filter-group">
+                <Text fs={16} fw={700} lh={140} color="burgundy">
+                  {filterGroup.group}
+                </Text>
+                {filterGroup.options.map((option) => (
+                  <div key={option} className="filter-item">
+                    <input type="checkbox" className="checkbox-input" />
+                    <Text fs={14} fw={400} lh={125} color="burgundy">
+                      {option}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
