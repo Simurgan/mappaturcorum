@@ -10,7 +10,7 @@ public class OrdinaryPerson : Person
     public string? InteractionWithOrdinaryExplanation{get; set;}
     public string? InteractionWithUnordinaryExplanation{get; set;}
     public string? Biography{get; set;}
-    public string? DepictionInTheSource{get; set;}
+    public string? DescriptionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     // public Relation? Relation{get; set;}
     [Required]

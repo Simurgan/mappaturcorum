@@ -16,6 +16,7 @@ public class UnordinaryPerson : Person
     public City? DeathPlace {get; set;}
     public List<WrittenSource>? Sources {get; set;}
     public List<Religion>? FormerReligion {get; set;}
+    public string? Depiction {get; set;}
 
 }
 

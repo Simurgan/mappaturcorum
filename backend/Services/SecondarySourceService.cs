@@ -28,6 +28,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
             .Select(e => new SecondarySourceGeneralDto
             {
                 Id = e.Id,
+                Name = e.Name,
                 AlternateNames = e.AlternateNames,
                 Author = e.Author,
                 YearWritten = e.YearWritten,
@@ -52,6 +53,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
         return new SecondarySourceDetailDto
         {
             Id = entity.Id,
+            Name = entity.Name,
             AlternateNames = entity.AlternateNames,
             Author = entity.Author,
             YearWritten = entity.YearWritten,
@@ -78,6 +80,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
 
         var entity = new SecondarySource
         {
+            Name = request.Name,
             AlternateNames = request.AlternateNames,
             Author = request.Author,
             YearWritten = request.YearWritten,
@@ -123,6 +126,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
         return new SecondarySourceDetailDto
         {
             Id = entity.Id,
+            Name = entity.Name,
             AlternateNames = entity.AlternateNames,
             Author = entity.Author,
             YearWritten = entity.YearWritten,
@@ -148,6 +152,9 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
             throw new ArgumentException($"Entity with ID {id} not found.");
 
         // Only update fields if they are not null
+        if (request.Name != null)
+            secondarySource.Name = request.Name;
+
         if (request.AlternateNames != null)
             secondarySource.AlternateNames = request.AlternateNames;
 
@@ -207,6 +214,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
         return new SecondarySourceDetailDto
         {
             Id = secondarySource.Id,
+            Name = secondarySource.Name,
             AlternateNames = secondarySource.AlternateNames,
             Author = secondarySource.Author,
             YearWritten = secondarySource.YearWritten,

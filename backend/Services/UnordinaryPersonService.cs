@@ -81,6 +81,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryA),
             InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryB),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(entity.Sources),
+            Depiction = entity.Depiction,
         };
     }
 
@@ -95,6 +96,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             ProbableBirthYear = request.ProbableBirthYear,
             ProbableDeathYear = request.ProbableDeathYear,
             Description = request.Description,
+            Depiction = request.Depiction,
             // Religion = _mapper.Map<Religion>(request.Religion),
             // Ethnicity = _mapper.Map<Ethnicity>(request.Ethnicity),
             // FormerReligion = _mapper.Map<List<Religion>>(request.FormerReligion),
@@ -233,6 +235,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
+            Depiction = unordinaryPerson.Depiction,
         };
     }
 
@@ -379,6 +382,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             unordinaryPerson.Sources = sources;
         }
 
+        if (request.Depiction != null)
+            unordinaryPerson.Depiction = request.Depiction;
+
         await _dbContext.SaveChangesAsync();
 
         return new UnordinaryPersonDetailDto
@@ -402,6 +408,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
+            Depiction = unordinaryPerson.Depiction,
         };
     }
 

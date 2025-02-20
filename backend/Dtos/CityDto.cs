@@ -6,6 +6,7 @@ public class CityBaseDto
 {
     public int Id { get; set; }
     public string AsciiName { get; set; }
+    public string? Name {get; set;}
 }
 
 public class CityGeneralDto : CityBaseDto {}
@@ -32,6 +33,7 @@ public class CityCreateRequest
 {
     [Required]
     public string AsciiName { get; set; }
+    public string? Name {get; set;}
     public string? GeoNamesId { get; set; }
     public List<string>? AlternateNames { get; set; }
     public string? CountryCode { get; set; }
@@ -42,6 +44,7 @@ public class CityCreateRequest
 public class CityUpdateRequest
 {
     public string? AsciiName { get; set; }
+    public string? Name {get; set;}
     public string? GeoNamesId { get; set; }
     public List<string>? AlternateNames { get; set; }
     public string? CountryCode { get; set; }
@@ -70,6 +73,7 @@ public class CityMapDto
 {
     public int Id { get; set; }
     public string AsciiName { get; set; }
+    public string? Name {get; set;}
     public double? Latitude {get; set;}
     public double? Longitude {get; set;}
     // OrdinaryPerson Ids

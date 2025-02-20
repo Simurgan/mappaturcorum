@@ -26,6 +26,7 @@ public class CityService : ICityService
             {
                 Id = e.Id,
                 AsciiName = e.AsciiName,
+                Name = e.Name,
             })
             .OrderBy(e => e.Id)
             .ToListAsync();
@@ -49,6 +50,7 @@ public class CityService : ICityService
         {
             Id = entity.Id,
             AsciiName = entity.AsciiName,
+            Name = entity.Name,
             GeoNamesId = entity.GeoNamesId,
             AlternateNames = entity.AlternateNames,
             CountryCode = entity.CountryCode,
@@ -76,6 +78,7 @@ public class CityService : ICityService
         var city = new City
         {
             AsciiName = request.AsciiName,
+            Name = request.Name,
             GeoNamesId = request.GeoNamesId,
             AlternateNames = request.AlternateNames,
             CountryCode = request.CountryCode,
@@ -90,6 +93,7 @@ public class CityService : ICityService
         {
             Id = city.Id,
             AsciiName = city.AsciiName,
+            Name = city.Name,
             GeoNamesId = city.GeoNamesId,
             AlternateNames = city.AlternateNames,
             CountryCode = city.CountryCode,
@@ -121,6 +125,9 @@ public class CityService : ICityService
         if (request.AsciiName != null)
             city.AsciiName = request.AsciiName;
 
+        if (request.Name != null)
+            city.Name = request.Name;
+
         if (request.GeoNamesId != null)
             city.GeoNamesId = request.GeoNamesId;
 
@@ -142,6 +149,7 @@ public class CityService : ICityService
         {
             Id = city.Id,
             AsciiName = city.AsciiName,
+            Name = city.Name,
             GeoNamesId = city.GeoNamesId,
             AlternateNames = city.AlternateNames,
             CountryCode = city.CountryCode,
@@ -203,6 +211,7 @@ public class CityService : ICityService
                     {
                         Id = p.Id,
                         AsciiName = p.AsciiName,
+                        Name = p.Name,
                         AlternateNames = p.AlternateNames,
                         GeoNamesId = p.GeoNamesId,
                         CountryCode = p.CountryCode,
@@ -230,6 +239,7 @@ public class CityService : ICityService
                     {
                         Id = p.Id,
                         AsciiName = p.AsciiName,
+                        Name = p.Name,
                         AlternateNames = p.AlternateNames,
                         GeoNamesId = p.GeoNamesId,
                         CountryCode = p.CountryCode,
@@ -257,6 +267,7 @@ public class CityService : ICityService
                     {
                         Id = p.Id,
                         AsciiName = p.AsciiName,
+                        Name = p.Name,
                         AlternateNames = p.AlternateNames,
                         GeoNamesId = p.GeoNamesId,
                         CountryCode = p.CountryCode,
@@ -284,6 +295,7 @@ public class CityService : ICityService
                     {
                         Id = p.Id,
                         AsciiName = p.AsciiName,
+                        Name = p.Name,
                         AlternateNames = p.AlternateNames,
                         GeoNamesId = p.GeoNamesId,
                         CountryCode = p.CountryCode,
@@ -311,6 +323,7 @@ public class CityService : ICityService
                     {
                         Id = p.Id,
                         AsciiName = p.AsciiName,
+                        Name = p.Name,
                         AlternateNames = p.AlternateNames,
                         GeoNamesId = p.GeoNamesId,
                         CountryCode = p.CountryCode,
@@ -338,6 +351,7 @@ public class CityService : ICityService
                     {
                         Id = p.Id,
                         AsciiName = p.AsciiName,
+                        Name = p.Name,
                         AlternateNames = p.AlternateNames,
                         GeoNamesId = p.GeoNamesId,
                         CountryCode = p.CountryCode,
@@ -359,6 +373,7 @@ public class CityService : ICityService
                 {
                     Id = p.Id,
                     AsciiName = p.AsciiName,
+                    Name = p.Name,
                     AlternateNames = p.AlternateNames,
                     GeoNamesId = p.GeoNamesId,
                     CountryCode = p.CountryCode,

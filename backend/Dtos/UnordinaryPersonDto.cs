@@ -33,6 +33,7 @@ public class UnordinaryPersonDetailDto : UnordinaryPersonGeneralDto
     public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryA {get; set;}
     public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryB {get; set;}
     public List<WrittenSourceBaseDto>? Sources {get; set;}
+    public string? Depiction {get; set;}
 }
 
 // Simple entities will be denoted by their Names.
@@ -57,6 +58,7 @@ public class UnordinaryPersonCreateRequest
     public string? BirthPlace {get; set;}
     public List<int>? InteractionsWithUnordinaryA {get; set;}
     public List<int>? Sources {get; set;}
+    public string? Depiction {get; set;}
 }
 
 public class UnordinaryPersonUpdateRequest
@@ -78,6 +80,7 @@ public class UnordinaryPersonUpdateRequest
     public string? BirthPlace {get; set;}
     public List<int>? InteractionsWithUnordinaryA {get; set;}
     public List<int>? Sources {get; set;}
+    public string? Depiction {get; set;}
 }
 
 public class UnordinaryPersonFilterDto 

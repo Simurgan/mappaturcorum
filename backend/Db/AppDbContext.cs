@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks.Dataflow;
 using Mappa.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -65,6 +66,14 @@ public class AppDbContext : IdentityDbContext<User>
             .WithMany();
 
         builder.Entity<UnordinaryPerson>().HasOne(up => up.Religion)
+            .WithMany();
+
+        // Translated Languages
+        
+        builder.Entity<WrittenSource>().HasMany(ws => ws.TranslatedLanguages)
+            .WithMany();
+
+        builder.Entity<SecondarySource>().HasMany(ss => ss.TranslatedLanguages)
             .WithMany();
 
         // ----------- <City Mappings> --------------

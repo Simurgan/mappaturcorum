@@ -13,6 +13,7 @@ public class City
     public int Id {get; set;}
     [Required]
     public string AsciiName {get; set;}
+    public string? Name {get; set;}
     public string? GeoNamesId {get; set;}
     public List<string>? AlternateNames {get; set;}
     public string? CountryCode {get; set;}

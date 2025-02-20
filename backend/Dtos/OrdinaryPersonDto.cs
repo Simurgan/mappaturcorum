@@ -37,7 +37,7 @@ public class OrdinaryPersonDetailDto : OrdinaryPersonGeneralDto
     public string? InteractionWithOrdinaryExplanation{get; set;}
     public string? InteractionWithUnordinaryExplanation{get; set;}
     public string? Biography{get; set;}
-    public string? DepictionInTheSource{get; set;}
+    public string? DescriptionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinaryA{get; set;}
     public CityBaseDto? BackgroundCity {get; set;}
@@ -66,7 +66,7 @@ public class OrdinaryPersonCreateRequest
     public string? InteractionWithOrdinaryExplanation{get; set;}
     public string? InteractionWithUnordinaryExplanation{get; set;}
     public string? Biography{get; set;}
-    public string? DepictionInTheSource{get; set;}
+    public string? DescriptionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     public List<int>? InteractionsWithOrdinaryA{get; set;}
     public List<int>? InteractionsWithUnordinary{get; set;}
@@ -95,7 +95,7 @@ public class OrdinaryPersonUpdateRequest
     public string? InteractionWithOrdinaryExplanation{get; set;}
     public string? InteractionWithUnordinaryExplanation{get; set;}
     public string? Biography{get; set;}
-    public string? DepictionInTheSource{get; set;}
+    public string? DescriptionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     public List<int>? InteractionsWithOrdinaryA{get; set;}
     public List<int>? InteractionsWithUnordinary{get; set;}

@@ -90,7 +90,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             InteractionWithOrdinaryExplanation = entity.InteractionWithOrdinaryExplanation,
             InteractionWithUnordinaryExplanation = entity.InteractionWithUnordinaryExplanation,
             Biography = entity.Biography,
-            DepictionInTheSource = entity.DepictionInTheSource,
+            DescriptionInTheSource = entity.DescriptionInTheSource,
             ExplanationOfEthnicity = entity.ExplanationOfEthnicity,
             InteractionsWithOrdinaryA = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.InteractionsWithOrdinaryA),
             InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinary),
@@ -115,7 +115,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             InteractionWithOrdinaryExplanation = request.InteractionWithOrdinaryExplanation,
             InteractionWithUnordinaryExplanation = request.InteractionWithUnordinaryExplanation,
             Biography = request.Biography,
-            DepictionInTheSource = request.DepictionInTheSource,
+            DescriptionInTheSource = request.DescriptionInTheSource,
             ExplanationOfEthnicity = request.ExplanationOfEthnicity,
         };
 
@@ -247,7 +247,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             InteractionWithOrdinaryExplanation = ordinaryPerson.InteractionWithOrdinaryExplanation,
             InteractionWithUnordinaryExplanation = ordinaryPerson.InteractionWithUnordinaryExplanation,
             Biography = ordinaryPerson.Biography,
-            DepictionInTheSource = ordinaryPerson.DepictionInTheSource,
+            DescriptionInTheSource = ordinaryPerson.DescriptionInTheSource,
             ExplanationOfEthnicity = ordinaryPerson.ExplanationOfEthnicity,
             InteractionsWithOrdinaryA = _mapper.Map<List<OrdinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithOrdinaryA),
             InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithUnordinary),
@@ -382,8 +382,8 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         if (request.Biography != null)
             ordinaryPerson.Biography = request.Biography;
 
-        if (request.DepictionInTheSource != null)
-            ordinaryPerson.DepictionInTheSource = request.DepictionInTheSource;
+        if (request.DescriptionInTheSource != null)
+            ordinaryPerson.DescriptionInTheSource = request.DescriptionInTheSource;
 
         if (request.ExplanationOfEthnicity != null)
             ordinaryPerson.ExplanationOfEthnicity = request.ExplanationOfEthnicity;
@@ -448,7 +448,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             InteractionWithOrdinaryExplanation = ordinaryPerson.InteractionWithOrdinaryExplanation,
             InteractionWithUnordinaryExplanation = ordinaryPerson.InteractionWithUnordinaryExplanation,
             Biography = ordinaryPerson.Biography,
-            DepictionInTheSource = ordinaryPerson.DepictionInTheSource,
+            DescriptionInTheSource = ordinaryPerson.DescriptionInTheSource,
             ExplanationOfEthnicity = ordinaryPerson.ExplanationOfEthnicity,
             InteractionsWithOrdinaryA = _mapper.Map<List<OrdinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithOrdinaryA),
             InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithUnordinary),

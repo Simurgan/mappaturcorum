@@ -30,6 +30,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .Select(e => new WrittenSourceGeneralDto
             {
                 Id = e.Id,
+                Name = e.Name,
                 AlternateNames = e.AlternateNames,
                 Author = e.Author,
                 YearWritten = e.YearWritten,
@@ -58,6 +59,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         return new WrittenSourceDetailDto
         {
             Id = entity.Id,
+            Name = entity.Name,
             AlternateNames = entity.AlternateNames,
             Author = entity.Author,
             YearWritten = entity.YearWritten,
@@ -90,6 +92,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         var writtenSource = new WrittenSource
         {
+            Name = request.Name,
             AlternateNames = request.AlternateNames,
             Author = request.Author,
             YearWritten = request.YearWritten,
@@ -161,6 +164,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         return new WrittenSourceDetailDto
         {
             Id = writtenSource.Id,
+            Name = writtenSource.Name,
             AlternateNames = writtenSource.AlternateNames,
             Author = writtenSource.Author,
             YearWritten = writtenSource.YearWritten,
@@ -192,6 +196,9 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             throw new ArgumentException($"Entity with ID {id} not found.");
 
         // Only update fields if they are not null
+        if (request.Name != null)
+            writtenSource.Name = request.Name;
+
         if (request.AlternateNames != null)
             writtenSource.AlternateNames = request.AlternateNames;
 
@@ -282,6 +289,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         return new WrittenSourceDetailDto
         {
             Id = writtenSource.Id,
+            Name = writtenSource.Name,
             AlternateNames = writtenSource.AlternateNames,
             Author = writtenSource.Author,
             YearWritten = writtenSource.YearWritten,
@@ -325,9 +333,10 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             if(filter.Name != null)
             {
                 var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
-                query = query.Where(e =>  (e.AlternateNames != null)
+                query = query.Where(e =>  e.Name.ToLower().Replace(" ", "").Replace("\t", "").
+                    Contains(checkedString) || ((e.AlternateNames != null)
                     && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "").
-                    Contains(checkedString)));
+                    Contains(checkedString))));
             }
 
             if(filter.Genre != null) 
