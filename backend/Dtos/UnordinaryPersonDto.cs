@@ -105,5 +105,6 @@ public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto
     public int? DeathPlace {get; set;}
     public int? Gender {get; set;}
     public List<int>? InteractionsWithUnordinaryA{get; set;}
+    public List<int>? InteractionsWithUnordinaryB{get; set;}
     public List<int>? InteractionsWithOrdinary{get; set;}
 }

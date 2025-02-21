@@ -53,6 +53,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
             .Include(ws => ws.InteractionsWithUnordinaryA)
+            .Include(ws => ws.InteractionsWithUnordinaryB)
             .Include(ws => ws.Sources)
             .FirstOrDefaultAsync(ws => ws.Id == id);
         
@@ -233,6 +234,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
             .Include(ws => ws.InteractionsWithUnordinaryA)
+            .Include(ws => ws.InteractionsWithUnordinaryB)
             .Include(ws => ws.Sources)
             .FirstOrDefaultAsync(ws => ws.Id == id);
 
@@ -517,6 +519,8 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                 Gender = e.Gender == null ? null : e.Gender.Id,
                 InteractionsWithUnordinaryA = e.InteractionsWithUnordinaryA == null ? null : 
                     e.InteractionsWithUnordinaryA.Select(fr => fr.Id).ToList(),
+                InteractionsWithUnordinaryB = e.InteractionsWithUnordinaryB == null ? null : 
+                    e.InteractionsWithUnordinaryB.Select(fr => fr.Id).ToList(),
                 InteractionsWithOrdinary = e.InteractionsWithOrdinary == null ? null : 
                     e.InteractionsWithOrdinary.Select(fr => fr.Id).ToList(),
             })

@@ -59,6 +59,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             .Include(ws => ws.Gender)
             .Include(ws => ws.FormerReligion)
             .Include(ws => ws.InteractionsWithOrdinaryA)
+            .Include(ws => ws.InteractionsWithOrdinaryB)
             .Include(ws => ws.InteractionsWithUnordinary)
             .Include(ws => ws.Sources)
             .FirstOrDefaultAsync(ws => ws.Id == id);
@@ -93,6 +94,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             DescriptionInTheSource = entity.DescriptionInTheSource,
             ExplanationOfEthnicity = entity.ExplanationOfEthnicity,
             InteractionsWithOrdinaryA = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.InteractionsWithOrdinaryA),
+            InteractionsWithOrdinaryB = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.InteractionsWithOrdinaryB),
             InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinary),
             BackgroundCity = _mapper.Map<CityBaseDto>(entity.BackgroundCity),
         };
@@ -247,6 +249,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             DescriptionInTheSource = ordinaryPerson.DescriptionInTheSource,
             ExplanationOfEthnicity = ordinaryPerson.ExplanationOfEthnicity,
             InteractionsWithOrdinaryA = _mapper.Map<List<OrdinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithOrdinaryA),
+            InteractionsWithOrdinaryB = _mapper.Map<List<OrdinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithOrdinaryB),
             InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithUnordinary),
             BackgroundCity = _mapper.Map<CityBaseDto>(ordinaryPerson.BackgroundCity),
         };
@@ -263,6 +266,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             .Include(ws => ws.Gender)
             .Include(ws => ws.FormerReligion)
             .Include(ws => ws.InteractionsWithOrdinaryA)
+            .Include(ws => ws.InteractionsWithOrdinaryB)
             .Include(ws => ws.InteractionsWithUnordinary)
             .Include(ws => ws.Sources)
             .FirstOrDefaultAsync(ws => ws.Id == id);
@@ -444,6 +448,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             DescriptionInTheSource = ordinaryPerson.DescriptionInTheSource,
             ExplanationOfEthnicity = ordinaryPerson.ExplanationOfEthnicity,
             InteractionsWithOrdinaryA = _mapper.Map<List<OrdinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithOrdinaryA),
+            InteractionsWithOrdinaryB = _mapper.Map<List<OrdinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithOrdinaryB),
             InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(ordinaryPerson.InteractionsWithUnordinary),
             BackgroundCity = _mapper.Map<CityBaseDto>(ordinaryPerson.BackgroundCity),
         };
@@ -626,6 +631,8 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     e.InteractionsWithUnordinary.Select(fr => fr.Id).ToList(),
                 InteractionsWithOrdinaryA = e.InteractionsWithOrdinaryA == null ? null : 
                     e.InteractionsWithOrdinaryA.Select(fr => fr.Id).ToList(),
+                InteractionsWithOrdinaryB = e.InteractionsWithOrdinaryB == null ? null : 
+                    e.InteractionsWithOrdinaryB.Select(fr => fr.Id).ToList(),
             })
             .OrderBy(op => op.Id)
             .ToListAsync();

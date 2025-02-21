@@ -40,6 +40,7 @@ public class OrdinaryPersonDetailDto : OrdinaryPersonGeneralDto
     public string? DescriptionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinaryA{get; set;}
+    public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinaryB{get; set;}
     public CityBaseDto? BackgroundCity {get; set;}
 }
 
@@ -131,4 +132,5 @@ public class OrdinaryPersonGraphDto: OrdinaryPersonBaseDto
     public List<int>? InteractionsWithUnordinary{get; set;}
     public int? FormerReligion {get; set;}
     public List<int>? InteractionsWithOrdinaryA{get; set;}
+    public List<int>? InteractionsWithOrdinaryB{get; set;}
 }
