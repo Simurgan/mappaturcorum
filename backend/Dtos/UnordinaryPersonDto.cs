@@ -26,7 +26,6 @@ public class UnordinaryPersonDetailDto : UnordinaryPersonGeneralDto
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<ReligionDto>? FormerReligion {get; set;}
     public ProfessionDto? Profession {get; set;}
     public GenderDto? Gender {get; set;}
     public CityBaseDto? BirthPlace {get; set;}
@@ -52,7 +51,6 @@ public class UnordinaryPersonCreateRequest
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<string>? FormerReligion {get; set;}
     public string? Profession {get; set;}
     public string? Gender {get; set;}
     public string? BirthPlace {get; set;}
@@ -74,7 +72,6 @@ public class UnordinaryPersonUpdateRequest
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<string>? FormerReligion {get; set;}
     public string? Profession {get; set;}
     public string? Gender {get; set;}
     public string? BirthPlace {get; set;}
@@ -108,6 +105,5 @@ public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto
     public int? DeathPlace {get; set;}
     public int? Gender {get; set;}
     public List<int>? InteractionsWithUnordinaryA{get; set;}
-    public List<int>? FormerReligion {get; set;}
     public List<int>? InteractionsWithOrdinary{get; set;}
 }

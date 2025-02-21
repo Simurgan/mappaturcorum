@@ -50,7 +50,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             .Include(ws => ws.Ethnicity)
             .Include(ws => ws.DeathPlace)
             .Include(ws => ws.InteractionsWithOrdinary)
-            .Include(ws => ws.FormerReligion)
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
             .Include(ws => ws.InteractionsWithUnordinaryA)
@@ -74,7 +73,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             ProbableBirthYear = entity.ProbableBirthYear,
             ProbableDeathYear = entity.ProbableDeathYear,
             Description = entity.Description,
-            FormerReligion = _mapper.Map<List<ReligionDto>>(entity.FormerReligion),
             Profession = _mapper.Map<ProfessionDto>(entity.Profession),
             Gender = _mapper.Map<GenderDto>(entity.Gender),
             BirthPlace = _mapper.Map<CityBaseDto>(entity.BirthPlace),
@@ -99,7 +97,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Depiction = request.Depiction,
             // Religion = _mapper.Map<Religion>(request.Religion),
             // Ethnicity = _mapper.Map<Ethnicity>(request.Ethnicity),
-            // FormerReligion = _mapper.Map<List<Religion>>(request.FormerReligion),
             // Profession = _mapper.Map<Profession>(request.Profession),
             // Gender = _mapper.Map<Gender>(request.Gender),
             // Sources = _mapper.Map<List<WrittenSource>>(request.Sources),
@@ -146,18 +143,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             if (interactionsWithOrdinary.Count != request.InteractionsWithOrdinary.Count)
                 throw new ArgumentException("One or more provided InteractionsWithOrdinary are invalid.");
             unordinaryPerson.InteractionsWithOrdinary = interactionsWithOrdinary;
-        }
-
-        // Check if FormerReligion elements exists
-        if (request.FormerReligion != null)
-        {
-            var formerReligion = await _dbContext.Set<Religion>()
-                .Where(c => request.FormerReligion.Contains(c.Name))
-                .ToListAsync();
-
-            if (formerReligion.Count != request.FormerReligion.Count)
-                throw new ArgumentException("One or more provided Formerreligion are invalid.");
-            unordinaryPerson.FormerReligion = formerReligion;
         }
 
         // Check if Profession exists
@@ -226,7 +211,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Description = unordinaryPerson.Description,
             Religion = _mapper.Map<ReligionDto>(unordinaryPerson.Religion),
             Ethnicity = _mapper.Map<EthnicityDto>(unordinaryPerson.Ethnicity),
-            FormerReligion = _mapper.Map<List<ReligionDto>>(unordinaryPerson.FormerReligion),
             Profession = _mapper.Map<ProfessionDto>(unordinaryPerson.Profession),
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
@@ -246,7 +230,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             .Include(ws => ws.Ethnicity)
             .Include(ws => ws.DeathPlace)
             .Include(ws => ws.InteractionsWithOrdinary)
-            .Include(ws => ws.FormerReligion)
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
             .Include(ws => ws.InteractionsWithUnordinaryA)
@@ -315,19 +298,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
 
         if (request.Description != null)
             unordinaryPerson.Description = request.Description;
-
-        // Update FormerReligion 
-        if (request.FormerReligion != null)
-        {
-            var formerReligion = await _dbContext.Set<Religion>()
-                .Where(l => request.FormerReligion.Contains(l.Name))
-                .ToListAsync();
-
-            if (formerReligion.Count != request.FormerReligion.Count)
-                throw new ArgumentException("One or more provided Former Religion are invalid.");
-
-            unordinaryPerson.FormerReligion = formerReligion;
-        }
 
         // Profession update only if a valid profession is provided
         if (request.Profession != null)
@@ -399,7 +369,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Description = unordinaryPerson.Description,
             Religion = _mapper.Map<ReligionDto>(unordinaryPerson.Religion),
             Ethnicity = _mapper.Map<EthnicityDto>(unordinaryPerson.Ethnicity),
-            FormerReligion = _mapper.Map<List<ReligionDto>>(unordinaryPerson.FormerReligion),
             Profession = _mapper.Map<ProfessionDto>(unordinaryPerson.Profession),
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
@@ -546,8 +515,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                 Sources = e.Sources == null ? null : e.Sources.Select(s => s.Id).
                     ToList(),
                 Gender = e.Gender == null ? null : e.Gender.Id,
-                FormerReligion = e.FormerReligion == null ? null : e.FormerReligion.
-                    Select(fr => fr.Id).ToList(),
                 InteractionsWithUnordinaryA = e.InteractionsWithUnordinaryA == null ? null : 
                     e.InteractionsWithUnordinaryA.Select(fr => fr.Id).ToList(),
                 InteractionsWithOrdinary = e.InteractionsWithOrdinary == null ? null : 

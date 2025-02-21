@@ -15,8 +15,8 @@ public class WrittenSource
     public List<string>? AlternateNames {get; set;}
     public string? Author {get; set;}
     public List<int>? YearWritten {get; set;}
-    public int? KnownCopies {get; set;}
-    public int? SurvivedCopies {get; set;}
+    public string? KnownCopies {get; set;}
+    public string? SurvivedCopies {get; set;}
     public string? LibraryInformation {get; set;}
     public string? OtherInformation {get; set;}
     public string? RemarkableWorksOnTheBook {get; set;}

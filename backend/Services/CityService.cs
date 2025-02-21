@@ -68,11 +68,11 @@ public class CityService : ICityService
     public async Task<CityDetailDto> CreateAsync(CityCreateRequest request)
     {
         bool exists = await _dbContext.Set<City>().AnyAsync(c => 
-            EF.Property<string>(c, "AsciiName") == request.AsciiName);
+            EF.Property<string>(c, "Name") == request.Name);
 
         if (exists)
         {
-            throw new ArgumentException($"An entity with the name '{request.AsciiName}' already exists.");
+            throw new ArgumentException($"An entity with the name '{request.Name}' already exists.");
         }
 
         var city = new City
@@ -192,8 +192,10 @@ public class CityService : ICityService
             if(filter.Name != null)
             {
                 var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
-                query = query.Where(e => e.AsciiName.ToLower().Replace(" ", "").
+                query = query.Where(e => e.Name.ToLower().Replace(" ", "").
                     Replace("\t", "").Contains(checkedString) || 
+                    (e.AsciiName != null && e.AsciiName.ToLower().Replace(" ", "").
+                    Replace("\t", "").Contains(checkedString)) ||
                     (e.AlternateNames != null &&
                     e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "")
                     .Contains(checkedString))));
@@ -391,6 +393,7 @@ public class CityService : ICityService
             {
                 Id = e.Id,
                 AsciiName = e.AsciiName,
+                Name = e.Name,
                 Latitude = e.Latitude,
                 Longitude = e.Longitude,
                 NumberOfLocationOf = (e.LocationOf != null) ? e.LocationOf.Count : 0,

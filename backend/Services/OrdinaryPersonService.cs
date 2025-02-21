@@ -83,7 +83,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             ProbableBirthYear = entity.ProbableBirthYear,
             ProbableDeathYear = entity.ProbableDeathYear,
             Description = entity.Description,
-            FormerReligion = _mapper.Map<List<ReligionDto>>(entity.FormerReligion),
+            FormerReligion = _mapper.Map<ReligionDto>(entity.FormerReligion),
             ReligionExplanation = entity.ReligionExplanation,
             ProfessionExplanation = entity.ProfessionExplanation,
             InterestingFeature = entity.InterestingFeature,
@@ -179,12 +179,9 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         // Check if FormerReligion elements exists
         if (request.FormerReligion != null)
         {
-            var formerReligion = await _dbContext.Set<Religion>()
-                .Where(c => request.FormerReligion.Contains(c.Name))
-                .ToListAsync();
-
-            if (formerReligion.Count != request.FormerReligion.Count)
-                throw new ArgumentException("One or more provided Formerreligion are invalid.");
+            var formerReligion = await _dbContext.Set<Religion>().FirstOrDefaultAsync(e => e.Name == request.FormerReligion);
+            if (formerReligion == null)
+                throw new ArgumentException($"Religion with name {request.FormerReligion} not found.");
             ordinaryPerson.FormerReligion = formerReligion;
         }
 
@@ -240,7 +237,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             ProbableBirthYear = ordinaryPerson.ProbableBirthYear,
             ProbableDeathYear = ordinaryPerson.ProbableDeathYear,
             Description = ordinaryPerson.Description,
-            FormerReligion = _mapper.Map<List<ReligionDto>>(ordinaryPerson.FormerReligion),
+            FormerReligion = _mapper.Map<ReligionDto>(ordinaryPerson.FormerReligion),
             ReligionExplanation = ordinaryPerson.ReligionExplanation,
             ProfessionExplanation = ordinaryPerson.ProfessionExplanation,
             InterestingFeature = ordinaryPerson.InterestingFeature,
@@ -354,13 +351,9 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         // Update FormerReligion 
         if (request.FormerReligion != null)
         {
-            var formerReligion = await _dbContext.Set<Religion>()
-                .Where(l => request.FormerReligion.Contains(l.Name))
-                .ToListAsync();
-
-            if (formerReligion.Count != request.FormerReligion.Count)
-                throw new ArgumentException("One or more provided Former Religion are invalid.");
-
+            var formerReligion = await _dbContext.Set<Religion>().FirstOrDefaultAsync(e => e.Name == request.FormerReligion);
+            if (formerReligion == null)
+                throw new ArgumentException($"Religion with name {request.FormerReligion} not found.");
             ordinaryPerson.FormerReligion = formerReligion;
         }
 
@@ -441,7 +434,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             ProbableBirthYear = ordinaryPerson.ProbableBirthYear,
             ProbableDeathYear = ordinaryPerson.ProbableDeathYear,
             Description = ordinaryPerson.Description,
-            FormerReligion = _mapper.Map<List<ReligionDto>>(ordinaryPerson.FormerReligion),
+            FormerReligion = _mapper.Map<ReligionDto>(ordinaryPerson.FormerReligion),
             ReligionExplanation = ordinaryPerson.ReligionExplanation,
             ProfessionExplanation = ordinaryPerson.ProfessionExplanation,
             InterestingFeature = ordinaryPerson.InterestingFeature,
@@ -628,8 +621,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                 Sources = e.Sources == null ? null : e.Sources.Select(s => s.Id).
                     ToList(),
                 Gender = e.Gender == null ? null : e.Gender.Id,
-                FormerReligion = e.FormerReligion == null ? null : e.FormerReligion.
-                    Select(fr => fr.Id).ToList(),
+                FormerReligion = e.FormerReligion == null ? null : e.FormerReligion.Id,
                 InteractionsWithUnordinary = e.InteractionsWithUnordinary == null ? null : 
                     e.InteractionsWithUnordinary.Select(fr => fr.Id).ToList(),
                 InteractionsWithOrdinaryA = e.InteractionsWithOrdinaryA == null ? null : 

@@ -57,10 +57,7 @@ public class AppDbContext : IdentityDbContext<User>
             .WithMany(p => p.Sources);
 
         builder.Entity<Religion>().HasMany(ws => ws.FormerOrdinaryPersons)
-            .WithMany(p => p.FormerReligion);
-
-        builder.Entity<Religion>().HasMany(ws => ws.FormerUnordinaryPersons)
-            .WithMany(p => p.FormerReligion);
+            .WithOne(p => p.FormerReligion);
 
         builder.Entity<OrdinaryPerson>().HasOne(op => op.Religion)
             .WithMany();

@@ -23,8 +23,8 @@ public class WrittenSourceGeneralDto : WrittenSourceBaseDto
 
 public class WrittenSourceDetailDto : WrittenSourceGeneralDto
 {
-    public int? KnownCopies {get; set;}
-    public int? SurvivedCopies {get; set;}
+    public string? KnownCopies {get; set;}
+    public string? SurvivedCopies {get; set;}
     public string? LibraryInformation {get; set;}
     public string? OtherInformation {get; set;}
     public string? RemarkableWorksOnTheBook {get; set;}
@@ -46,8 +46,8 @@ public class WrittenSourceCreateRequest
     public List<int>? YearWritten {get; set;}
     public string? Genre {get; set;}
     public string? Language {get; set;}
-    public int? KnownCopies {get; set;}
-    public int? SurvivedCopies {get; set;}
+    public string? KnownCopies {get; set;}
+    public string? SurvivedCopies {get; set;}
     public string? LibraryInformation {get; set;}
     public string? OtherInformation {get; set;}
     public string? RemarkableWorksOnTheBook {get; set;}
@@ -66,8 +66,8 @@ public class WrittenSourceUpdateRequest
     public List<int>? YearWritten {get; set;}
     public string? Genre {get; set;}
     public string? Language {get; set;}
-    public int? KnownCopies {get; set;}
-    public int? SurvivedCopies {get; set;}
+    public string? KnownCopies {get; set;}
+    public string? SurvivedCopies {get; set;}
     public string? LibraryInformation {get; set;}
     public string? OtherInformation {get; set;}
     public string? RemarkableWorksOnTheBook {get; set;}

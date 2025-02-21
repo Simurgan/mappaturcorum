@@ -30,7 +30,7 @@ public class OrdinaryPersonDetailDto : OrdinaryPersonGeneralDto
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<ReligionDto>? FormerReligion {get; set;}
+    public ReligionDto? FormerReligion {get; set;}
     public string? ReligionExplanation{get; set;}
     public string? ProfessionExplanation{get; set;}
     public string? InterestingFeature{get; set;}
@@ -59,7 +59,7 @@ public class OrdinaryPersonCreateRequest
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<string>? FormerReligion {get; set;}
+    public string? FormerReligion {get; set;}
     public string? ReligionExplanation{get; set;}
     public string? ProfessionExplanation{get; set;}
     public string? InterestingFeature{get; set;}
@@ -88,7 +88,7 @@ public class OrdinaryPersonUpdateRequest
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<string>? FormerReligion {get; set;}
+    public string? FormerReligion {get; set;}
     public string? ReligionExplanation{get; set;}
     public string? ProfessionExplanation{get; set;}
     public string? InterestingFeature{get; set;}
@@ -129,6 +129,6 @@ public class OrdinaryPersonGraphDto: OrdinaryPersonBaseDto
     public List<int>? Sources {get; set;}
     public int? Gender {get; set;}
     public List<int>? InteractionsWithUnordinary{get; set;}
-    public List<int>? FormerReligion {get; set;}
+    public int? FormerReligion {get; set;}
     public List<int>? InteractionsWithOrdinaryA{get; set;}
 }
