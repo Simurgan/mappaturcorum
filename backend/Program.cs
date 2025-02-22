@@ -172,7 +172,7 @@ app.UseHttpsRedirection();
 
 
 // In Configure method
-//app.UseCors("AllowAll");
+app.UseCors("AllowAll");
 
 // 8. Authentication
 app.UseAuthentication();
