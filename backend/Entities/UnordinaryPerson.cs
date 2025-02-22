@@ -14,6 +14,8 @@ public class UnordinaryPerson : Person
     public List<UnordinaryPerson>? InteractionsWithUnordinaryB{get; set;}
     public City? BirthPlace {get; set;}
     public City? DeathPlace {get; set;}
+    public List<WrittenSource>? Sources {get; set;}
+    public string? Depiction {get; set;}
 
 }
 

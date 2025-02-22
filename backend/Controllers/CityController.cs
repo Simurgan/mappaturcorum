@@ -10,12 +10,10 @@ namespace Mappa.Controllers;
 [Route("[controller]")]
 public class CityController : ControllerBase
 {
-    private readonly IComplexEntityService<City, CityGeneralDto, CityDetailDto, 
-        CityCreateRequest, CityUpdateRequest>
+    private readonly ICityService
         _service;
 
-    public CityController(IComplexEntityService<City, CityGeneralDto,
-        CityDetailDto, CityCreateRequest, CityUpdateRequest> service)
+    public CityController(ICityService service)
     {
         _service = service;
     }
@@ -24,6 +22,14 @@ public class CityController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var items = await _service.GetAllAsync();
+        return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("filter")]
+    public async Task<IActionResult> GetAllFiltered(CityFilterDto filter)
+    {
+        var items = await _service.GetAllFilteredAsync(filter);
         return Ok(items);
     }
 
@@ -103,6 +109,14 @@ public class CityController : ControllerBase
             // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
+    }
+
+    [HttpGet]
+    [Route("map")]
+    public async Task<IActionResult> GetAllForMapAsync()
+    {
+        var items = await _service.GetAllForMapAsync();
+        return Ok(items);
     }
 
 }

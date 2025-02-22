@@ -23,7 +23,7 @@ public class EntityService<TEntity, TDto> : IEntityService<TEntity, TDto>
             {
                 Id = e.Id,
                 Name = e.Name
-            })
+            }).OrderBy(e => e.Id)
             .ToListAsync();
     }
 

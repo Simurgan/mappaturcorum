@@ -8,7 +8,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mappa.Services;
 
-public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest>
+public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, 
+    UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
+    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
+    UnordinaryPersonGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -22,10 +25,10 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
     public async Task<IEnumerable<UnordinaryPersonGeneralDto>> GetAllAsync()
     {
         return await _dbContext.Set<UnordinaryPerson>()
-            .Include(ws => ws.Religion)
-            .Include(ws => ws.Ethnicity)
-            .Include(ws => ws.DeathPlace)
-            .Include(ws => ws.InteractionsWithOrdinary)
+            .Include(up => up.Religion)
+            .Include(up => up.Ethnicity)
+            .Include(up => up.DeathPlace)
+            .Include(up => up.InteractionsWithOrdinary)
             .Select(e => new UnordinaryPersonGeneralDto
             {
                 Id = e.Id,
@@ -34,8 +37,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
                 Ethnicity = _mapper.Map<EthnicityDto>(e.Ethnicity),
                 DeathYear = e.DeathYear,
                 DeathPlace = _mapper.Map<CityBaseDto>(e.DeathPlace),
-                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(e.InteractionsWithOrdinary)
+                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(e.InteractionsWithOrdinary),
             })
+            .OrderBy(up => up.Id)
             .ToListAsync();
     }
 
@@ -46,10 +50,10 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             .Include(ws => ws.Ethnicity)
             .Include(ws => ws.DeathPlace)
             .Include(ws => ws.InteractionsWithOrdinary)
-            .Include(ws => ws.FormerReligion)
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
             .Include(ws => ws.InteractionsWithUnordinaryA)
+            .Include(ws => ws.InteractionsWithUnordinaryB)
             .Include(ws => ws.Sources)
             .FirstOrDefaultAsync(ws => ws.Id == id);
         
@@ -70,13 +74,13 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             ProbableBirthYear = entity.ProbableBirthYear,
             ProbableDeathYear = entity.ProbableDeathYear,
             Description = entity.Description,
-            FormerReligion = _mapper.Map<List<ReligionDto>>(entity.FormerReligion),
             Profession = _mapper.Map<ProfessionDto>(entity.Profession),
             Gender = _mapper.Map<GenderDto>(entity.Gender),
             BirthPlace = _mapper.Map<CityBaseDto>(entity.BirthPlace),
             InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryA),
             InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryB),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(entity.Sources),
+            Depiction = entity.Depiction,
         };
     }
 
@@ -91,9 +95,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             ProbableBirthYear = request.ProbableBirthYear,
             ProbableDeathYear = request.ProbableDeathYear,
             Description = request.Description,
+            Depiction = request.Depiction,
             // Religion = _mapper.Map<Religion>(request.Religion),
             // Ethnicity = _mapper.Map<Ethnicity>(request.Ethnicity),
-            // FormerReligion = _mapper.Map<List<Religion>>(request.FormerReligion),
             // Profession = _mapper.Map<Profession>(request.Profession),
             // Gender = _mapper.Map<Gender>(request.Gender),
             // Sources = _mapper.Map<List<WrittenSource>>(request.Sources),
@@ -140,18 +144,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             if (interactionsWithOrdinary.Count != request.InteractionsWithOrdinary.Count)
                 throw new ArgumentException("One or more provided InteractionsWithOrdinary are invalid.");
             unordinaryPerson.InteractionsWithOrdinary = interactionsWithOrdinary;
-        }
-
-        // Check if FormerReligion elements exists
-        if (request.FormerReligion != null)
-        {
-            var formerReligion = await _dbContext.Set<Religion>()
-                .Where(c => request.FormerReligion.Contains(c.Name))
-                .ToListAsync();
-
-            if (formerReligion.Count != request.FormerReligion.Count)
-                throw new ArgumentException("One or more provided Formerreligion are invalid.");
-            unordinaryPerson.FormerReligion = formerReligion;
         }
 
         // Check if Profession exists
@@ -220,7 +212,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             Description = unordinaryPerson.Description,
             Religion = _mapper.Map<ReligionDto>(unordinaryPerson.Religion),
             Ethnicity = _mapper.Map<EthnicityDto>(unordinaryPerson.Ethnicity),
-            FormerReligion = _mapper.Map<List<ReligionDto>>(unordinaryPerson.FormerReligion),
             Profession = _mapper.Map<ProfessionDto>(unordinaryPerson.Profession),
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
@@ -229,6 +220,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
+            Depiction = unordinaryPerson.Depiction,
         };
     }
 
@@ -239,10 +231,10 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             .Include(ws => ws.Ethnicity)
             .Include(ws => ws.DeathPlace)
             .Include(ws => ws.InteractionsWithOrdinary)
-            .Include(ws => ws.FormerReligion)
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
             .Include(ws => ws.InteractionsWithUnordinaryA)
+            .Include(ws => ws.InteractionsWithUnordinaryB)
             .Include(ws => ws.Sources)
             .FirstOrDefaultAsync(ws => ws.Id == id);
 
@@ -309,19 +301,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
         if (request.Description != null)
             unordinaryPerson.Description = request.Description;
 
-        // Update FormerReligion 
-        if (request.FormerReligion != null)
-        {
-            var formerReligion = await _dbContext.Set<Religion>()
-                .Where(l => request.FormerReligion.Contains(l.Name))
-                .ToListAsync();
-
-            if (formerReligion.Count != request.FormerReligion.Count)
-                throw new ArgumentException("One or more provided Former Religion are invalid.");
-
-            unordinaryPerson.FormerReligion = formerReligion;
-        }
-
         // Profession update only if a valid profession is provided
         if (request.Profession != null)
         {
@@ -375,6 +354,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             unordinaryPerson.Sources = sources;
         }
 
+        if (request.Depiction != null)
+            unordinaryPerson.Depiction = request.Depiction;
+
         await _dbContext.SaveChangesAsync();
 
         return new UnordinaryPersonDetailDto
@@ -389,7 +371,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             Description = unordinaryPerson.Description,
             Religion = _mapper.Map<ReligionDto>(unordinaryPerson.Religion),
             Ethnicity = _mapper.Map<EthnicityDto>(unordinaryPerson.Ethnicity),
-            FormerReligion = _mapper.Map<List<ReligionDto>>(unordinaryPerson.FormerReligion),
             Profession = _mapper.Map<ProfessionDto>(unordinaryPerson.Profession),
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
@@ -398,6 +379,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
             InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
+            Depiction = unordinaryPerson.Depiction,
         };
     }
 
@@ -410,5 +392,139 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, U
         _dbContext.Set<UnordinaryPerson>().Remove(unordinaryPerson);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+    
+    public async Task<PaginationResponse<UnordinaryPersonFilterResponseDto>> GetPageAsync(
+        int pageNumber, int pageSize, UnordinaryPersonFilterDto? filter)
+    {
+        var query = _dbContext.Set<UnordinaryPerson>()
+            .Include(op => op.Religion).Include(op => op.Ethnicity)
+            .Include(op => op.DeathPlace)
+            .Include(op => op.InteractionsWithOrdinary)
+            .AsQueryable();
+
+        if(filter != null)
+        {
+            if(filter.Name != null)
+            {
+                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+                query = query.Where(e => e.Name.ToLower().Replace(" ", "").
+                    Replace("\t", "").Contains(checkedString) || (e.AlternateName != null)
+                    && e.AlternateName.ToLower().Replace(" ", "").Replace("\t", "").
+                    Contains(checkedString));
+            }
+            if(filter.Religion != null) 
+                query = query.Where(op => op.Religion != null && (op.Religion.Id == filter.Religion));
+
+            if(filter.Ethnicity != null)
+                query = query.Where(op => op.Ethnicity != null && (op.Ethnicity.Id == filter.Ethnicity));
+
+            if(filter.DeathYear != null && filter.DeathYear.Count > 0)
+            {
+                if(filter.DeathYear.Count == 1)
+                    query = query.Where(op => op.ProbableDeathYear != null && 
+                        (op.ProbableDeathYear >= filter.DeathYear[0]));
+                else // For case 2, further elements are ignored
+                    query = query.Where(op => op.ProbableDeathYear != null && 
+                        (op.ProbableDeathYear >= filter.DeathYear[0]) && 
+                        (op.ProbableDeathYear <= filter.DeathYear[1]));
+            }
+            
+            if(filter.DeathPlace != null)
+                query = query.Where(op => op.DeathPlace != null && (op.DeathPlace.Id == filter.DeathPlace));
+        
+            if(filter.InteractionsWithOrdinary != null)
+            {
+                var innerItems = query.Include(op => op.InteractionsWithOrdinary).AsEnumerable()
+                    .Where(op => (op.InteractionsWithOrdinary != null) 
+                    && filter.InteractionsWithOrdinary.
+                        Any(fs => op.InteractionsWithOrdinary.Select(s => s.Id).Contains(fs))
+                        )
+                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(p => new UnordinaryPersonFilterResponseDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Religion = _mapper.Map<ReligionDto>(p.Religion),
+                        Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                        DeathYear = p.DeathYear,
+                        DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
+                        InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary),
+                        AlternateName = p.AlternateName,
+                    })
+                    .ToList();
+
+                Console.WriteLine("items", innerItems);
+
+                int totalCount1 = innerItems.Count;
+
+                return new PaginationResponse<UnordinaryPersonFilterResponseDto>
+                {
+                    Data = innerItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalCount = totalCount1,
+                };
+            }
+        }
+        else
+        {
+            throw new ArgumentException("Filter is not provided.");
+        }
+
+        int totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(p => p.Id)  // Sort by Id (or other field)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new UnordinaryPersonFilterResponseDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Religion = _mapper.Map<ReligionDto>(p.Religion),
+                Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                DeathYear = p.DeathYear,
+                DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
+                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary),
+                AlternateName = p.AlternateName,
+            })
+            .ToListAsync();
+
+        return new PaginationResponse<UnordinaryPersonFilterResponseDto>
+        {
+            Data = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+        };
+    }
+
+    public async Task<IEnumerable<UnordinaryPersonGraphDto>> GetAllForGraphAsync()
+    {
+        return await _dbContext.Set<UnordinaryPerson>()
+            .Select(e => new UnordinaryPersonGraphDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Religion = e.Religion == null ? null : e.Religion.Id,
+                Ethnicity = e.Ethnicity == null ? null : e.Ethnicity.Id,
+                Profession = e.Profession == null ? null : e.Profession.Id,
+                BirthPlace = e.BirthPlace == null ? null : e.BirthPlace.Id,
+                DeathPlace = e.DeathPlace == null ? null : e.DeathPlace.Id,
+                Sources = e.Sources == null ? null : e.Sources.Select(s => s.Id).
+                    ToList(),
+                Gender = e.Gender == null ? null : e.Gender.Id,
+                InteractionsWithUnordinaryA = e.InteractionsWithUnordinaryA == null ? null : 
+                    e.InteractionsWithUnordinaryA.Select(fr => fr.Id).ToList(),
+                InteractionsWithUnordinaryB = e.InteractionsWithUnordinaryB == null ? null : 
+                    e.InteractionsWithUnordinaryB.Select(fr => fr.Id).ToList(),
+                InteractionsWithOrdinary = e.InteractionsWithOrdinary == null ? null : 
+                    e.InteractionsWithOrdinary.Select(fr => fr.Id).ToList(),
+            })
+            .OrderBy(up => up.Id)
+            .ToListAsync();
     }
 }

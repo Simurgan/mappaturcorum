@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks.Dataflow;
 using Mappa.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -44,5 +45,54 @@ public class AppDbContext : IdentityDbContext<User>
                 e => e.HasOne<UnordinaryPerson>().WithMany().HasForeignKey(e => e.PersonIdA),
                 e => e.HasOne<UnordinaryPerson>().WithMany().HasForeignKey(e => e.PersonIdB)    
             );
+
+        builder.Entity<OrdinaryPerson>()
+            .HasMany(o => o.InteractionsWithUnordinary)
+            .WithMany(u => u.InteractionsWithOrdinary);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.OrdinaryPersons)
+            .WithMany(p => p.Sources);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.UnordinaryPersons)
+            .WithMany(p => p.Sources);
+
+        builder.Entity<Religion>().HasMany(ws => ws.FormerOrdinaryPersons)
+            .WithOne(p => p.FormerReligion);
+
+        builder.Entity<OrdinaryPerson>().HasOne(op => op.Religion)
+            .WithMany();
+
+        builder.Entity<UnordinaryPerson>().HasOne(up => up.Religion)
+            .WithMany();
+
+        // Translated Languages
+        
+        builder.Entity<WrittenSource>().HasMany(ws => ws.TranslatedLanguages)
+            .WithMany();
+
+        builder.Entity<SecondarySource>().HasMany(ss => ss.TranslatedLanguages)
+            .WithMany();
+
+        // ----------- <City Mappings> --------------
+
+        builder.Entity<OrdinaryPerson>().HasOne(op => op.Location)
+            .WithMany(c => c.LocationOf);
+
+        builder.Entity<OrdinaryPerson>().HasOne(op => op.BackgroundCity)
+            .WithMany(c => c.BackgroundCityOf);
+
+        builder.Entity<UnordinaryPerson>().HasOne(up => up.BirthPlace)
+            .WithMany(c => c.BirthPlaceOf);
+
+        builder.Entity<UnordinaryPerson>().HasOne(up => up.DeathPlace)
+            .WithMany(c => c.DeathPlaceOf);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.CitiesMentionedByTheSource)
+            .WithMany(c => c.SourcesMentioningTheCity);
+
+        builder.Entity<WrittenSource>().HasMany(ws => ws.CitiesWhereSourcesAreWritten)
+            .WithMany(c => c.SourcesWrittenInTheCity);
+
+        // ----------- </City Mappings> --------------
     }
 }

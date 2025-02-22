@@ -10,11 +10,16 @@ namespace Mappa.Controllers;
 [Route("[controller]")]
 public class WrittenSourceController : ControllerBase
 {
-    private readonly IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest>
+    private readonly IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, 
+        WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest,
+        WrittenSourceFilterDto, WrittenSourceFilterResponseDto, WrittenSourceGraphDto>
         _service;
 
-    public WrittenSourceController(IComplexEntityService<WrittenSource, WrittenSourceGeneralDto,
-        WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest> service)
+    public WrittenSourceController(IComplexEntityService<WrittenSource, 
+        WrittenSourceGeneralDto,WrittenSourceDetailDto, WrittenSourceCreateRequest, 
+        WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
+        WrittenSourceGraphDto> 
+        service)
     {
         _service = service;
     }
@@ -24,6 +29,28 @@ public class WrittenSourceController : ControllerBase
     {
         var items = await _service.GetAllAsync();
         return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("page")]
+    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<WrittenSourceFilterDto> filter)
+    {
+        if (filter.PageNumber < 1 || filter.PageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0.");
+        }
+        
+        try
+        {
+            var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
+                filter.PageSize, filter.Filter);
+
+            return Ok(paginatedResult);
+        }
+        catch(ArgumentException ex) when (ex.Message.Contains($"Filter is not provided."))
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 
     [HttpGet("{id}")]

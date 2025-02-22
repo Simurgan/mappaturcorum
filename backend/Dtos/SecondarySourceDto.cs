@@ -8,12 +8,13 @@ namespace Mappa.Dtos;
 public class SecondarySourceBaseDto
 {
     public int Id {get; set;}
-    public List<string>? AlternateNames {get; set;}
+    public string Name {get; set;}
     
 }
 
 public class SecondarySourceGeneralDto : SecondarySourceBaseDto
 {
+    public List<string>? AlternateNames {get; set;}
     public string? Author {get; set;}
     public int? YearWritten {get; set;}
     public string? University {get; set;}
@@ -33,6 +34,7 @@ public class SecondarySourceDetailDto : SecondarySourceGeneralDto
 public class SecondarySourceCreateRequest
 {
     [Required]
+    public string Name {get; set;}
     public List<string>? AlternateNames {get; set;}
     public string? Author {get; set;}
     public int? YearWritten {get; set;}
@@ -47,6 +49,7 @@ public class SecondarySourceCreateRequest
 
 public class SecondarySourceUpdateRequest
 {
+    public string? Name {get; set;}
     public List<string>? AlternateNames {get; set;}
     public string? Author {get; set;}
     public int? YearWritten {get; set;}
@@ -58,3 +61,12 @@ public class SecondarySourceUpdateRequest
     public string? Language {get; set;}
     public List<string>? TranslatedLanguages {get; set;}
 }
+
+public class SecondarySourceFilterDto
+{
+    public int? Type {get; set;}
+}
+
+public class SecondarySourceFilterResponseDto : SecondarySourceGeneralDto {}
+
+public class SecondarySourceGraphDto : SecondarySourceBaseDto {}

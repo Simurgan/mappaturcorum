@@ -12,4 +12,6 @@ public class Religion : IEntity
     public int Id {get; set;}
     [Required]
     public string Name {get; set;}
+    public List<OrdinaryPerson>? FormerOrdinaryPersons {get; set;} 
+    public List<UnordinaryPerson>? FormerUnordinaryPersons {get; set;}
 }

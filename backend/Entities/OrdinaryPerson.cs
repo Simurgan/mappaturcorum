@@ -10,7 +10,7 @@ public class OrdinaryPerson : Person
     public string? InteractionWithOrdinaryExplanation{get; set;}
     public string? InteractionWithUnordinaryExplanation{get; set;}
     public string? Biography{get; set;}
-    public string? DepictionInTheSource{get; set;}
+    public string? DescriptionInTheSource{get; set;}
     public string? ExplanationOfEthnicity{get; set;}
     // public Relation? Relation{get; set;}
     [Required]
@@ -21,6 +21,8 @@ public class OrdinaryPerson : Person
     public List<UnordinaryPerson>? InteractionsWithUnordinary{get; set;}
     public City? Location {get; set;}
     public City? BackgroundCity {get; set;}
+    public List<WrittenSource>? Sources {get; set;}
+    public Religion? FormerReligion {get; set;}
     
 }
 

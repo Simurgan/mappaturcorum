@@ -11,11 +11,16 @@ namespace Mappa.Controllers;
 public class OrdinaryPersonController : ControllerBase
 {
     private readonly IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, 
-    OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest>
+        OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
+        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
+        OrdinaryPersonGraphDto>
         _service;
 
-    public OrdinaryPersonController(IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto,
-        OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest> service)
+    public OrdinaryPersonController(IComplexEntityService<OrdinaryPerson, 
+        OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
+        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
+        OrdinaryPersonGraphDto> 
+        service)
     {
         _service = service;
     }
@@ -25,6 +30,37 @@ public class OrdinaryPersonController : ControllerBase
     {
         var items = await _service.GetAllAsync();
         return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("graph")]
+    public async Task<IActionResult> GetAllForGraph()
+    {
+        var items = await _service.GetAllForGraphAsync();
+        return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("page")]
+    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<OrdinaryPersonFilterDto> filter)
+    {
+        if (filter.PageNumber < 1 || filter.PageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0.");
+        }
+
+        try
+        {
+            var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
+                filter.PageSize, filter.Filter);
+
+            return Ok(paginatedResult);
+        }
+        catch(ArgumentException ex) when (ex.Message.Contains($"Filter is not provided."))
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+
     }
 
     [HttpGet("{id}")]
