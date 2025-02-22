@@ -27,3 +27,5 @@ src/assets/images
 src/assets/icons
 
 .netlify
+.env.local
+.env.prod.local
