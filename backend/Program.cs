@@ -146,8 +146,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
     IdentityModelEventSource.ShowPII = true;
     IdentityModelEventSource.LogCompleteSecurityArtifact = true;
     app.UseSwagger();
@@ -156,7 +156,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mappa Anatolicorum API v1"); // Path to the Swagger JSON
         c.RoutePrefix = string.Empty;  // Set the Swagger UI at the root URL (optional)
     });
-}
+// }
 
 using (var scope = app.Services.CreateScope())
 {
