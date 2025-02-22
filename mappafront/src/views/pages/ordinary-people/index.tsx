@@ -7,8 +7,9 @@ import {
   ordinaryTableHeaders,
 } from "@/helpers/data/ordinary-people";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MappaModal from "@/views/components/modal";
+import { getOrdinaryPage } from "@/actions/ordinary";
 
 const OrdinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
@@ -18,9 +19,26 @@ const OrdinaryPeoplePage = () => {
     setIsOpen(true);
     setSelectedData(data);
   }
+
   function closeModal() {
     setIsOpen(false);
   }
+
+  const setInitialData = async () => {
+    const response = await getOrdinaryPage({
+      pageSize: 10,
+      pageNumber: 1,
+      filter: {},
+    });
+
+    console.log(response);
+    console.log("response");
+  };
+
+  useEffect(() => {
+    setInitialData();
+  }, []);
+
   return (
     <section className="section ordinary-section">
       <div className="container">

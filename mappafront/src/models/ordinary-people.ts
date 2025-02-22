@@ -1,4 +1,4 @@
-type OrdinaryPeopleTableDataType = {
+export type OrdinaryPeopleTableDataType = {
   name: string;
   alternateName?: string;
   ethnonym?: string;
@@ -18,4 +18,17 @@ type OrdinaryPeopleTableDataType = {
   version?: string;
 };
 
-export type { OrdinaryPeopleTableDataType };
+export type OrdinaryPageRequestBody = {
+  pageSize: number;
+  pageNumber: number;
+  filter: {
+    name?: string;
+    religion?: number;
+    ethnicity?: number;
+    profession?: number;
+    location?: number;
+    sources?: number[];
+    gender?: number;
+    interactionsWithUnordinary?: number[];
+  };
+};
