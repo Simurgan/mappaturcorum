@@ -105,7 +105,7 @@ public class OrdinaryPersonUpdateRequest
 
 public class OrdinaryPersonFilterDto 
 {
-    public string Name {get; set;}
+    public string? Name {get; set;}
     public int? Religion {get; set;}
     public int? Ethnicity {get; set;}
     public int? Profession {get; set;}

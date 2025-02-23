@@ -577,10 +577,6 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                 };
             }
         }
-        else
-        {
-            throw new ArgumentException("Filter is not provided.");
-        }
 
         int totalCount = await query.CountAsync();
 
