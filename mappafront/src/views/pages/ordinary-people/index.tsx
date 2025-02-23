@@ -36,6 +36,18 @@ const OrdinaryPeoplePage = () => {
     }
   };
 
+  const updateData = async () => {
+    const response = await getOrdinaryPage({
+      pageNumber: tablePage,
+      pageSize: 10,
+    });
+
+    if (response.status === 200) {
+      setTableData(response.data.data);
+      setTotalPage(response.data.totalPages);
+    }
+  };
+
   const headerData = [
     "Name",
     "Alternate Name",
@@ -48,6 +60,10 @@ const OrdinaryPeoplePage = () => {
   useEffect(() => {
     setInitialData();
   }, []);
+
+  useEffect(() => {
+    updateData();
+  }, [tablePage]);
 
   return (
     <section className="section ordinary-section">
