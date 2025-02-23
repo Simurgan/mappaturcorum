@@ -7,8 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Mappa.Services;
 
-public class SecondarySourceService : IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
-    SecondarySourceUpdateRequest>
+public class SecondarySourceService : IComplexEntityService<SecondarySource, 
+    SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
+    SecondarySourceUpdateRequest, SecondarySourceFilterDto, SecondarySourceFilterResponseDto,
+    SecondarySourceGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -26,12 +28,14 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
             .Select(e => new SecondarySourceGeneralDto
             {
                 Id = e.Id,
+                Name = e.Name,
                 AlternateNames = e.AlternateNames,
                 Author = e.Author,
                 YearWritten = e.YearWritten,
                 University = e.University,
                 Type = _mapper.Map<TypeDto>(e.Type)
             })
+            .OrderBy(ss => ss.Id)
             .ToListAsync();
     }
 
@@ -49,6 +53,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
         return new SecondarySourceDetailDto
         {
             Id = entity.Id,
+            Name = entity.Name,
             AlternateNames = entity.AlternateNames,
             Author = entity.Author,
             YearWritten = entity.YearWritten,
@@ -64,7 +69,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
 
     public async Task<SecondarySourceDetailDto> CreateAsync(SecondarySourceCreateRequest request)
     {
-        if ((request.AlternateNames != null) && (request.AlternateNames.Count == 0) )
+        if ((request.AlternateNames == null) || (request.AlternateNames.Count == 0) )
             throw new ArgumentException("Alternate names is not provided");
 
         bool exists = await _dbContext.Set<SecondarySource>()
@@ -75,6 +80,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
 
         var entity = new SecondarySource
         {
+            Name = request.Name,
             AlternateNames = request.AlternateNames,
             Author = request.Author,
             YearWritten = request.YearWritten,
@@ -120,6 +126,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
         return new SecondarySourceDetailDto
         {
             Id = entity.Id,
+            Name = entity.Name,
             AlternateNames = entity.AlternateNames,
             Author = entity.Author,
             YearWritten = entity.YearWritten,
@@ -145,6 +152,9 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
             throw new ArgumentException($"Entity with ID {id} not found.");
 
         // Only update fields if they are not null
+        if (request.Name != null)
+            secondarySource.Name = request.Name;
+
         if (request.AlternateNames != null)
             secondarySource.AlternateNames = request.AlternateNames;
 
@@ -204,6 +214,7 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
         return new SecondarySourceDetailDto
         {
             Id = secondarySource.Id,
+            Name = secondarySource.Name,
             AlternateNames = secondarySource.AlternateNames,
             Author = secondarySource.Author,
             YearWritten = secondarySource.YearWritten,
@@ -226,5 +237,15 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource, Sec
         _dbContext.Set<SecondarySource>().Remove(secondarySource);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public Task<PaginationResponse<SecondarySourceFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize, SecondarySourceFilterDto filter)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<SecondarySourceGraphDto>> GetAllForGraphAsync()
+    {
+        throw new NotImplementedException();
     }
 }

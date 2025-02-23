@@ -26,13 +26,13 @@ public class UnordinaryPersonDetailDto : UnordinaryPersonGeneralDto
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<ReligionDto>? FormerReligion {get; set;}
     public ProfessionDto? Profession {get; set;}
     public GenderDto? Gender {get; set;}
     public CityBaseDto? BirthPlace {get; set;}
     public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryA {get; set;}
     public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryB {get; set;}
     public List<WrittenSourceBaseDto>? Sources {get; set;}
+    public string? Depiction {get; set;}
 }
 
 // Simple entities will be denoted by their Names.
@@ -51,12 +51,12 @@ public class UnordinaryPersonCreateRequest
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<string>? FormerReligion {get; set;}
     public string? Profession {get; set;}
     public string? Gender {get; set;}
     public string? BirthPlace {get; set;}
     public List<int>? InteractionsWithUnordinaryA {get; set;}
     public List<int>? Sources {get; set;}
+    public string? Depiction {get; set;}
 }
 
 public class UnordinaryPersonUpdateRequest
@@ -72,10 +72,39 @@ public class UnordinaryPersonUpdateRequest
     public int? ProbableBirthYear {get; set;}
     public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public List<string>? FormerReligion {get; set;}
     public string? Profession {get; set;}
     public string? Gender {get; set;}
     public string? BirthPlace {get; set;}
     public List<int>? InteractionsWithUnordinaryA {get; set;}
     public List<int>? Sources {get; set;}
+    public string? Depiction {get; set;}
+}
+
+public class UnordinaryPersonFilterDto 
+{
+    public string Name {get; set;}
+    public int? Religion {get; set;}
+    public int? Ethnicity {get; set;}
+    public List<int>? DeathYear {get; set;}
+    public int? DeathPlace {get; set;}
+    public List<int>? InteractionsWithOrdinary {get; set;}
+}
+
+public class UnordinaryPersonFilterResponseDto : UnordinaryPersonGeneralDto 
+{
+    public string? AlternateName {get; set;}
+}
+
+public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto 
+{
+    public int? Religion {get; set;}
+    public int? Ethnicity {get; set;}
+    public int? Profession {get; set;}
+    public List<int>? Sources {get; set;}
+    public int? BirthPlace {get; set;}
+    public int? DeathPlace {get; set;}
+    public int? Gender {get; set;}
+    public List<int>? InteractionsWithUnordinaryA{get; set;}
+    public List<int>? InteractionsWithUnordinaryB{get; set;}
+    public List<int>? InteractionsWithOrdinary{get; set;}
 }

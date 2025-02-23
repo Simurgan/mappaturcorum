@@ -76,11 +76,23 @@ builder.Services.AddScoped<IEntityService<Language, LanguageDto>, LanguageServic
 builder.Services.AddScoped<IEntityService<Profession, ProfessionDto>, ProfessionService>();
 builder.Services.AddScoped<IEntityService<Religion, ReligionDto>, ReligionService>();
 builder.Services.AddScoped<IEntityService<Mappa.Entities.Type, TypeDto>, TypeService>();
-builder.Services.AddScoped<IComplexEntityService<City, CityGeneralDto, CityDetailDto, CityCreateRequest, CityUpdateRequest>, CityService>();
-builder.Services.AddScoped<IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest>, WrittenSourceService>();
-builder.Services.AddScoped<IComplexEntityService<SecondarySource, SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, SecondarySourceUpdateRequest>, SecondarySourceService>();
-builder.Services.AddScoped<IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest>, OrdinaryPersonService>();
-builder.Services.AddScoped<IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest>, UnordinaryPersonService>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IComplexEntityService<WrittenSource, 
+    WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
+    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
+    WrittenSourceGraphDto>, WrittenSourceService>();
+builder.Services.AddScoped<IComplexEntityService<SecondarySource, 
+    SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
+    SecondarySourceUpdateRequest, SecondarySourceFilterDto, SecondarySourceFilterResponseDto,
+    SecondarySourceGraphDto>, SecondarySourceService>();
+builder.Services.AddScoped<IComplexEntityService<OrdinaryPerson, 
+    OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
+    OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto, 
+    OrdinaryPersonGraphDto>, OrdinaryPersonService>();
+builder.Services.AddScoped<IComplexEntityService<UnordinaryPerson, 
+    UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
+    UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto,
+    UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto>, UnordinaryPersonService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -134,8 +146,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
     IdentityModelEventSource.ShowPII = true;
     IdentityModelEventSource.LogCompleteSecurityArtifact = true;
     app.UseSwagger();
@@ -144,7 +156,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mappa Anatolicorum API v1"); // Path to the Swagger JSON
         c.RoutePrefix = string.Empty;  // Set the Swagger UI at the root URL (optional)
     });
-}
+// }
 
 using (var scope = app.Services.CreateScope())
 {
@@ -160,7 +172,7 @@ app.UseHttpsRedirection();
 
 
 // In Configure method
-//app.UseCors("AllowAll");
+app.UseCors("AllowAll");
 
 // 8. Authentication
 app.UseAuthentication();

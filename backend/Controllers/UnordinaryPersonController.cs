@@ -10,11 +10,17 @@ namespace Mappa.Controllers;
 [Route("[controller]")]
 public class UnordinaryPersonController : ControllerBase
 {
-    private readonly IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest>
+    private readonly IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, 
+        UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
+        UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
+        UnordinaryPersonGraphDto>
         _service;
 
-    public UnordinaryPersonController(IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto,
-        UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest> service)
+    public UnordinaryPersonController(IComplexEntityService<UnordinaryPerson, 
+        UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
+        UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest,
+        UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto> 
+        service)
     {
         _service = service;
     }
@@ -24,6 +30,36 @@ public class UnordinaryPersonController : ControllerBase
     {
         var items = await _service.GetAllAsync();
         return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("graph")]
+    public async Task<IActionResult> GetAllForGraph()
+    {
+        var items = await _service.GetAllForGraphAsync();
+        return Ok(items);
+    }
+
+    [HttpGet]
+    [Route("page")]
+    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<UnordinaryPersonFilterDto> filter)
+    {
+        if (filter.PageNumber < 1 || filter.PageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0.");
+        }
+        
+        try
+        {
+            var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
+                filter.PageSize, filter.Filter);
+
+            return Ok(paginatedResult);
+        }
+        catch(ArgumentException ex) when (ex.Message.Contains($"Filter is not provided."))
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 
     [HttpGet("{id}")]
