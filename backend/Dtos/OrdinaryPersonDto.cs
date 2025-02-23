@@ -106,12 +106,12 @@ public class OrdinaryPersonUpdateRequest
 public class OrdinaryPersonFilterDto 
 {
     public string? Name {get; set;}
-    public int? Religion {get; set;}
-    public int? Ethnicity {get; set;}
-    public int? Profession {get; set;}
-    public int? Location {get; set;}
+    public List<int>? Religion {get; set;}
+    public List<int>? Ethnicity {get; set;}
+    public List<int>? Profession {get; set;}
+    public List<int>? Location {get; set;}
     public List<int>? Sources {get; set;}
-    public int? Gender {get; set;}
+    public List<int>? Gender {get; set;}
     public List<int>? InteractionsWithUnordinary{get; set;}
 
 }

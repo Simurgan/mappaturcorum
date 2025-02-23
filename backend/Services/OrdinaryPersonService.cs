@@ -475,6 +475,8 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             .Include(op => op.InteractionsWithUnordinary)
             .AsQueryable();
 
+        IEnumerable<OrdinaryPerson> innerItems = query.AsEnumerable();
+
         if(filter != null)
         {
             if(filter.Name != null)
@@ -486,101 +488,103 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     Contains(checkedString));
             }
 
-            if(filter.Religion != null) 
-                query = query.Where(op => op.Religion != null && (op.Religion.Id == filter.Religion));
+            if(filter.Religion != null && filter.Religion.Count != 0) 
+                query = query.Where(op => op.Religion != null &&  filter.Religion.Contains(op.Religion.Id));
 
-            if(filter.Ethnicity != null)
-                query = query.Where(op => op.Ethnicity != null && (op.Ethnicity.Id == filter.Ethnicity));
+            if(filter.Ethnicity != null && filter.Ethnicity.Count != 0)
+                query = query.Where(op => op.Ethnicity != null && filter.Ethnicity.Contains(op.Ethnicity.Id));
         
-            if(filter.Profession != null)
-                query = query.Where(op => op.Profession != null && (op.Profession.Id == filter.Profession));
+            if(filter.Profession != null && filter.Profession.Count != 0)
+                query = query.Where(op => op.Profession != null && filter.Profession.Contains(op.Profession.Id));
         
-            if(filter.Location != null)
-                query = query.Where(op => op.Location != null && (op.Location.Id == filter.Location));
+            if(filter.Location != null && filter.Location.Count != 0)
+                query = query.Where(op => op.Location != null && filter.Location.Contains(op.Location.Id));
 
-            if(filter.Gender != null)
-                query = query.Where(op => op.Gender != null && (op.Gender.Id == filter.Gender));
+            if(filter.Gender != null && filter.Gender.Count != 0)
+                query = query.Where(op => op.Gender != null && filter.Gender.Contains(op.Gender.Id));
         
-            if(filter.Sources != null)
+            innerItems = query.AsEnumerable();
+
+            if(filter.Sources != null && filter.Sources.Count != 0)
             {
-                var innerItems = query.AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.Sources != null) 
                     && filter.Sources.
                         Any(fs => op.Sources.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(p => new OrdinaryPersonFilterResponseDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Religion = _mapper.Map<ReligionDto>(p.Religion),
-                    Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
-                    Profession = _mapper.Map<ProfessionDto>(p.Profession),
-                    Location = _mapper.Map<CityBaseDto>(p.Location),
-                    Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
-                    Gender = _mapper.Map<GenderDto>(p.Gender),
-                    InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
-                AlternateName = p.AlternateName,
-                })
-                .ToList();
+                        );
+                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
+                // .Skip((pageNumber - 1) * pageSize)
+                // .Take(pageSize)
+                // .Select(p => new OrdinaryPersonFilterResponseDto
+                // {
+                //     Id = p.Id,
+                //     Name = p.Name,
+                //     Religion = _mapper.Map<ReligionDto>(p.Religion),
+                //     Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                //     Profession = _mapper.Map<ProfessionDto>(p.Profession),
+                //     Location = _mapper.Map<CityBaseDto>(p.Location),
+                //     Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
+                //     Gender = _mapper.Map<GenderDto>(p.Gender),
+                //     InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
+                // AlternateName = p.AlternateName,
+                // })
+                // .ToList();
 
-                Console.WriteLine("items", innerItems);
+                // Console.WriteLine("items", innerItems);
 
-                int totalCount1 = innerItems.Count;
+                // int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<OrdinaryPersonFilterResponseDto>
-                {
-                    Data = innerItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalCount = totalCount1,
-                };
+                // return new PaginationResponse<OrdinaryPersonFilterResponseDto>
+                // {
+                //     Data = innerItems,
+                //     PageNumber = pageNumber,
+                //     PageSize = pageSize,
+                //     TotalCount = totalCount1,
+                // };
             }
 
-            if(filter.InteractionsWithUnordinary != null)
+            if(filter.InteractionsWithUnordinary != null && filter.InteractionsWithUnordinary.Count != 0)
             {
-                var innerItems = query.Include(op => op.InteractionsWithUnordinary).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.InteractionsWithUnordinary != null) 
                     && filter.InteractionsWithUnordinary.
                         Any(fs => op.InteractionsWithUnordinary.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(p => new OrdinaryPersonFilterResponseDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Religion = _mapper.Map<ReligionDto>(p.Religion),
-                    Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
-                    Profession = _mapper.Map<ProfessionDto>(p.Profession),
-                    Location = _mapper.Map<CityBaseDto>(p.Location),
-                    Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
-                    Gender = _mapper.Map<GenderDto>(p.Gender),
-                    InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
-                    AlternateName = p.AlternateName,
-                })
-                .ToList();
+                        );
+                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
+                // .Skip((pageNumber - 1) * pageSize)
+                // .Take(pageSize)
+                // .Select(p => new OrdinaryPersonFilterResponseDto
+                // {
+                //     Id = p.Id,
+                //     Name = p.Name,
+                //     Religion = _mapper.Map<ReligionDto>(p.Religion),
+                //     Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                //     Profession = _mapper.Map<ProfessionDto>(p.Profession),
+                //     Location = _mapper.Map<CityBaseDto>(p.Location),
+                //     Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
+                //     Gender = _mapper.Map<GenderDto>(p.Gender),
+                //     InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
+                //     AlternateName = p.AlternateName,
+                // })
+                // .ToList();
 
-                Console.WriteLine("items", innerItems);
+                // Console.WriteLine("items", innerItems);
 
-                int totalCount1 = innerItems.Count;
+                // int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<OrdinaryPersonFilterResponseDto>
-                {
-                    Data = innerItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalCount = totalCount1,
-                };
+                // return new PaginationResponse<OrdinaryPersonFilterResponseDto>
+                // {
+                //     Data = innerItems,
+                //     PageNumber = pageNumber,
+                //     PageSize = pageSize,
+                //     TotalCount = totalCount1,
+                // };
             }
         }
 
-        int totalCount = await query.CountAsync();
+        int totalCount = innerItems.Count();
 
-        var items = await query
+        var items = innerItems
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -597,7 +601,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                 InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
                 AlternateName = p.AlternateName,
             })
-            .ToListAsync();
+            .ToList();
 
         return new PaginationResponse<OrdinaryPersonFilterResponseDto>
         {

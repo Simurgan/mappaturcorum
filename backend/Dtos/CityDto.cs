@@ -54,7 +54,7 @@ public class CityUpdateRequest
 
 public class CityFilterDto
 {
-    // This includes both AsciiName and AlternateNames
+    // This includes both Name,AsciiName and AlternateNames
     public string? Name { get; set; }
     // OrdinaryPerson Ids
     public List<int>? LocationOf {get; set;}

@@ -40,7 +40,7 @@ public class OrdinaryPersonController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("page")]
     public async Task<IActionResult> GetPage([FromBody] PaginationRequest<OrdinaryPersonFilterDto> filter)
     {

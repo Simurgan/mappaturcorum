@@ -138,7 +138,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         if (request.CitiesMentionedByTheSource != null)
         {
             var mentionedCities = await _dbContext.Set<City>()
-                .Where(c => request.CitiesMentionedByTheSource.Contains(c.AsciiName))
+                .Where(c => request.CitiesMentionedByTheSource.Contains(c.Name) ||
+                    (c.AsciiName != null && request.CitiesMentionedByTheSource.Contains(c.AsciiName)))
                 .ToListAsync();
 
             if (mentionedCities.Count != request.CitiesMentionedByTheSource.Count)
@@ -150,7 +151,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         if (request.CitiesWhereSourcesAreWritten != null)
         {
             var writtenCities = await _dbContext.Set<City>()
-                .Where(c => request.CitiesWhereSourcesAreWritten.Contains(c.AsciiName))
+                .Where(c => request.CitiesWhereSourcesAreWritten.Contains(c.Name) ||
+                    (c.AsciiName != null && request.CitiesWhereSourcesAreWritten.Contains(c.AsciiName)))
                 .ToListAsync();
 
             if (writtenCities.Count != request.CitiesWhereSourcesAreWritten.Count)
@@ -262,7 +264,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         if (request.CitiesMentionedByTheSource != null)
         {
             var mentionedCities = await _dbContext.Set<City>()
-                .Where(c => request.CitiesMentionedByTheSource.Contains(c.AsciiName))
+                .Where(c => request.CitiesMentionedByTheSource.Contains(c.Name) ||
+                    (c.AsciiName != null && request.CitiesMentionedByTheSource.Contains(c.AsciiName)))
                 .ToListAsync();
 
             if (mentionedCities.Count != request.CitiesMentionedByTheSource.Count)
@@ -275,7 +278,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         if (request.CitiesWhereSourcesAreWritten != null)
         {
             var writtenCities = await _dbContext.Set<City>()
-                .Where(c => request.CitiesWhereSourcesAreWritten.Contains(c.AsciiName))
+                .Where(c => request.CitiesWhereSourcesAreWritten.Contains(c.Name) ||
+                    (c.AsciiName != null && request.CitiesWhereSourcesAreWritten.Contains(c.AsciiName)))
                 .ToListAsync();
 
             if (writtenCities.Count != request.CitiesWhereSourcesAreWritten.Count)
@@ -328,6 +332,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .Include(op => op.UnordinaryPersons)
             .AsQueryable();
 
+        IEnumerable<WrittenSource> innerItems = query.AsEnumerable();
+
         if(filter != null)
         {
             if(filter.Name != null)
@@ -339,10 +345,10 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                     Contains(checkedString))));
             }
 
-            if(filter.Genre != null) 
-                query = query.Where(op => op.Genre != null && (op.Genre.Id == filter.Genre));
+            if(filter.Genre != null && filter.Genre.Count != 0) 
+                query = query.Where(op => op.Genre != null && filter.Genre.Contains(op.Genre.Id));
 
-            if(filter.YearWritten != null && filter.YearWritten.Count > 0)
+            if(filter.YearWritten != null && filter.YearWritten.Count != 0)
             {
                 if(filter.YearWritten.Count == 1)
                     query = query.Where(op => op.ProbableYearWritten != null && 
@@ -361,85 +367,83 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             }
                 
             
-            if(filter.Language != null)
-                query = query.Where(op => op.Language != null && (op.Language.Id == filter.Language));
+            if(filter.Language != null && filter.Language.Count != 0)
+                query = query.Where(op => op.Language != null && filter.Language.Contains(op.Language.Id));
+
+            innerItems = query.AsEnumerable();
         
-            if(filter.OrdinaryPersons != null)
+            if(filter.OrdinaryPersons != null && filter.OrdinaryPersons.Count != 0)
             {
-                var innerItems = query.Include(op => op.OrdinaryPersons).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.OrdinaryPersons != null) 
                     && filter.OrdinaryPersons.
                         Any(fs => op.OrdinaryPersons.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(p => new WrittenSourceFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AlternateNames = p.AlternateNames,
-                        Author = p.Author,
-                        YearWritten = p.YearWritten,
-                        Genre = _mapper.Map<GenreDto>(p.Genre),
-                        Language = _mapper.Map<LanguageDto>(p.Language),
-                    })
-                    .ToList();
+                        );
+                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
+                //     .Skip((pageNumber - 1) * pageSize)
+                //     .Take(pageSize)
+                //     .Select(p => new WrittenSourceFilterResponseDto
+                //     {
+                //         Id = p.Id,
+                //         AlternateNames = p.AlternateNames,
+                //         Author = p.Author,
+                //         YearWritten = p.YearWritten,
+                //         Genre = _mapper.Map<GenreDto>(p.Genre),
+                //         Language = _mapper.Map<LanguageDto>(p.Language),
+                //     })
+                //     .ToList();
 
-                Console.WriteLine("items", innerItems);
+                // Console.WriteLine("items", innerItems);
 
-                int totalCount1 = innerItems.Count;
+                // int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<WrittenSourceFilterResponseDto>
-                {
-                    Data = innerItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalCount = totalCount1,
-                };
+                // return new PaginationResponse<WrittenSourceFilterResponseDto>
+                // {
+                //     Data = innerItems,
+                //     PageNumber = pageNumber,
+                //     PageSize = pageSize,
+                //     TotalCount = totalCount1,
+                // };
             }
         
-            if(filter.UnordinaryPersons != null)
+            if(filter.UnordinaryPersons != null && filter.UnordinaryPersons.Count != 0)
             {
-                var innerItems = query.Include(op => op.UnordinaryPersons).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.UnordinaryPersons != null) 
                     && filter.UnordinaryPersons.
                         Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(p => new WrittenSourceFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AlternateNames = p.AlternateNames,
-                        Author = p.Author,
-                        YearWritten = p.YearWritten,
-                        Genre = _mapper.Map<GenreDto>(p.Genre),
-                        Language = _mapper.Map<LanguageDto>(p.Language),
-                    })
-                    .ToList();
+                        );
+                    // .OrderBy(p => p.Id)  // Sort by Id (or other field)
+                    // .Skip((pageNumber - 1) * pageSize)
+                    // .Take(pageSize)
+                    // .Select(p => new WrittenSourceFilterResponseDto
+                    // {
+                    //     Id = p.Id,
+                    //     AlternateNames = p.AlternateNames,
+                    //     Author = p.Author,
+                    //     YearWritten = p.YearWritten,
+                    //     Genre = _mapper.Map<GenreDto>(p.Genre),
+                    //     Language = _mapper.Map<LanguageDto>(p.Language),
+                    // })
+                    // .ToList();
 
-                Console.WriteLine("items", innerItems);
+                // Console.WriteLine("items", innerItems);
 
-                int totalCount1 = innerItems.Count;
+                // int totalCount1 = innerItems.Count;
 
-                return new PaginationResponse<WrittenSourceFilterResponseDto>
-                {
-                    Data = innerItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalCount = totalCount1,
-                };
+                // return new PaginationResponse<WrittenSourceFilterResponseDto>
+                // {
+                //     Data = innerItems,
+                //     PageNumber = pageNumber,
+                //     PageSize = pageSize,
+                //     TotalCount = totalCount1,
+                // };
             }
         }
-        else
-        {
-            throw new ArgumentException("Filter is not provided.");
-        }
 
-        int totalCount = await query.CountAsync();
+        int totalCount = innerItems.Count();
 
-        var items = await query
+        var items = innerItems
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -451,8 +455,10 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                 YearWritten = p.YearWritten,
                 Genre = _mapper.Map<GenreDto>(p.Genre),
                 Language = _mapper.Map<LanguageDto>(p.Language),
+                OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
+                UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
             })
-            .ToListAsync();
+            .ToList();
 
         return new PaginationResponse<WrittenSourceFilterResponseDto>
         {

@@ -25,9 +25,9 @@ public class CityController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("filter")]
-    public async Task<IActionResult> GetAllFiltered(CityFilterDto filter)
+    public async Task<IActionResult> GetAllFiltered([FromBody] CityFilterDto filter)
     {
         var items = await _service.GetAllFilteredAsync(filter);
         return Ok(items);

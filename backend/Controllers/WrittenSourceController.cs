@@ -31,7 +31,7 @@ public class WrittenSourceController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("page")]
     public async Task<IActionResult> GetPage([FromBody] PaginationRequest<WrittenSourceFilterDto> filter)
     {
