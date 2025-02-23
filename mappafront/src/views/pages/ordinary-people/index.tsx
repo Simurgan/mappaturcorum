@@ -10,12 +10,13 @@ import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
 
 const OrdinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState();
+  const [selectedData, setSelectedData] =
+    useState<OrdinaryPageResponseDataItem>();
   const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
   const [tablePage, setTablePage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
 
-  function openModal(data: any) {
+  function openModal(data: OrdinaryPageResponseDataItem) {
     setIsOpen(true);
     setSelectedData(data);
   }
@@ -121,7 +122,7 @@ const OrdinaryPeoplePage = () => {
                     {cellText}
                   </Text>
                 )),
-                onClick: () => openModal({}),
+                onClick: () => openModal(ordinary),
               };
             }),
           }}
