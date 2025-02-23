@@ -5,7 +5,7 @@ import Table from "@/views/components/table";
 
 import { useEffect, useState } from "react";
 import MappaModal from "@/views/components/modal";
-import { getOrdinaryPage } from "@/actions/ordinary";
+import { getOrdinaryPage } from "@/actions/ordinary-people";
 import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
 
 const OrdinaryPeoplePage = () => {
