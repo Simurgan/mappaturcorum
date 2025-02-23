@@ -2,7 +2,6 @@ import MappaLogo from "@/assets/images/mappa-logo.png";
 import searchIcon from "@/assets/icons/search.svg";
 import { Urls } from "@/routers/routes";
 import { NavLink } from "react-router-dom";
-import Button from "@/views/components/button";
 import "./style.scss";
 import Text from "@/views/components/text";
 
@@ -19,7 +18,7 @@ const Header = () => {
               <input placeholder="Search" className="search-input" />
               <img src={searchIcon} className="search-icon" />
             </div>
-            <Button style={"primary"}>Sign Up</Button>
+            {/* <Button style={"primary"}>Sign Up</Button> */}
           </div>
         </div>
         <nav className="nav">

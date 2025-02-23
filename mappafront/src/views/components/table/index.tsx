@@ -1,41 +1,17 @@
-import usePagination from "@/helpers/hooks/usePagination";
-import TableData from "./data";
-import TablePagination from "./pagination";
+import TableData, { TableDataProps } from "./table-data";
+import TablePagination, { TablePaginationProps } from "./table-pagination";
 import "./style.scss";
 
 interface TableProps {
-  tableHeaders: string[];
-  tableData: Object[];
-  openModal: (data: any) => void;
+  tableData: TableDataProps;
+  paginationData?: TablePaginationProps;
 }
 
-const Table = ({ tableHeaders, tableData, openModal }: TableProps) => {
-  const {
-    currentPage,
-    totalPages,
-    nextPage,
-    prevPage,
-    goToPage,
-    paginatedData,
-  } = usePagination({
-    _data: tableData,
-    itemsPerPage: 100,
-  });
-
+const Table = ({ tableData, paginationData }: TableProps) => {
   return (
     <div className="table-container">
-      <TableData
-        headers={tableHeaders}
-        data={paginatedData}
-        openModal={(data: any) => openModal(data)}
-      />
-      <TablePagination
-        currentPage={currentPage}
-        totalPage={totalPages}
-        nextStep={nextPage}
-        prevStep={prevPage}
-        goStep={goToPage}
-      />
+      <TableData {...tableData} />
+      {paginationData && <TablePagination {...paginationData} />}
     </div>
   );
 };

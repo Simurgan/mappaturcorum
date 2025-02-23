@@ -2,18 +2,18 @@ import Text from "@/views/components/text";
 import "./style.scss";
 import Button from "@/views/components/button";
 import Table from "@/views/components/table";
-import {
-  ordinaryTableData,
-  ordinaryTableHeaders,
-} from "@/helpers/data/ordinary-people";
 
 import { useEffect, useState } from "react";
 import MappaModal from "@/views/components/modal";
 import { getOrdinaryPage } from "@/actions/ordinary";
+import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
 
 const OrdinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState();
+  const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
+  const [tablePage, setTablePage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>();
 
   function openModal(data: any) {
     setIsOpen(true);
@@ -28,12 +28,22 @@ const OrdinaryPeoplePage = () => {
     const response = await getOrdinaryPage({
       pageSize: 10,
       pageNumber: 1,
-      filter: {},
     });
 
-    console.log(response);
-    console.log("response");
+    if (response.status === 200) {
+      setTableData(response.data.data);
+      setTotalPage(response.data.totalPages);
+    }
   };
+
+  const headerData = [
+    "Name",
+    "Alternate Name",
+    "Ethnonym",
+    "Religion",
+    "Profession",
+    "Gender",
+  ];
 
   useEffect(() => {
     setInitialData();
@@ -64,9 +74,41 @@ const OrdinaryPeoplePage = () => {
       </div>
       <div className="content">
         <Table
-          openModal={(data) => openModal(data)}
-          tableHeaders={ordinaryTableHeaders}
-          tableData={ordinaryTableData}
+          paginationData={
+            totalPage
+              ? {
+                  currentPage: tablePage,
+                  setPage: setTablePage,
+                  totalPage: totalPage,
+                }
+              : undefined
+          }
+          tableData={{
+            hasRowHover: true,
+            headers: headerData.map((cell) => (
+              <Text fs={14} fw={500} lh={125} color="burgundy">
+                {cell}
+              </Text>
+            )),
+            rows: tableData?.map((ordinary) => {
+              const cellTexts = [
+                ordinary.name,
+                ordinary.alternateName,
+                ordinary.ethnicity?.name,
+                ordinary.religion?.name,
+                ordinary.profession?.name,
+                ordinary.gender?.name,
+              ];
+              return {
+                cells: cellTexts.map((cellText) => (
+                  <Text fs={12} fw={500} lh={125} color="dark-gray">
+                    {cellText}
+                  </Text>
+                )),
+                onClick: () => openModal({}),
+              };
+            }),
+          }}
         />
       </div>
       <MappaModal
