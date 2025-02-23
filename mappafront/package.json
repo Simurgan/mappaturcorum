@@ -6,12 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "buildprod": "tsc -b && vite build --mode prod",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@types/node": "^22.10.7",
     "@types/react-modal": "^3.16.3",
+    "axios": "^1.7.9",
     "leaflet": "^1.9.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
