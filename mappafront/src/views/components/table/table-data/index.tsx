@@ -15,9 +15,7 @@ const TableData = ({ headers, rows, hasRowHover }: TableDataProps) => {
         <tr className="table-columns">
           {headers.map((header, index) => (
             <th key={index} className="table-column">
-              {/* <Text fs={14} fw={500} lh={125} color="burgundy"> */}
               {header}
-              {/* </Text> */}
             </th>
           ))}
         </tr>
@@ -34,11 +32,6 @@ const TableData = ({ headers, rows, hasRowHover }: TableDataProps) => {
               {row.cells.map((cell, index) => (
                 <td key={index} className="data-row-item">
                   {cell}
-                  {/* <Text fs={12} fw={500} lh={125} color="dark-gray">
-                    {typeof row[key] === "object" && row[key] !== null
-                      ? JSON.stringify(row[key])
-                      : row[key]?.toString() || "-"}{" "}
-                  </Text> */}
                 </td>
               ))}
             </tr>

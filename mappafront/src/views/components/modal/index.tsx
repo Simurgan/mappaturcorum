@@ -3,14 +3,32 @@ import ReactModal from "react-modal";
 import "./style.scss";
 import Text from "../text";
 import Button from "../button";
+import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
 
 interface MappaModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  data?: { [key: string]: any };
+  data?: OrdinaryPageResponseDataItem | any;
 }
 
+const formatDataField = (data: OrdinaryPageResponseDataItem, key: string) => {
+  const value = (data as any)[key];
+  if (value === null) return "-";
+  if (typeof value !== "object") return value.toString();
+  if (Array.isArray(value) && value.length === 0) return "-";
+  if (Array.isArray(value) && value.length !== 0) {
+    if (typeof value[0] === "object")
+      return value.map((item) => `${item.name}, `);
+    else {
+      return value[0] ? value[0]?.toString() : "-";
+    }
+  }
+
+  return value.name || "-";
+};
+
 const MappaModal = ({ isOpen, closeModal, data }: MappaModalProps) => {
+  console.log("🚀 ~ MappaModal ~ data:", data);
   return (
     <ReactModal
       isOpen={isOpen}
@@ -42,12 +60,10 @@ const MappaModal = ({ isOpen, closeModal, data }: MappaModalProps) => {
               Object.keys(data).map((key, index) => (
                 <div key={index} className="info-row">
                   <Text fs={16} fw={500} lh={125} classNames="data-field">
-                    {key}
+                    {key.toString()}
                   </Text>
                   <Text fs={14} fw={400} lh={125} classNames="data">
-                    {typeof data[key] === "object"
-                      ? JSON.stringify(data[key])
-                      : data[key]?.toString() || "-"}{" "}
+                    {formatDataField(data, key)}
                   </Text>
                 </div>
               ))
