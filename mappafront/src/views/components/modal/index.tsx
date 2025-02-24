@@ -8,7 +8,7 @@ import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
 interface MappaModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  data?: OrdinaryPageResponseDataItem;
+  data?: OrdinaryPageResponseDataItem | any;
 }
 
 const formatDataField = (data: OrdinaryPageResponseDataItem, key: string) => {
@@ -16,12 +16,19 @@ const formatDataField = (data: OrdinaryPageResponseDataItem, key: string) => {
   if (value === null) return "-";
   if (typeof value !== "object") return value.toString();
   if (Array.isArray(value) && value.length === 0) return "-";
+  if (Array.isArray(value) && value.length !== 0) {
+    if (typeof value[0] === "object")
+      return value.map((item) => `${item.name}, `);
+    else {
+      return value[0] ? value[0]?.toString() : "-";
+    }
+  }
+
   return value.name || "-";
 };
 
 const MappaModal = ({ isOpen, closeModal, data }: MappaModalProps) => {
-  console.log("🚀 ~ data:", data);
-
+  console.log("🚀 ~ MappaModal ~ data:", data);
   return (
     <ReactModal
       isOpen={isOpen}
