@@ -18,6 +18,15 @@ public class CityDetailDto : CityGeneralDto
     public string? CountryCode {get; set;}
     public double? Latitude {get; set;}
     public double? Longitude {get; set;}
+    // OrdinaryPerson 
+    public int NumberOfLocationOf {get; set;}
+    public int NumberOfBackgroundCityOf {get; set;}
+    // UnordinaryPerson 
+    public int NumberOfBirthPlaceOf {get; set;}
+    public int NumberOfDeathPlaceOf {get; set;}
+    // WrittenSource 
+    public int NumberOfSourcesMentioningTheCity {get; set;}
+    public int NumberOfSourcesWrittenInTheCity {get; set;}
     // OrdinaryPerson Ids
     public List<OrdinaryPersonBaseDto>? LocationOf {get; set;}
     public List<OrdinaryPersonBaseDto>? BackgroundCityOf {get; set;}

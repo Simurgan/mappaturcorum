@@ -113,12 +113,14 @@ public class OrdinaryPersonFilterDto
     public List<int>? Sources {get; set;}
     public List<int>? Gender {get; set;}
     public List<int>? InteractionsWithUnordinary{get; set;}
+    public List<int>? FormerReligion{get; set;}
 
 }
 
 public class OrdinaryPersonFilterResponseDto : OrdinaryPersonGeneralDto 
 {
     public string? AlternateName {get; set;}
+    public ReligionDto? FormerReligion {get; set;}
 }
 
 public class OrdinaryPersonGraphDto: OrdinaryPersonBaseDto 

@@ -56,6 +56,12 @@ public class CityService : ICityService
             CountryCode = entity.CountryCode,
             Latitude = entity.Latitude,
             Longitude = entity.Longitude,
+            NumberOfLocationOf = entity.NumberOfLocationOf,
+            NumberOfBackgroundCityOf = entity.NumberOfBackgroundCityOf,
+            NumberOfBirthPlaceOf = entity.NumberOfBirthPlaceOf,
+            NumberOfDeathPlaceOf = entity.NumberOfDeathPlaceOf,
+            NumberOfSourcesMentioningTheCity = entity.NumberOfSourcesMentioningTheCity,
+            NumberOfSourcesWrittenInTheCity = entity.NumberOfSourcesWrittenInTheCity,
             LocationOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.LocationOf),
             BackgroundCityOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.BackgroundCityOf),
             BirthPlaceOf = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.BirthPlaceOf),
@@ -84,6 +90,12 @@ public class CityService : ICityService
             CountryCode = request.CountryCode,
             Latitude = request.Latitude,
             Longitude = request.Longitude,
+            NumberOfLocationOf = 0,
+            NumberOfBackgroundCityOf = 0,
+            NumberOfBirthPlaceOf = 0,
+            NumberOfDeathPlaceOf = 0,
+            NumberOfSourcesMentioningTheCity = 0,
+            NumberOfSourcesWrittenInTheCity = 0,
         };
         
         _dbContext.Set<City>().Add(city);
@@ -99,6 +111,12 @@ public class CityService : ICityService
             CountryCode = city.CountryCode,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            NumberOfLocationOf = city.NumberOfLocationOf,
+            NumberOfBackgroundCityOf = city.NumberOfBackgroundCityOf,
+            NumberOfBirthPlaceOf = city.NumberOfBirthPlaceOf,
+            NumberOfDeathPlaceOf = city.NumberOfDeathPlaceOf,
+            NumberOfSourcesMentioningTheCity = city.NumberOfSourcesMentioningTheCity,
+            NumberOfSourcesWrittenInTheCity = city.NumberOfSourcesWrittenInTheCity,
             LocationOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.LocationOf),
             BackgroundCityOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.BackgroundCityOf),
             BirthPlaceOf = _mapper.Map<List<UnordinaryPersonBaseDto>>(city.BirthPlaceOf),
@@ -155,6 +173,12 @@ public class CityService : ICityService
             CountryCode = city.CountryCode,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            NumberOfLocationOf = city.NumberOfLocationOf,
+            NumberOfBackgroundCityOf = city.NumberOfBackgroundCityOf,
+            NumberOfBirthPlaceOf = city.NumberOfBirthPlaceOf,
+            NumberOfDeathPlaceOf = city.NumberOfDeathPlaceOf,
+            NumberOfSourcesMentioningTheCity = city.NumberOfSourcesMentioningTheCity,
+            NumberOfSourcesWrittenInTheCity = city.NumberOfSourcesWrittenInTheCity,
             LocationOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.LocationOf),
             BackgroundCityOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.BackgroundCityOf),
             BirthPlaceOf = _mapper.Map<List<UnordinaryPersonBaseDto>>(city.BirthPlaceOf),
@@ -274,6 +298,12 @@ public class CityService : ICityService
                     CountryCode = p.CountryCode,
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
+                    NumberOfLocationOf = p.NumberOfLocationOf,
+                    NumberOfBackgroundCityOf = p.NumberOfBackgroundCityOf,
+                    NumberOfBirthPlaceOf = p.NumberOfBirthPlaceOf,
+                    NumberOfDeathPlaceOf = p.NumberOfDeathPlaceOf,
+                    NumberOfSourcesMentioningTheCity = p.NumberOfSourcesMentioningTheCity,
+                    NumberOfSourcesWrittenInTheCity = p.NumberOfSourcesWrittenInTheCity,
                 })
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .ToList();
@@ -289,15 +319,12 @@ public class CityService : ICityService
                 Name = e.Name,
                 Latitude = e.Latitude,
                 Longitude = e.Longitude,
-                NumberOfLocationOf = (e.LocationOf != null) ? e.LocationOf.Count : 0,
-                NumberOfBackgroundCityOf = (e.BackgroundCityOf != null) ? 
-                    e.BackgroundCityOf.Count : 0,
-                NumberOfBirthPlaceOf = (e.BirthPlaceOf != null) ? e.BirthPlaceOf.Count : 0,
-                NumberOfDeathPlaceOf = (e.DeathPlaceOf != null) ? e.DeathPlaceOf.Count : 0,
-                NumberOfSourcesMentioningTheCity = (e.SourcesMentioningTheCity != null) 
-                    ? e.SourcesMentioningTheCity.Count : 0,
-                NumberOfSourcesWrittenInTheCity = (e.SourcesWrittenInTheCity != null) 
-                    ? e.SourcesWrittenInTheCity.Count : 0,
+                NumberOfLocationOf = e.NumberOfLocationOf,
+                NumberOfBackgroundCityOf = e.NumberOfBackgroundCityOf,
+                NumberOfBirthPlaceOf = e.NumberOfBirthPlaceOf,
+                NumberOfDeathPlaceOf = e.NumberOfDeathPlaceOf,
+                NumberOfSourcesMentioningTheCity = e.NumberOfSourcesMentioningTheCity,
+                NumberOfSourcesWrittenInTheCity = e.NumberOfSourcesWrittenInTheCity,
 
             })
             .OrderBy(e => e.Id)

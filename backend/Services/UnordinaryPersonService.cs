@@ -96,15 +96,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             ProbableDeathYear = request.ProbableDeathYear,
             Description = request.Description,
             Depiction = request.Depiction,
-            // Religion = _mapper.Map<Religion>(request.Religion),
-            // Ethnicity = _mapper.Map<Ethnicity>(request.Ethnicity),
-            // Profession = _mapper.Map<Profession>(request.Profession),
-            // Gender = _mapper.Map<Gender>(request.Gender),
-            // Sources = _mapper.Map<List<WrittenSource>>(request.Sources),
-            // InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPerson>>(request.InteractionsWithOrdinary),
-            // InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPerson>>(request.InteractionsWithUnordinaryA),
-            // BirthPlace = _mapper.Map<City>(request.BirthPlace),
-            // DeathPlace = _mapper.Map<City>(request.DeathPlace),
         };
 
         // Check if Religion exists
@@ -128,10 +119,13 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         // Check if DeathPlace exists
         if(request.DeathPlace != null)
         {
-            var deathPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.DeathPlace);
+            var deathPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.DeathPlace || (e.AsciiName != null &&  
+                e.AsciiName == request.DeathPlace));
             if (deathPlace == null)
                 throw new ArgumentException($"DeathPlace with name {request.DeathPlace} not found.");
             unordinaryPerson.DeathPlace = deathPlace;
+            deathPlace.NumberOfDeathPlaceOf++;
         }
 
         // Check if InteractionsWithOrdinary elements exists
@@ -167,10 +161,13 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         // Check if BirthPlace exists
         if(request.BirthPlace != null)
         {
-            var birthPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.BirthPlace);
+            var birthPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.BirthPlace || (e.AsciiName != null && 
+                e.AsciiName == request.BirthPlace));
             if (birthPlace == null)
                 throw new ArgumentException($"BirthPlace with name {request.BirthPlace} not found.");
             unordinaryPerson.BirthPlace = birthPlace;
+            birthPlace.NumberOfBirthPlaceOf++;
         }
 
         // Check if InteractionsWithUnordinaryA elements exists
@@ -266,10 +263,21 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         // DeathPlace update only if a valid city name is provided
         if (request.DeathPlace != null)
         {
-            var deathPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.DeathPlace);
+            var deathPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.DeathPlace || (e.AsciiName != null &&  
+                e.AsciiName == request.DeathPlace));
             if (deathPlace == null)
                 throw new ArgumentException($"DeathPlace with name {request.DeathPlace} not found.");
+            
+            if(unordinaryPerson.DeathPlace != null)
+            {
+                unordinaryPerson.DeathPlace.NumberOfDeathPlaceOf--;
+
+                if(unordinaryPerson.DeathPlace.NumberOfDeathPlaceOf < 0)
+                    throw new Exception("City.NumberOfDeathPlaceOf cannot be < 0");
+            }
             unordinaryPerson.DeathPlace = deathPlace;
+            deathPlace.NumberOfDeathPlaceOf++;
         }
 
         // Update InteractionsWithOrdinary 
@@ -322,10 +330,20 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         // BirthPlace update only if a valid city is provided
         if (request.BirthPlace != null)
         {
-            var birthPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.BirthPlace);
+            var birthPlace = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.BirthPlace || (e.AsciiName != null && 
+                e.AsciiName == request.BirthPlace));
             if (birthPlace == null)
                 throw new ArgumentException($"BirthPlace with name {request.BirthPlace} not found.");
+            if(unordinaryPerson.BirthPlace != null)
+            {
+                unordinaryPerson.BirthPlace.NumberOfBirthPlaceOf--;
+
+                if(unordinaryPerson.BirthPlace.NumberOfBirthPlaceOf < 0)
+                    throw new Exception("City.NumberOfBirthPlaceOf cannot be < 0");
+            }
             unordinaryPerson.BirthPlace = birthPlace;
+            birthPlace.NumberOfBirthPlaceOf++;
         }
 
         // Update InteractionsWithUnordinaryA 
@@ -385,9 +403,28 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var unordinaryPerson = await _dbContext.Set<UnordinaryPerson>().FindAsync(id);
+        var unordinaryPerson = await _dbContext.Set<UnordinaryPerson>()
+            .Include(e => e.BirthPlace)
+            .Include(e => e.DeathPlace)
+            .FirstOrDefaultAsync(e => e.Id == id);
         if (unordinaryPerson == null)
             return false;
+
+        if(unordinaryPerson.BirthPlace != null)
+        {
+            unordinaryPerson.BirthPlace.NumberOfBirthPlaceOf --;
+
+            if(unordinaryPerson.BirthPlace.NumberOfBirthPlaceOf < 0)
+                throw new Exception("City.NumberOfBirthPlaceOf cannot be < 0");
+        }
+
+        if(unordinaryPerson.DeathPlace != null)
+        {
+            unordinaryPerson.DeathPlace.NumberOfDeathPlaceOf --;
+
+            if(unordinaryPerson.DeathPlace.NumberOfDeathPlaceOf < 0)
+                throw new Exception("City.NumberOfDeathPlaceOf cannot be < 0");
+        }
 
         _dbContext.Set<UnordinaryPerson>().Remove(unordinaryPerson);
         await _dbContext.SaveChangesAsync();
@@ -444,33 +481,6 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                     && filter.InteractionsWithOrdinary.
                         Any(fs => op.InteractionsWithOrdinary.Select(s => s.Id).Contains(fs))
                         );
-                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                //     .Skip((pageNumber - 1) * pageSize)
-                //     .Take(pageSize)
-                //     .Select(p => new UnordinaryPersonFilterResponseDto
-                //     {
-                //         Id = p.Id,
-                //         Name = p.Name,
-                //         Religion = _mapper.Map<ReligionDto>(p.Religion),
-                //         Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
-                //         DeathYear = p.DeathYear,
-                //         DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
-                //         InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary),
-                //         AlternateName = p.AlternateName,
-                //     })
-                //     .ToList();
-
-                // Console.WriteLine("items", innerItems);
-
-                // int totalCount1 = innerItems.Count;
-
-                // return new PaginationResponse<UnordinaryPersonFilterResponseDto>
-                // {
-                //     Data = innerItems,
-                //     PageNumber = pageNumber,
-                //     PageSize = pageSize,
-                //     TotalCount = totalCount1,
-                // };
             }
         }
 

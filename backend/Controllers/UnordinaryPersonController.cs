@@ -28,16 +28,30 @@ public class UnordinaryPersonController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var items = await _service.GetAllAsync();
-        return Ok(items);
+        try
+        {
+            var items = await _service.GetAllAsync();
+            return Ok(items);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [HttpGet]
     [Route("graph")]
     public async Task<IActionResult> GetAllForGraph()
     {
-        var items = await _service.GetAllForGraphAsync();
-        return Ok(items);
+        try
+        {
+            var items = await _service.GetAllForGraphAsync();
+            return Ok(items);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [HttpPost]
@@ -60,6 +74,10 @@ public class UnordinaryPersonController : ControllerBase
         {
             return BadRequest(new { Message = ex.Message });
         }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [HttpGet("{id}")]
@@ -76,7 +94,6 @@ public class UnordinaryPersonController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
@@ -96,7 +113,6 @@ public class UnordinaryPersonController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
@@ -116,7 +132,6 @@ public class UnordinaryPersonController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
@@ -135,7 +150,6 @@ public class UnordinaryPersonController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }

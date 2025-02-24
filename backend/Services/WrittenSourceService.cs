@@ -145,6 +145,9 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             if (mentionedCities.Count != request.CitiesMentionedByTheSource.Count)
                 throw new ArgumentException("One or more provided CitiesMentionedByTheSource are invalid.");
             writtenSource.CitiesMentionedByTheSource = mentionedCities;
+            
+            foreach(var city in mentionedCities)
+                city.NumberOfSourcesMentioningTheCity++;
         }
 
         // Update CitiesWhereSourcesAreWritten (List of CityBaseDto)
@@ -158,6 +161,9 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             if (writtenCities.Count != request.CitiesWhereSourcesAreWritten.Count)
                 throw new ArgumentException("One or more provided CitiesWhereSourcesAreWritten IDs are invalid.");
             writtenSource.CitiesWhereSourcesAreWritten = writtenCities;
+            
+            foreach(var city in writtenCities)
+                city.NumberOfSourcesWrittenInTheCity++;
         }
         
         _dbContext.Set<WrittenSource>().Add(writtenSource);
@@ -271,7 +277,20 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             if (mentionedCities.Count != request.CitiesMentionedByTheSource.Count)
                 throw new ArgumentException("One or more provided CitiesMentionedByTheSource are invalid.");
 
+            if(writtenSource.CitiesMentionedByTheSource != null)
+                foreach(var city in writtenSource.CitiesMentionedByTheSource)
+                    {
+                        city.NumberOfSourcesMentioningTheCity--;
+
+                        if(city.NumberOfSourcesMentioningTheCity < 0)
+                            throw new Exception("City.NumberOfSourcesMentioningTheCity cannot be < 0");
+                    }
+
             writtenSource.CitiesMentionedByTheSource = mentionedCities;
+
+            foreach(var city in mentionedCities)
+                city.NumberOfSourcesMentioningTheCity++;
+ 
         }
 
         // Update CitiesWhereSourcesAreWritten (List of CityBaseDto)
@@ -285,7 +304,19 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             if (writtenCities.Count != request.CitiesWhereSourcesAreWritten.Count)
                 throw new ArgumentException("One or more provided CitiesWhereSourcesAreWritten are invalid.");
 
+            if(writtenSource.CitiesWhereSourcesAreWritten != null)
+                foreach(var city in writtenSource.CitiesWhereSourcesAreWritten)
+                    {
+                        city.NumberOfSourcesWrittenInTheCity--;
+
+                        if(city.NumberOfSourcesWrittenInTheCity < 0)
+                            throw new Exception("City.NumberOfSourcesWrittenInTheCity cannot be < 0");
+                    }
+                    
             writtenSource.CitiesWhereSourcesAreWritten = writtenCities;
+
+            foreach(var city in writtenCities)
+                city.NumberOfSourcesWrittenInTheCity++;
         }
 
         await _dbContext.SaveChangesAsync();
@@ -313,9 +344,30 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var writtenSource = await _dbContext.Set<WrittenSource>().FindAsync(id);
+        var writtenSource = await _dbContext.Set<WrittenSource>()
+            .Include(e => e.CitiesMentionedByTheSource)
+            .Include(e => e.CitiesWhereSourcesAreWritten)
+            .FirstOrDefaultAsync(e => e.Id == id);
         if (writtenSource == null)
             return false;
+
+        if(writtenSource.CitiesMentionedByTheSource != null)
+            foreach(var city in writtenSource.CitiesMentionedByTheSource)
+            {
+                city.NumberOfSourcesMentioningTheCity--;
+
+                if(city.NumberOfSourcesMentioningTheCity < 0)
+                    throw new Exception("City.NumberOfSourcesMentioningTheCity cannot be < 0");
+            }
+
+        if(writtenSource.CitiesWhereSourcesAreWritten != null)
+            foreach(var city in writtenSource.CitiesWhereSourcesAreWritten)
+            {
+                city.NumberOfSourcesWrittenInTheCity--;
+
+                if(city.NumberOfSourcesWrittenInTheCity < 0)
+                    throw new Exception("City.NumberOfSourcesWrittenInTheCity cannot be < 0");
+            }
 
         _dbContext.Set<WrittenSource>().Remove(writtenSource);
         await _dbContext.SaveChangesAsync();
@@ -379,31 +431,6 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                     && filter.OrdinaryPersons.
                         Any(fs => op.OrdinaryPersons.Select(s => s.Id).Contains(fs))
                         );
-                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                //     .Skip((pageNumber - 1) * pageSize)
-                //     .Take(pageSize)
-                //     .Select(p => new WrittenSourceFilterResponseDto
-                //     {
-                //         Id = p.Id,
-                //         AlternateNames = p.AlternateNames,
-                //         Author = p.Author,
-                //         YearWritten = p.YearWritten,
-                //         Genre = _mapper.Map<GenreDto>(p.Genre),
-                //         Language = _mapper.Map<LanguageDto>(p.Language),
-                //     })
-                //     .ToList();
-
-                // Console.WriteLine("items", innerItems);
-
-                // int totalCount1 = innerItems.Count;
-
-                // return new PaginationResponse<WrittenSourceFilterResponseDto>
-                // {
-                //     Data = innerItems,
-                //     PageNumber = pageNumber,
-                //     PageSize = pageSize,
-                //     TotalCount = totalCount1,
-                // };
             }
         
             if(filter.UnordinaryPersons != null && filter.UnordinaryPersons.Count != 0)
@@ -413,31 +440,6 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                     && filter.UnordinaryPersons.
                         Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
                         );
-                    // .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    // .Skip((pageNumber - 1) * pageSize)
-                    // .Take(pageSize)
-                    // .Select(p => new WrittenSourceFilterResponseDto
-                    // {
-                    //     Id = p.Id,
-                    //     AlternateNames = p.AlternateNames,
-                    //     Author = p.Author,
-                    //     YearWritten = p.YearWritten,
-                    //     Genre = _mapper.Map<GenreDto>(p.Genre),
-                    //     Language = _mapper.Map<LanguageDto>(p.Language),
-                    // })
-                    // .ToList();
-
-                // Console.WriteLine("items", innerItems);
-
-                // int totalCount1 = innerItems.Count;
-
-                // return new PaginationResponse<WrittenSourceFilterResponseDto>
-                // {
-                //     Data = innerItems,
-                //     PageNumber = pageNumber,
-                //     PageSize = pageSize,
-                //     TotalCount = totalCount1,
-                // };
             }
         }
 

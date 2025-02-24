@@ -19,6 +19,15 @@ public class City
     public string? CountryCode {get; set;}
     public double? Latitude {get; set;}
     public double? Longitude {get; set;}
+    // OrdinaryPerson
+    public int NumberOfLocationOf {get; set;}
+    public int NumberOfBackgroundCityOf {get; set;}
+    // UnordinaryPerson
+    public int NumberOfBirthPlaceOf {get; set;}
+    public int NumberOfDeathPlaceOf {get; set;}
+    // WrittenSource
+    public int NumberOfSourcesMentioningTheCity {get; set;}
+    public int NumberOfSourcesWrittenInTheCity {get; set;}
     public List<OrdinaryPerson>? LocationOf {get; set;}
     public List<OrdinaryPerson>? BackgroundCityOf {get; set;}
     public List<UnordinaryPerson>? BirthPlaceOf {get; set;}

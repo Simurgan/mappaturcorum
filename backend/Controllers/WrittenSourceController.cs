@@ -27,8 +27,15 @@ public class WrittenSourceController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var items = await _service.GetAllAsync();
-        return Ok(items);
+        try
+        {
+            var items = await _service.GetAllAsync();
+            return Ok(items);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [HttpPost]
@@ -51,6 +58,10 @@ public class WrittenSourceController : ControllerBase
         {
             return BadRequest(new { Message = ex.Message });
         }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
     }
 
     [HttpGet("{id}")]
@@ -67,7 +78,6 @@ public class WrittenSourceController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
@@ -87,7 +97,6 @@ public class WrittenSourceController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
@@ -107,7 +116,6 @@ public class WrittenSourceController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }
@@ -126,7 +134,6 @@ public class WrittenSourceController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
             return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
         }
     }

@@ -151,10 +151,13 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         // Check if Location exists
         if(request.Location != null)
         {
-            var location = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.Location);
+            var location = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.Location || (e.AsciiName != null && 
+                e.AsciiName == request.Location));
             if (location == null)
                 throw new ArgumentException($"Location with name {request.Location} not found.");
             ordinaryPerson.Location = location;
+            location.NumberOfLocationOf ++;
         }
 
         // Check if Sources elements exists
@@ -214,10 +217,13 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         // Check if BackgroundCity exists
         if(request.BackgroundCity != null)
         {
-            var backgroundCity = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.BackgroundCity);
+            var backgroundCity = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.BackgroundCity || (e.AsciiName != null && 
+                e.AsciiName == request.BackgroundCity));
             if (backgroundCity == null)
                 throw new ArgumentException($"BackgroundCity with name {request.BackgroundCity} not found.");
             ordinaryPerson.BackgroundCity = backgroundCity;
+            backgroundCity.NumberOfBackgroundCityOf++;
         }
         
         _dbContext.Set<OrdinaryPerson>().Add(ordinaryPerson);
@@ -304,10 +310,22 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         // Location update only if a valid city is provided
         if (request.Location != null)
         {
-            var location = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.Location);
+            var location = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.Location || (e.AsciiName != null && 
+                e.AsciiName == request.Location));
             if (location == null)
                 throw new ArgumentException($"Location with name {request.Location} not found.");
+
+            if(ordinaryPerson.Location != null)
+            {
+                ordinaryPerson.Location.NumberOfLocationOf--;
+
+                if(ordinaryPerson.Location.NumberOfLocationOf < 0)
+                    throw new Exception("City.NumberOfLocationOf cannot be < 0");
+            }
+
             ordinaryPerson.Location = location;
+            location.NumberOfLocationOf++;
         }
 
         // Update Sources 
@@ -414,10 +432,21 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
         // BackgroundCity update only if a valid ID is provided
         if (request.BackgroundCity != null)
         {
-            var backgroundCity = await _dbContext.Set<City>().FirstOrDefaultAsync(e => e.AsciiName == request.BackgroundCity);
+            var backgroundCity = await _dbContext.Set<City>().FirstOrDefaultAsync(e => 
+                e.Name == request.BackgroundCity || (e.AsciiName != null && 
+                e.AsciiName == request.BackgroundCity));
             if (backgroundCity == null)
                 throw new ArgumentException($"BackgroundCity with name {request.BackgroundCity} not found.");
+            
+            if(ordinaryPerson.BackgroundCity != null)
+            {
+                ordinaryPerson.BackgroundCity.NumberOfBackgroundCityOf--;
+
+                if(ordinaryPerson.BackgroundCity.NumberOfBackgroundCityOf < 0)
+                    throw new Exception("City.NumberOfBackgroundCityOf cannot be < 0");
+            }
             ordinaryPerson.BackgroundCity = backgroundCity;
+            backgroundCity.NumberOfBackgroundCityOf++;
         }
 
         await _dbContext.SaveChangesAsync();
@@ -456,9 +485,30 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var ordinaryPerson = await _dbContext.Set<OrdinaryPerson>().FindAsync(id);
+        var ordinaryPerson = await _dbContext.Set<OrdinaryPerson>()
+            .Include(e => e.BackgroundCity)
+            .Include(e => e.Location)
+            .FirstOrDefaultAsync(e => e.Id == id);
+
         if (ordinaryPerson == null)
             return false;
+
+        if(ordinaryPerson.Location != null)
+        {
+            ordinaryPerson.Location.NumberOfLocationOf --;
+
+            if(ordinaryPerson.Location.NumberOfLocationOf < 0)
+                throw new Exception("City.NumberOfLocationOf cannot be < 0");
+        }
+
+        if(ordinaryPerson.BackgroundCity != null)
+        {
+            ordinaryPerson.BackgroundCity.NumberOfBackgroundCityOf --;
+
+            if(ordinaryPerson.BackgroundCity.NumberOfBackgroundCityOf < 0)
+                throw new Exception("City.NumberOfBackgroundCityOf cannot be < 0");
+        }
+             
 
         _dbContext.Set<OrdinaryPerson>().Remove(ordinaryPerson);
         await _dbContext.SaveChangesAsync();
@@ -473,6 +523,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             .Include(op => op.Profession).Include(op => op.Location)
             .Include(op => op.Sources).Include(op => op.Gender)
             .Include(op => op.InteractionsWithUnordinary)
+            .Include(op => op.FormerReligion)
             .AsQueryable();
 
         IEnumerable<OrdinaryPerson> innerItems = query.AsEnumerable();
@@ -490,6 +541,9 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
 
             if(filter.Religion != null && filter.Religion.Count != 0) 
                 query = query.Where(op => op.Religion != null &&  filter.Religion.Contains(op.Religion.Id));
+
+            if(filter.FormerReligion != null && filter.FormerReligion.Count != 0) 
+                query = query.Where(op => op.FormerReligion != null &&  filter.FormerReligion.Contains(op.FormerReligion.Id));
 
             if(filter.Ethnicity != null && filter.Ethnicity.Count != 0)
                 query = query.Where(op => op.Ethnicity != null && filter.Ethnicity.Contains(op.Ethnicity.Id));
@@ -512,35 +566,6 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     && filter.Sources.
                         Any(fs => op.Sources.Select(s => s.Id).Contains(fs))
                         );
-                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                // .Skip((pageNumber - 1) * pageSize)
-                // .Take(pageSize)
-                // .Select(p => new OrdinaryPersonFilterResponseDto
-                // {
-                //     Id = p.Id,
-                //     Name = p.Name,
-                //     Religion = _mapper.Map<ReligionDto>(p.Religion),
-                //     Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
-                //     Profession = _mapper.Map<ProfessionDto>(p.Profession),
-                //     Location = _mapper.Map<CityBaseDto>(p.Location),
-                //     Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
-                //     Gender = _mapper.Map<GenderDto>(p.Gender),
-                //     InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
-                // AlternateName = p.AlternateName,
-                // })
-                // .ToList();
-
-                // Console.WriteLine("items", innerItems);
-
-                // int totalCount1 = innerItems.Count;
-
-                // return new PaginationResponse<OrdinaryPersonFilterResponseDto>
-                // {
-                //     Data = innerItems,
-                //     PageNumber = pageNumber,
-                //     PageSize = pageSize,
-                //     TotalCount = totalCount1,
-                // };
             }
 
             if(filter.InteractionsWithUnordinary != null && filter.InteractionsWithUnordinary.Count != 0)
@@ -550,35 +575,6 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                     && filter.InteractionsWithUnordinary.
                         Any(fs => op.InteractionsWithUnordinary.Select(s => s.Id).Contains(fs))
                         );
-                //     .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                // .Skip((pageNumber - 1) * pageSize)
-                // .Take(pageSize)
-                // .Select(p => new OrdinaryPersonFilterResponseDto
-                // {
-                //     Id = p.Id,
-                //     Name = p.Name,
-                //     Religion = _mapper.Map<ReligionDto>(p.Religion),
-                //     Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
-                //     Profession = _mapper.Map<ProfessionDto>(p.Profession),
-                //     Location = _mapper.Map<CityBaseDto>(p.Location),
-                //     Sources = _mapper.Map<List<WrittenSourceBaseDto>>(p.Sources),
-                //     Gender = _mapper.Map<GenderDto>(p.Gender),
-                //     InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
-                //     AlternateName = p.AlternateName,
-                // })
-                // .ToList();
-
-                // Console.WriteLine("items", innerItems);
-
-                // int totalCount1 = innerItems.Count;
-
-                // return new PaginationResponse<OrdinaryPersonFilterResponseDto>
-                // {
-                //     Data = innerItems,
-                //     PageNumber = pageNumber,
-                //     PageSize = pageSize,
-                //     TotalCount = totalCount1,
-                // };
             }
         }
 
@@ -600,6 +596,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
                 Gender = _mapper.Map<GenderDto>(p.Gender),
                 InteractionsWithUnordinary = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.InteractionsWithUnordinary),
                 AlternateName = p.AlternateName,
+                FormerReligion = _mapper.Map<ReligionDto>(p.FormerReligion),
             })
             .ToList();
 
