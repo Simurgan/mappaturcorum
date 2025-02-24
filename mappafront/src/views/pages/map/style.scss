@@ -70,17 +70,6 @@ section.section.map-section {
       display: flex;
       flex-direction: column;
 
-      .map-search-input {
-        width: 100%;
-        border: 8px solid $color-primary;
-        border-left: 0;
-        border-right: 0;
-      }
-
-      .map-search-input:focus {
-        outline: none;
-      }
-
       .map-filters-container {
         .filter-group {
           display: flex;
@@ -171,8 +160,5 @@ section.section.map-section {
     width: 100%;
     display: flex;
     justify-content: space-between;
-  }
-
-  .modal-body {
   }
 }
