@@ -42,12 +42,12 @@ export type OrdinaryPageResponseData = {
 export type OrdinaryGraphResponseDataItem = {
   id: number;
   name: string;
-  religion: number;
-  formerReligion: number;
-  ethnicity: number;
-  profession: number;
-  gender: number;
-  location: number;
+  religion?: number;
+  formerReligion?: number;
+  ethnicity?: number;
+  profession?: number;
+  gender?: number;
+  location?: number;
   sources: number[];
   interactionsWithOrdinaryA: number[];
   interactionsWithOrdinaryB: number[];
