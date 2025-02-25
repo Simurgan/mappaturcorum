@@ -12,7 +12,7 @@ import OrdinaryPeoplePage from "@/views/pages/ordinary-people";
 import UnordinaryPeoplePage from "@/views/pages/unordinary-people";
 import SourcesPage from "@/views/pages/sources";
 import MembersPage from "@/views/pages/members";
-import PublicationsPage from "@/views/pages/publications";
+// import PublicationsPage from "@/views/pages/publications";
 
 const MainRouter = () => {
   return (
@@ -43,7 +43,7 @@ const Router = () => {
         />
         <Route element={<SourcesPage />} path={Urls.Sources} />
         <Route element={<MembersPage />} path={Urls.Members} />
-        <Route element={<PublicationsPage />} path={Urls.Publications} />
+        {/* <Route element={<PublicationsPage />} path={Urls.Publications} /> */}
       </Route>
       <Route element={<ToolLayout />}>
         <Route element={<MapPage />} path={Urls.Map} />
