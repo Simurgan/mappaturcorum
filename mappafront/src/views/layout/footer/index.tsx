@@ -19,7 +19,7 @@ const Footer = () => {
             </Text>
             <Link to="mailto:info@mappaanatolicum.com" className="mail-link">
               <Text fw={400} fs={14} lh={125} color="papirus">
-                info@mappaanatolicum.com
+                info@mappateam.com
               </Text>
             </Link>
           </address>

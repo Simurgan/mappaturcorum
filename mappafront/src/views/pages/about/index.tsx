@@ -6,54 +6,42 @@ const AboutPage = () => {
     <section className="section about-section">
       <div className="container">
         <Text tag="h1" fs={36} fw={500} lh={125} color="burgundy">
-          About the Project
+          About Mappa Anatolicorum
         </Text>
         <div className="about-content">
           <div className="content-section">
-            <Text tag="h2" fs={28} fw={700}>
-              Lorem ipsum dolor sit amet
+            <Text tag="p" fs={16}>
+              Mappa Anatolicorum is a digital humanities project dedicated to
+              reconstructing the ordinary life of Late Medieval Anatolia1
+              (1200-1450). Starting its journey in March 2023, the project aims
+              to provide an extensive, well-structured database indexing the
+              ordinary people, primary sources, and settlements of the period.
+              Mappa Anatolicorum presents its data-base, which is built by
+              data-mining of the historical primary sources of the field of
+              study of the project, through social network analysis and
+              geographical information systems (GIS). A key goal of the project
+              is to offer reliable, open-source data to researchers and
+              enthusiasts interested in the social fabric of Medieval Anatolia.
             </Text>
             <Text tag="p" fs={16}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
-              laborum error nihil alias repudiandae dolore non impedit rem id?
-              Enim repudiandae asperiores eos voluptatibus exercitationem
-              corporis dolore nulla itaque ipsam? Quas voluptatibus veniam
-              voluptas sed nihil magni incidunt? Non quis quae tempore nulla
-              accusamus nisi dolorem possimus tempora libero culpa eius
-              explicabo, obcaecati labore beatae iusto, velit asperiores,
-              reprehenderit ex! Laboriosam ullam nobis corporis saepe ex sequi
-              rem temporibus facilis nihil fuga sed vitae modi sapiente, ducimus
-              porro asperiores ipsum, aspernatur praesentium cupiditate
-              recusandae voluptate fugit optio distinctio. At, magnam. Autem
-              doloremque tempora quibusdam dicta illo laudantium repudiandae,
-              accusantium architecto itaque, quam saepe perspiciatis odio unde,
-              dolorum numquam dolores. Facere distinctio ab hic ea illum eaque
-              cupiditate quos deserunt exercitationem. Corporis, laborum ut
-              tenetur iste facilis consequatur similique nihil ipsa tempore
-              libero dicta eius molestiae, nulla provident beatae? Vero vitae
-              dolores ex error nisi illo ratione libero maiores excepturi
-              cumque.
+              Our small yet dedicated team of undergraduate voluntary
+              researchers carefully read primary works of the era, collect,
+              classify, and organizy the data, making them easily accessible
+              through dynamic and interactive GIS map and social network
+              analysis graphs. These tools allow users to conduct rapid
+              searching, understanding, bibliography searches and analyze
+              intricate relationships between ordinary people, and between
+              sources and settlements of the era.
             </Text>
             <Text tag="p" fs={16}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
-              laborum error nihil alias repudiandae dolore non impedit rem id?
-              Enim repudiandae asperiores eos voluptatibus exercitationem
-              corporis dolore nulla itaque ipsam? Quas voluptatibus veniam
-              voluptas sed nihil magni incidunt? Non quis quae tempore nulla
-              accusamus nisi dolorem possimus tempora libero culpa eius
-              explicabo, obcaecati labore beatae iusto, velit asperiores,
-              reprehenderit ex! Laboriosam ullam nobis corporis saepe ex sequi
-              rem temporibus facilis nihil fuga sed vitae modi sapiente, ducimus
-              porro asperiores ipsum, aspernatur praesentium cupiditate
-              recusandae voluptate fugit optio distinctio. At, magnam. Autem
-              doloremque tempora quibusdam dicta illo laudantium repudiandae,
-              accusantium architecto itaque, quam saepe perspiciatis odio unde,
-              dolorum numquam dolores. Facere distinctio ab hic ea illum eaque
-              cupiditate quos deserunt exercitationem. Corporis, laborum ut
-              tenetur iste facilis consequatur similique nihil ipsa tempore
-              libero dicta eius molestiae, nulla provident beatae? Vero vitae
-              dolores ex error nisi illo ratione libero maiores excepturi
-              cumque.
+              We are thrilled to share this project with the academic community
+              and the public, fostering new research opportunities and deeper
+              insights into Anatolia’s rich medieval history. We do not mark an
+              ultimate end to the project by making it open source but we will
+              be editing and expanding the database as much as possible
+              throughout time. By providing an open-access platform, Mappa
+              Anatolicorum aspires to be a valuable resource for those seeking
+              to understand the past through digital innovation.
             </Text>
           </div>
         </div>

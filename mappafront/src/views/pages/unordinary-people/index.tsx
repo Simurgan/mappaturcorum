@@ -72,7 +72,7 @@ const UnunordinaryPeoplePage = () => {
       <div className="container">
         <div className="page-head">
           <Text fs={36} fw={700} lh={125} color="papirus">
-            Ununordinary People
+            Unordinary People
           </Text>
 
           <div className="page-head-actions-container">
