@@ -99,60 +99,60 @@ public class OrdinaryPersonController : ControllerBase
         }
     }
 
-    [Authorize]
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] OrdinaryPersonCreateRequest request)
-    {
-        try
-        {
-            var item = await _service.CreateAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
-        }
-        catch (ArgumentException ex)
-        {
-            return Conflict(new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
-        }
-    }
+    // [Authorize]
+    // [HttpPost]
+    // public async Task<IActionResult> Create([FromBody] OrdinaryPersonCreateRequest request)
+    // {
+    //     try
+    //     {
+    //         var item = await _service.CreateAsync(request);
+    //         return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
+    //     }
+    //     catch (ArgumentException ex)
+    //     {
+    //         return Conflict(new { Message = ex.Message });
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+    //     }
+    // }
 
-    [Authorize]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] OrdinaryPersonUpdateRequest request)
-    {
-        try
-        {
-            var item = await _service.UpdateAsync(id, request);
-            return Ok(item);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(new { Message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
-        }
-    }
+    // [Authorize]
+    // [HttpPut("{id}")]
+    // public async Task<IActionResult> Update(int id, [FromBody] OrdinaryPersonUpdateRequest request)
+    // {
+    //     try
+    //     {
+    //         var item = await _service.UpdateAsync(id, request);
+    //         return Ok(item);
+    //     }
+    //     catch (ArgumentException ex)
+    //     {
+    //         return NotFound(new { Message = ex.Message });
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+    //     }
+    // }
 
-    [Authorize]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        try
-        {
-            var result = await _service.DeleteAsync(id);
-            if (!result)
-                return NotFound(new {Message = $"Item with {id} not found"});
+    // [Authorize]
+    // [HttpDelete("{id}")]
+    // public async Task<IActionResult> Delete(int id)
+    // {
+    //     try
+    //     {
+    //         var result = await _service.DeleteAsync(id);
+    //         if (!result)
+    //             return NotFound(new {Message = $"Item with {id} not found"});
 
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
-        }
-    }
+    //         return NoContent();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+    //     }
+    // }
 
 }
