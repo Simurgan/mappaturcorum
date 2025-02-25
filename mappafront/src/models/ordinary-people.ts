@@ -28,6 +28,7 @@ export type OrdinaryPageResponseDataItem = {
   profession?: SubObjectPair;
   religion?: SubObjectPair;
   sources: SubObjectPair[];
+  formerReligion: SubObjectPair[];
   interactionsWithUnordinary: SubObjectPair[];
 };
 
