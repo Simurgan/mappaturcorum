@@ -114,7 +114,35 @@ const GraphPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setData(filterNodes(fullNodeData, filters));
+    const nodsod = filterNodes(fullNodeData, filters);
+    const shamans = rawData.ordinaries.filter(
+      (ordinary) => ordinary.religion === 18841609
+    );
+
+    shamans.forEach((shaman) => {
+      const nod = nodsod.nodes.filter((no) => no.dataId === shaman.id);
+      if (nod.length !== 1) {
+        console.log("cloudn't found shaman:");
+        console.log(shaman);
+      }
+
+      const shamanismNode = nodsod.nodes.filter((no) => no.dataId === 18841609);
+      if (shamanismNode.length !== 1) {
+        console.log("no shamanism node");
+      }
+      const edges = nodsod.links.filter(
+        (edge) =>
+          edge.source === nod[0].id && edge.target === shamanismNode[0].id
+      );
+
+      if (edges.length !== 1) {
+        console.log("edge bug found:");
+        console.log(nod[0]);
+      }
+    });
+    console.log("done with checking");
+
+    setData(nodsod);
   }, [filters]);
 
   return (
