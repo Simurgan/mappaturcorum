@@ -3,10 +3,9 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import L from "leaflet";
 import Text from "@/views/components/text";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Button from "@/views/components/button";
 import ReactModal from "react-modal";
-import { FilterGroup } from "@/models/map-filters";
 import { getCityMap } from "@/actions/map";
 import { CityMapResponseDataItem } from "@/models/map";
 import Table from "@/views/components/table";
@@ -15,32 +14,45 @@ import { getOrdinaryPage } from "@/actions/ordinary-people";
 
 ReactModal.setAppElement("#root"); // For blocking not working modal styles in some browsers.
 
-const filters: FilterGroup[] = [
+const MAIN_FILTERS = [
   {
-    group: "Location Types",
-    key: "location",
-    options: ["Cities", "Villages", "Castles", "Caravansarries", "Other"],
+    id: "written",
+    label: "Written Sources",
+    options: ["Bahsettiği Yerler", "Yazıldığı Yerler"],
   },
   {
-    group: "Document Types",
-    key: "documents",
-    options: [
-      "All",
-      "Waqfiyas",
-      "Manakibnames",
-      "Tawarikhs",
-      "Travel Books",
-      "Other",
-    ],
+    id: "ordinary",
+    label: "Ordinary Peoples",
+    options: ["Hikayeler", "Tanıklıklar"],
   },
-  {
-    group: "Survival Status",
-    key: "survival",
-    options: ["All", "Survived", "Unsurvived"],
-  },
-];
+] as const;
+
+type MainFilter = (typeof MAIN_FILTERS)[number]["id"];
+type SubFilter = string;
 
 const MapPage = () => {
+  const [selectedMainFilter, setSelectedMainFilter] =
+    useState<MainFilter | null>(MAIN_FILTERS[0].id);
+  const [selectedSubFilter, setSelectedSubFilter] = useState<SubFilter | null>(
+    null
+  );
+
+  const subFilters = useMemo(() => {
+    return (
+      MAIN_FILTERS.find((filter) => filter.id === selectedMainFilter)
+        ?.options || []
+    );
+  }, [selectedMainFilter]);
+
+  const handleMainFilterChange = (value: MainFilter) => {
+    setSelectedMainFilter(value);
+    setSelectedSubFilter(null);
+  };
+
+  const handleSubFilterChange = (value: SubFilter) => {
+    setSelectedSubFilter(value);
+  };
+
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [selectedMarker, setSelectedMarker] =
     useState<CityMapResponseDataItem>();
@@ -73,19 +85,33 @@ const MapPage = () => {
     getInitialData();
   }, []);
 
+  function filterCityData() {
+    if (selectedMainFilter === MAIN_FILTERS[0].id) {
+      if (selectedSubFilter === "Bahsettiği Yerler") {
+        return cityData.filter(
+          (city) => city.numberOfSourcesMentioningTheCity > 0
+        );
+      }
+
+      return cityData.filter(
+        (city) => city.numberOfSourcesWrittenInTheCity > 0
+      );
+    } else {
+      return cityData.filter((city) => city.numberOfLocationOf > 0);
+    }
+  }
+
   useEffect(() => {
-    setMarkers(
-      cityData
-        .filter((city) => city.numberOfLocationOf > 0)
-        .map((city) => {
-          return {
-            ...city,
-            latitude: city.longitude,
-            longitude: city.latitude,
-          };
-        })
-    );
-  }, [cityData]);
+    const filteredData = filterCityData().map((city) => {
+      return {
+        ...city,
+        latitude: city.longitude,
+        longitude: city.latitude,
+      };
+    });
+
+    setMarkers(filteredData);
+  }, [cityData, selectedMainFilter, selectedSubFilter]);
 
   useEffect(() => {
     console.log(markers);
@@ -227,23 +253,41 @@ const MapPage = () => {
           </MapContainer>
         </div>
         <div className="map-tools-container">
-          <input placeholder="search on map..." className="map-search-input" />
           <div className="map-filters-container">
-            {filters.map((filterGroup) => (
-              <div key={filterGroup.key} className="filter-group">
-                <Text fs={16} fw={700} lh={140} color="burgundy">
-                  {filterGroup.group}
-                </Text>
-                {filterGroup.options.map((option) => (
+            <div className="filter-group">
+              {MAIN_FILTERS.map((filter, index) => (
+                <div key={filter.id} className="filter-item">
+                  <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={filter.id === selectedMainFilter}
+                    onChange={() =>
+                      handleMainFilterChange(MAIN_FILTERS[index].id)
+                    }
+                  />
+                  <Text fs={14} fw={400} lh={125} color="burgundy">
+                    {filter.label}
+                  </Text>
+                </div>
+              ))}
+            </div>
+            {subFilters.length > 0 && (
+              <div className="filter-group">
+                {subFilters.map((option) => (
                   <div key={option} className="filter-item">
-                    <input type="checkbox" className="checkbox-input" />
+                    <input
+                      type="checkbox"
+                      className="checkbox-input"
+                      checked={option === selectedSubFilter}
+                      onChange={() => handleSubFilterChange(option)}
+                    />
                     <Text fs={14} fw={400} lh={125} color="burgundy">
                       {option}
                     </Text>
                   </div>
                 ))}
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

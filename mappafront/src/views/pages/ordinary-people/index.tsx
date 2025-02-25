@@ -10,12 +10,13 @@ import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
 
 const OrdinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState();
+  const [selectedData, setSelectedData] =
+    useState<OrdinaryPageResponseDataItem>();
   const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
   const [tablePage, setTablePage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
 
-  function openModal(data: any) {
+  function openModal(data: OrdinaryPageResponseDataItem) {
     setIsOpen(true);
     setSelectedData(data);
   }
@@ -33,6 +34,8 @@ const OrdinaryPeoplePage = () => {
     if (response.status === 200) {
       setTableData(response.data.data);
       setTotalPage(response.data.totalPages);
+      console.log(response.data.data);
+      console.log("here");
     }
   };
 
@@ -55,6 +58,10 @@ const OrdinaryPeoplePage = () => {
     "Religion",
     "Profession",
     "Gender",
+    "Former Religion",
+    "Sources",
+    "Location",
+    "Interactions With Unordinary",
   ];
 
   useEffect(() => {
@@ -114,6 +121,7 @@ const OrdinaryPeoplePage = () => {
                 ordinary.religion?.name,
                 ordinary.profession?.name,
                 ordinary.gender?.name,
+                ordinary.formerReligion?.name,
               ];
               return {
                 cells: cellTexts.map((cellText) => (
@@ -121,7 +129,7 @@ const OrdinaryPeoplePage = () => {
                     {cellText}
                   </Text>
                 )),
-                onClick: () => openModal({}),
+                onClick: () => openModal(ordinary),
               };
             }),
           }}
