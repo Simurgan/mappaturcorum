@@ -20,12 +20,7 @@ import { WrittenSourceResponseItemType } from "@/models/written-source";
 ReactModal.setAppElement("#root"); // For blocking not working modal styles in some browsers.
 
 const getIconSize = (count: number) => {
-  if (count > 100) return new L.Point(100, 100);
-  if (count > 75) return new L.Point(75, 75);
-  if (count > 50) return new L.Point(50, 50);
-  if (count > 20) return new L.Point(40, 40);
-  if (count > 10) return new L.Point(30, 30);
-  return new L.Point(20, 20);
+  return new L.Point(count * 0.45 + 16, count * 0.45 + 16);
 };
 
 const MAIN_FILTERS = [
