@@ -20,6 +20,7 @@ import {
   generateGraph,
   getNodeColor,
 } from "@/helpers/social-network";
+import Text from "@/views/components/text";
 
 const GraphPage: React.FC = () => {
   const [width, height] = useWindowSize();
@@ -147,6 +148,11 @@ const GraphPage: React.FC = () => {
 
   return (
     <section className="section social-network-section">
+      <div className="warning">
+        <Text fs={16} fw={300} lh={140} color="burgundy">
+          Bu Sayfa Henüz Yapım Aşamasındadır!
+        </Text>
+      </div>
       <div className="container">
         <div className="graph-container">
           <ForceGraph2D
@@ -176,7 +182,35 @@ const GraphPage: React.FC = () => {
             // dagLevelDistance={10}
           />
         </div>
-        <div className="graph-tools-container"></div>
+        <div className="graph-tools-container">
+          {Object.keys(filters).map((key) => (
+            <div className="tool-item" key={key}>
+              <input
+                type="checkbox"
+                className="checkbox-input"
+                checked={filters[key as keyof typeof filters]}
+                disabled={key === "ordinaries"}
+                onChange={() =>
+                  setFilters({
+                    ...filters,
+                    [key]: !filters[key as keyof typeof filters],
+                  })
+                }
+              />
+              <label>
+                <Text
+                  fs={18}
+                  fw={500}
+                  lh={125}
+                  color="burgundy"
+                  classNames="tool-text"
+                >
+                  {key}
+                </Text>
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
