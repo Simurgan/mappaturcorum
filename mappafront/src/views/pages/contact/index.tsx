@@ -14,6 +14,16 @@ const ContactPage = () => {
           <Text tag="h1" fs={36} fw={700} lh={125} color="burgundy">
             Contact
           </Text>
+          <Text>
+            Please contact us if you have any feedback that you want to inform
+            us. We are looking forward to seeing your evaluations, comments,
+            criticism, suggestions and so on.
+          </Text>
+          <Text>
+            We are also open to receiveing requests from you to take place in
+            our project, and for future project ideas as well. Please contact us
+            if you would like to join us!
+          </Text>
           <div className="contact-info">
             {/* <img src={mailIcon} width={24} height={18} /> */}
             <Link
@@ -25,9 +35,11 @@ const ContactPage = () => {
               </Text>
             </Link>
             {/* <img src={phoneIcon} width={24} height={18} /> */}
-            <Text fs={24} fw={400} lh={125} color="burgundy">
-              +90 551 112 7399
-            </Text>
+            <Link to={"tel:+905511127399"}>
+              <Text fs={24} fw={400} lh={125} color="burgundy">
+                +90 551 112 7399
+              </Text>
+            </Link>
           </div>
         </div>
         {/* <div className="contact-form">
