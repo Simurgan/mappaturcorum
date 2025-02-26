@@ -1,3 +1,4 @@
 *.txt
 .env
 mappa_data/
+*.pem
