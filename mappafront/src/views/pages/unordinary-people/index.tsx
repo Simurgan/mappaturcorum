@@ -69,14 +69,7 @@ const UnunordinaryPeoplePage = () => {
     }
   };
 
-  const headerData = [
-    "Name",
-    "Alternate Name",
-    "Gender",
-    "Ethnicity",
-    "Religion",
-    "Profession",
-  ];
+  const headerData = ["Name", "Alternate Name", "Ethnicity", "Religion"];
 
   useEffect(() => {
     setInitialData();
@@ -130,10 +123,10 @@ const UnunordinaryPeoplePage = () => {
               const cellTexts = [
                 unordinary.name,
                 unordinary.alternateName,
-                /* unordinary.gender || */ "",
+                /* unordinary.gender || */
                 unordinary.ethnicity?.name,
                 unordinary.religion?.name,
-                /* unordinary.profession.name || */ "",
+                /* unordinary.profession.name || */
               ];
               return {
                 cells: cellTexts.map((cellText) => (
