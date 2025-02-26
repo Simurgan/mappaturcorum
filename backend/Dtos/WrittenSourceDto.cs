@@ -86,12 +86,16 @@ public class WrittenSourceFilterDto
     public List<int>? Language {get; set;}
     public List<int>? OrdinaryPersons {get; set;}
     public List<int>? UnordinaryPersons {get; set;}
+    public List<int>? CitiesMentionedByTheSource {get; set;}
+    public List<int>? CitiesWhereSourcesAreWritten {get; set;}
 }
 
 public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto 
 {
     public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;}
     public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
+    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}
+    public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
 }
 
 public class WrittenSourceGraphDto : WrittenSourceBaseDto {}
