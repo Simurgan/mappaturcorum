@@ -14,11 +14,15 @@ export type WrittenSourceRequestBody = {
   pageSize: number;
   pageNumber: number;
   filter?: {
-    religion?: number[];
-    ethnicity?: number[];
-    deathYear?: number[];
-    deathPlace?: number[];
-    interactionsWithOrdinary?: number[];
+    name?: string;
+    genre?: number[];
+    yearWritten?: number[];
+    author?: string;
+    language?: number[];
+    ordinaryPersons?: number[];
+    unordinaryPersons?: number[];
+    citiesMentionedByTheSource?: number[];
+    citiesWhereSourcesAreWritten?: number[];
   };
 };
 
