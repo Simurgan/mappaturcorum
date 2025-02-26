@@ -5,20 +5,23 @@ import Table from "@/views/components/table";
 
 import { useEffect, useState } from "react";
 import MappaModal from "@/views/components/modal";
-import { getOrdinaryPage } from "@/actions/ordinary-people";
-import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
+import { getOrdinary, getOrdinaryPage } from "@/actions/ordinary-people";
+import {
+  OrdinaryPageResponseDataItem,
+  SingleOrdinaryObject,
+} from "@/models/ordinary-people";
+import ReactModal from "react-modal";
 
 const OrdinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] =
-    useState<OrdinaryPageResponseDataItem>();
+  const [selectedData, setSelectedData] = useState<SingleOrdinaryObject>();
   const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
   const [tablePage, setTablePage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
 
   function openModal(data: OrdinaryPageResponseDataItem) {
     setIsOpen(true);
-    setSelectedData(data);
+    getSingleOrdinary(data.id);
   }
 
   function closeModal() {
@@ -51,17 +54,25 @@ const OrdinaryPeoplePage = () => {
     }
   };
 
+  const getSingleOrdinary = async (ordinaryId: number) => {
+    const response = await getOrdinary(ordinaryId);
+
+    if (response.status === 200) {
+      setSelectedData(response.data);
+    }
+  };
+
   const headerData = [
     "Name",
     "Alternate Name",
-    "Ethnonym",
     "Religion",
+    "Former Religion",
+    "Ethnicity",
     "Profession",
     "Gender",
-    "Former Religion",
     "Sources",
-    "Location",
     "Interactions With Unordinary",
+    "Location",
   ];
 
   useEffect(() => {
@@ -117,11 +128,16 @@ const OrdinaryPeoplePage = () => {
               const cellTexts = [
                 ordinary.name,
                 ordinary.alternateName,
-                ordinary.ethnicity?.name,
                 ordinary.religion?.name,
+                ordinary.formerReligion?.name,
+                ordinary.ethnicity?.name,
                 ordinary.profession?.name,
                 ordinary.gender?.name,
-                ordinary.formerReligion?.name,
+                ordinary.sources.map((source) => source.name).join(", "),
+                ordinary.interactionsWithUnordinary
+                  .map((unordinary) => unordinary.name)
+                  .join(", "),
+                ordinary.location?.name,
               ];
               return {
                 cells: cellTexts.map((cellText) => (
@@ -135,11 +151,57 @@ const OrdinaryPeoplePage = () => {
           }}
         />
       </div>
-      <MappaModal
+      {/* <MappaModal
         isOpen={modalIsOpen}
         closeModal={closeModal}
         data={selectedData}
-      />
+      /> */}
+      <ReactModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+        overlayClassName="custom-overlay"
+        className="custom-mappa-modal"
+      >
+        <div className="modal-content">
+          {/* Kapatma Butonu */}
+          <Button onClick={closeModal} classNames="modal-close-button">
+            <Text fs={36} fw={400} color="burgundy">
+              X
+            </Text>
+          </Button>
+
+          {/* Başlık */}
+          {/* <Text fs={18} fw={500} color="black">
+            Ordinary Person
+          </Text> */}
+
+          <div className="content">
+            <Text fs={28} fw={700} lh={140} color="burgundy">
+              {selectedData?.name || "No Name Provided"}
+            </Text>
+
+            {/* <div className="content-info">
+              {data && Object.keys(data).length > 0 ? (
+                Object.keys(data).map((key, index) => (
+                  <div key={index} className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      {key.toString()}
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {formatDataField(data, key)}
+                    </Text>
+                  </div>
+                ))
+              ) : (
+                <Text fs={14} fw={400} lh={125} color="gray">
+                  No data available
+                </Text>
+              )}
+            </div> */}
+          </div>
+        </div>
+      </ReactModal>
     </section>
   );
 };
