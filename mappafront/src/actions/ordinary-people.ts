@@ -2,6 +2,7 @@ import {
   OrdinaryGraphResponseDataItem,
   OrdinaryPageRequestBody,
   OrdinaryPageResponseData,
+  SingleOrdinaryObject,
 } from "@/models/ordinary-people";
 import api from "./api";
 import { AxiosResponse } from "axios";
@@ -27,4 +28,13 @@ export const getOrdinaryGraph = async () => {
   });
 
   return response as AxiosResponse<OrdinaryGraphResponseDataItem[]>;
+};
+
+export const getOrdinary = async (ordinaryId: number) => {
+  const response = await ordinaryApi({
+    url: `${ordinaryId}`,
+    method: "get",
+  });
+
+  return response as AxiosResponse<SingleOrdinaryObject>;
 };
