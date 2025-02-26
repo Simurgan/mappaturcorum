@@ -9,8 +9,13 @@ import ReactModal from "react-modal";
 import { getCityMap } from "@/actions/map";
 import { CityMapResponseDataItem } from "@/models/map";
 import Table from "@/views/components/table";
-import { OrdinaryPageResponseDataItem } from "@/models/ordinary-people";
+import {
+  OrdinaryPageResponseDataItem,
+  SubObjectPair,
+} from "@/models/ordinary-people";
 import { getOrdinaryPage } from "@/actions/ordinary-people";
+import { getWrittenSources } from "@/actions/written-source";
+import { WrittenSourceResponseItemType } from "@/models/written-source";
 
 ReactModal.setAppElement("#root"); // For blocking not working modal styles in some browsers.
 
@@ -23,7 +28,7 @@ const MAIN_FILTERS = [
   {
     id: "ordinary",
     label: "Ordinary Peoples",
-    options: ["Hikayeler", "Tanıklıklar"],
+    options: [],
   },
 ] as const;
 
@@ -34,7 +39,7 @@ const MapPage = () => {
   const [selectedMainFilter, setSelectedMainFilter] =
     useState<MainFilter | null>(MAIN_FILTERS[0].id);
   const [selectedSubFilter, setSelectedSubFilter] = useState<SubFilter | null>(
-    null
+    "Bahsettiği Yerler"
   );
 
   const subFilters = useMemo(() => {
@@ -58,7 +63,9 @@ const MapPage = () => {
     useState<CityMapResponseDataItem>();
   const [cityData, setCityData] = useState<CityMapResponseDataItem[]>([]);
   const [markers, setMarkers] = useState<CityMapResponseDataItem[]>([]);
-  const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
+  const [tableData, setTableData] = useState<
+    OrdinaryPageResponseDataItem[] | WrittenSourceResponseItemType[]
+  >();
   const [tablePage, setTablePage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
 
@@ -118,13 +125,30 @@ const MapPage = () => {
     console.log("markers");
   }, [markers]);
 
-  const getTableContent = async (cityId: number, page: number) => {
+  const getTableOrdinaryContent = async (cityId: number, page: number) => {
     const response = await getOrdinaryPage({
       pageSize: 10,
       pageNumber: page,
       filter: {
         location: [cityId],
       },
+    });
+
+    if (response.status === 200) {
+      setTableData(response.data.data);
+      setTotalPage(response.data.totalPages);
+    }
+  };
+  const getTableWrittenContent = async (cityId: number, page: number) => {
+    const subFilterForWrittenContent =
+      selectedMainFilter === "written" &&
+      selectedSubFilter === "Yazıldığı Yerler"
+        ? { citiesWhereSourcesAreWritten: [cityId] }
+        : { citiesMentionedByTheSource: [cityId] };
+    const response = await getWrittenSources({
+      pageSize: 10,
+      pageNumber: page,
+      filter: subFilterForWrittenContent,
     });
 
     if (response.status === 200) {
@@ -149,10 +173,13 @@ const MapPage = () => {
   ];
 
   useEffect(() => {
-    if (selectedMarker && tablePage) {
-      getTableContent(selectedMarker?.id, tablePage);
+    if (selectedMarker && tablePage && selectedMainFilter === "ordinary") {
+      getTableOrdinaryContent(selectedMarker?.id, tablePage);
     }
-  }, [tablePage, selectedMarker]);
+    if (selectedMarker && tablePage && selectedMainFilter === "written") {
+      getTableWrittenContent(selectedMarker?.id, tablePage);
+    }
+  }, [tablePage, selectedMarker, selectedMainFilter]);
 
   return (
     <section className="section map-section">
@@ -193,17 +220,46 @@ const MapPage = () => {
                     {cell}
                   </Text>
                 )),
-                rows: tableData?.map((ordinary) => {
-                  const cellTexts = [
-                    ordinary.name,
-                    ordinary.alternateName,
-                    ordinary.ethnicity?.name,
-                    ordinary.religion?.name,
-                    ordinary.profession?.name,
-                    ordinary.gender?.name,
+                rows: tableData?.map((item) => {
+                  const ordinaryCellText = [
+                    item.name,
+                    "alternateName" in item ? item.alternateName : "",
+                    "ethnicity" in item ? item.ethnicity?.name : "",
+                    "religion" in item ? item.religion?.name : "",
+                    "profession" in item ? item.profession?.name : "",
+                    "gender" in item ? item.gender?.name : "",
                   ];
+                  const writtenCellText = [
+                    item.name,
+                    "ordinaryPersons" in item
+                      ? item.ordinaryPersons.map(
+                          (person: SubObjectPair) => person.name
+                        )
+                      : "",
+                    "unordinaryPersons" in item
+                      ? item.unordinaryPersons.map(
+                          (person: SubObjectPair) => person.name
+                        )
+                      : "",
+                    "alternateNames" in item
+                      ? item.alternateNames
+                          ?.map((name: string) => name)
+                          .join(", ")
+                      : "",
+                    "author" in item ? item.author : "",
+                    "yearWritten" in item
+                      ? item.yearWritten?.map((year: number) => year.toString())
+                      : "",
+                    "genre" in item ? item.genre?.name : "",
+                    "language" in item ? item.language?.name : "",
+                  ];
+
+                  let cellText =
+                    selectedMainFilter === "written"
+                      ? writtenCellText
+                      : ordinaryCellText;
                   return {
-                    cells: cellTexts.map((cellText) => (
+                    cells: cellText.map((cellText) => (
                       <Text fs={12} fw={500} lh={125} color="dark-gray">
                         {cellText}
                       </Text>
