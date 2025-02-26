@@ -25,7 +25,7 @@ const AboutCardsSection = () => {
             </div>
           </div>
         </NavLink>
-        <NavLink to={Urls.Home} className="about-nav-item">
+        <NavLink to={"https://x.com/manatolicorum"} className="about-nav-item">
           <div className="about-card">
             <div className="img-container">
               <img

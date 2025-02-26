@@ -31,7 +31,7 @@ const MAIN_FILTERS = [
   },
   {
     id: "ordinary",
-    label: "Ordinary Peoples",
+    label: "Ordinary People",
     options: [],
   },
 ] as const;
@@ -41,7 +41,7 @@ type SubFilter = string;
 
 const MapPage = () => {
   const [selectedMainFilter, setSelectedMainFilter] =
-    useState<MainFilter | null>(MAIN_FILTERS[0].id);
+    useState<MainFilter | null>(MAIN_FILTERS[1].id);
   const [selectedSubFilter, setSelectedSubFilter] = useState<SubFilter | null>(
     "Bahsettiği Yerler"
   );

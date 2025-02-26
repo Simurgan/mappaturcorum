@@ -1,7 +1,7 @@
 import MappaLogo from "@/assets/images/mappa-logo.png";
 // import searchIcon from "@/assets/icons/search.svg";
 import { Urls } from "@/routers/routes";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./style.scss";
 import Text from "@/views/components/text";
 
@@ -11,7 +11,9 @@ const Header = () => {
       <div className="container">
         {/* <div className="header-content"> */}
         <div className="logo-container">
-          <img src={MappaLogo} className="logo-image" />
+          <Link to={Urls.Home}>
+            <img src={MappaLogo} className="logo-image" />
+          </Link>
         </div>
         {/* <div className="header-actions">
             <div className="search-container">

@@ -12,6 +12,8 @@ import {
   SubObjectPair,
 } from "@/models/ordinary-people";
 import ReactModal from "react-modal";
+import { useNavigate } from "react-router-dom";
+import { Urls } from "@/routers/routes";
 
 const OrdinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
@@ -19,6 +21,8 @@ const OrdinaryPeoplePage = () => {
   const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
   const [tablePage, setTablePage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
+
+  const navigate = useNavigate();
 
   function openModal(data: OrdinaryPageResponseDataItem) {
     setIsOpen(true);
@@ -91,7 +95,10 @@ const OrdinaryPeoplePage = () => {
           </Text>
 
           <div className="page-head-actions-container">
-            <Button classNames="action-button">
+            <Button
+              classNames="action-button"
+              onClick={() => navigate(Urls.Map)}
+            >
               <Text fs={20} fw={500} lh={125} color="burgundy">
                 Map
               </Text>
