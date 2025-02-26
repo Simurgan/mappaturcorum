@@ -148,6 +148,11 @@ const GraphPage: React.FC = () => {
 
   return (
     <section className="section social-network-section">
+      <div className="warning">
+        <Text fs={16} fw={300} lh={140} color="burgundy">
+          Bu Sayfa Henüz Yapım Aşamasındadır!
+        </Text>
+      </div>
       <div className="container">
         <div className="graph-container">
           <ForceGraph2D

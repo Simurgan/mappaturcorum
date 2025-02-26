@@ -6,6 +6,15 @@ $tools-width: 2.4rem;
 section.section.social-network-section {
   padding: 0;
 
+  .warning {
+    position: absolute;
+    z-index: 20;
+    background-color: $color-secondary !important;
+    border: 3px solid $color-primary !important;
+    margin: 0.2rem;
+    padding: 0.2rem;
+  }
+
   .container {
     padding: 0;
     margin: 0;
