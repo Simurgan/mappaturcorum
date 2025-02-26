@@ -4,11 +4,12 @@ import Button from "@/views/components/button";
 import Table from "@/views/components/table";
 
 import { useEffect, useState } from "react";
-import MappaModal from "@/views/components/modal";
+// import MappaModal from "@/views/components/modal";
 import { getOrdinary, getOrdinaryPage } from "@/actions/ordinary-people";
 import {
   OrdinaryPageResponseDataItem,
   SingleOrdinaryObject,
+  SubObjectPair,
 } from "@/models/ordinary-people";
 import ReactModal from "react-modal";
 
@@ -37,8 +38,6 @@ const OrdinaryPeoplePage = () => {
     if (response.status === 200) {
       setTableData(response.data.data);
       setTotalPage(response.data.totalPages);
-      console.log(response.data.data);
-      console.log("here");
     }
   };
 
@@ -181,8 +180,8 @@ const OrdinaryPeoplePage = () => {
               {selectedData?.name || "No Name Provided"}
             </Text>
 
-            {/* <div className="content-info">
-              {data && Object.keys(data).length > 0 ? (
+            <div className="content-info">
+              {/* {data && Object.keys(data).length > 0 ? (
                 Object.keys(data).map((key, index) => (
                   <div key={index} className="info-row">
                     <Text fs={16} fw={500} lh={125} classNames="data-field">
@@ -197,8 +196,263 @@ const OrdinaryPeoplePage = () => {
                 <Text fs={14} fw={400} lh={125} color="gray">
                   No data available
                 </Text>
+              )} */}
+
+              {selectedData?.alternateName && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Alternate Name(s):
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.alternateName}
+                    </Text>
+                  </div>
+                </>
               )}
-            </div> */}
+
+              {selectedData?.ethnicity && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Ethnicity:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.ethnicity.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.religion && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Religion:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.religion.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.formerReligion && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Former Religion:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.formerReligion.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.profession && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Profession:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.profession.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.professionExplanation && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Explanation of Profession:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.professionExplanation}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.gender && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Gender:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.gender.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.interestingFeature && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Additional Notes:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.interestingFeature}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {((selectedData?.interactionsWithOrdinaryA &&
+                selectedData.interactionsWithOrdinaryA.length > 0) ||
+                (selectedData?.interactionsWithOrdinaryB &&
+                  selectedData.interactionsWithOrdinaryB.length > 0)) && (
+                <div className="info-row">
+                  <>
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Interactions With Ordinary People:
+                    </Text>
+                    {() => {
+                      let ordinaryInteractions: SubObjectPair[] = [];
+                      if (selectedData.interactionsWithOrdinaryA) {
+                        ordinaryInteractions = [
+                          ...ordinaryInteractions,
+                          ...selectedData.interactionsWithOrdinaryA,
+                        ];
+                      }
+                      if (selectedData.interactionsWithOrdinaryB) {
+                        ordinaryInteractions = [
+                          ...ordinaryInteractions,
+                          ...selectedData.interactionsWithOrdinaryB,
+                        ];
+                      }
+                      return (
+                        <Text fs={14} fw={400} lh={125} classNames="data">
+                          {ordinaryInteractions
+                            .map((inter) => inter.name)
+                            .join(", ")}
+                        </Text>
+                      );
+                    }}
+                  </>
+                </div>
+              )}
+
+              {selectedData?.interactionWithOrdinaryExplanation && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Interactions With Ordinary People (Explanation):
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.interactionWithOrdinaryExplanation}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.interactionsWithUnordinary &&
+                selectedData.interactionsWithUnordinary.length > 0 && (
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Interactions With Unordinary People:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.interactionsWithUnordinary
+                        .map((inter) => inter.name)
+                        .join(", ")}
+                    </Text>
+                  </div>
+                )}
+
+              {selectedData?.interactionWithUnordinaryExplanation && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Interactions With Unordinary People (Explanation):
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.interactionWithUnordinaryExplanation}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.sources && selectedData.sources.length > 0 && (
+                <div className="info-row">
+                  <Text fs={16} fw={500} lh={125} classNames="data-field">
+                    Source(s):
+                  </Text>
+                  <Text fs={14} fw={400} lh={125} classNames="data">
+                    {selectedData.sources.map((inter) => inter.name).join(", ")}
+                  </Text>
+                </div>
+              )}
+
+              {selectedData?.biography && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Biography:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.biography}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.descriptionInTheSource && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Description In The Source(s):
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.descriptionInTheSource}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.explanationOfEthnicity && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Explanation of Ethnicity:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.explanationOfEthnicity}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.location && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Location:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.location.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+
+              {selectedData?.backgroundCity && (
+                <>
+                  <div className="info-row">
+                    <Text fs={16} fw={500} lh={125} classNames="data-field">
+                      Background Location:
+                    </Text>
+                    <Text fs={14} fw={400} lh={125} classNames="data">
+                      {selectedData.backgroundCity.name}
+                    </Text>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </ReactModal>
