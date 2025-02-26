@@ -1,4 +1,9 @@
-import { UnordinaryGraphResponseDataItem, UnordinaryPageRequestBody, UnordinaryPageResponseData, } from "@/models/unordinary-people";
+import {
+  UnordinaryGraphResponseDataItem,
+  UnordinaryPageRequestBody,
+  UnordinaryPageResponseData,
+  UnordinaryPersonResponseType,
+} from "@/models/unordinary-people";
 import api from "./api";
 import { AxiosResponse } from "axios";
 
@@ -13,7 +18,7 @@ export const getUnordinaryGraph = async () => {
   });
 
   return response as AxiosResponse<UnordinaryGraphResponseDataItem[]>;
-}
+};
 
 export const getUnordinaryPage = async (data: UnordinaryPageRequestBody) => {
   const response = await unordinaryApi({
@@ -23,4 +28,12 @@ export const getUnordinaryPage = async (data: UnordinaryPageRequestBody) => {
   });
 
   return response as AxiosResponse<UnordinaryPageResponseData>;
+};
+export const getUnordinaryPerson = async (id: number) => {
+  const response = await unordinaryApi({
+    url: `/${id}`,
+    method: "get",
+  });
+
+  return response as AxiosResponse<UnordinaryPersonResponseType>;
 };

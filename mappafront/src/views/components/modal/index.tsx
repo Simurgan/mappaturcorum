@@ -28,7 +28,6 @@ const formatDataField = (data: OrdinaryPageResponseDataItem, key: string) => {
 };
 
 const MappaModal = ({ isOpen, closeModal, data }: MappaModalProps) => {
-  console.log("🚀 ~ MappaModal ~ data:", data);
   return (
     <ReactModal
       isOpen={isOpen}
@@ -52,7 +51,7 @@ const MappaModal = ({ isOpen, closeModal, data }: MappaModalProps) => {
 
         <div className="content">
           <Text fs={28} fw={700} lh={140} color="burgundy">
-            {data?.name || "No Name Provided"}
+            {data?.id || "No Name Provided"}
           </Text>
 
           <div className="content-info">
