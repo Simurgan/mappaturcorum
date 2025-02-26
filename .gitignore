@@ -1,3 +1,4 @@
 .env
 mappa_data/
 backend/appsettings.json
+*.pem
