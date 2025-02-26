@@ -80,14 +80,18 @@ public class WrittenSourceUpdateRequest
 public class WrittenSourceFilterDto
 {
     public string? Name {get; set;}
-    public int? Genre {get; set;}
+    public List<int>? Genre {get; set;}
     public List<int>? YearWritten {get; set;}
     public string? Author {get; set;}
-    public int? Language {get; set;}
+    public List<int>? Language {get; set;}
     public List<int>? OrdinaryPersons {get; set;}
     public List<int>? UnordinaryPersons {get; set;}
 }
 
-public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto {}
+public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto 
+{
+    public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;}
+    public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
+}
 
 public class WrittenSourceGraphDto : WrittenSourceBaseDto {}

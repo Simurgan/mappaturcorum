@@ -56,6 +56,12 @@ public class CityService : ICityService
             CountryCode = entity.CountryCode,
             Latitude = entity.Latitude,
             Longitude = entity.Longitude,
+            NumberOfLocationOf = entity.NumberOfLocationOf,
+            NumberOfBackgroundCityOf = entity.NumberOfBackgroundCityOf,
+            NumberOfBirthPlaceOf = entity.NumberOfBirthPlaceOf,
+            NumberOfDeathPlaceOf = entity.NumberOfDeathPlaceOf,
+            NumberOfSourcesMentioningTheCity = entity.NumberOfSourcesMentioningTheCity,
+            NumberOfSourcesWrittenInTheCity = entity.NumberOfSourcesWrittenInTheCity,
             LocationOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.LocationOf),
             BackgroundCityOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.BackgroundCityOf),
             BirthPlaceOf = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.BirthPlaceOf),
@@ -84,6 +90,12 @@ public class CityService : ICityService
             CountryCode = request.CountryCode,
             Latitude = request.Latitude,
             Longitude = request.Longitude,
+            NumberOfLocationOf = 0,
+            NumberOfBackgroundCityOf = 0,
+            NumberOfBirthPlaceOf = 0,
+            NumberOfDeathPlaceOf = 0,
+            NumberOfSourcesMentioningTheCity = 0,
+            NumberOfSourcesWrittenInTheCity = 0,
         };
         
         _dbContext.Set<City>().Add(city);
@@ -99,6 +111,12 @@ public class CityService : ICityService
             CountryCode = city.CountryCode,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            NumberOfLocationOf = city.NumberOfLocationOf,
+            NumberOfBackgroundCityOf = city.NumberOfBackgroundCityOf,
+            NumberOfBirthPlaceOf = city.NumberOfBirthPlaceOf,
+            NumberOfDeathPlaceOf = city.NumberOfDeathPlaceOf,
+            NumberOfSourcesMentioningTheCity = city.NumberOfSourcesMentioningTheCity,
+            NumberOfSourcesWrittenInTheCity = city.NumberOfSourcesWrittenInTheCity,
             LocationOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.LocationOf),
             BackgroundCityOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.BackgroundCityOf),
             BirthPlaceOf = _mapper.Map<List<UnordinaryPersonBaseDto>>(city.BirthPlaceOf),
@@ -155,6 +173,12 @@ public class CityService : ICityService
             CountryCode = city.CountryCode,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            NumberOfLocationOf = city.NumberOfLocationOf,
+            NumberOfBackgroundCityOf = city.NumberOfBackgroundCityOf,
+            NumberOfBirthPlaceOf = city.NumberOfBirthPlaceOf,
+            NumberOfDeathPlaceOf = city.NumberOfDeathPlaceOf,
+            NumberOfSourcesMentioningTheCity = city.NumberOfSourcesMentioningTheCity,
+            NumberOfSourcesWrittenInTheCity = city.NumberOfSourcesWrittenInTheCity,
             LocationOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.LocationOf),
             BackgroundCityOf = _mapper.Map<List<OrdinaryPersonBaseDto>>(city.BackgroundCityOf),
             BirthPlaceOf = _mapper.Map<List<UnordinaryPersonBaseDto>>(city.BirthPlaceOf),
@@ -187,12 +211,19 @@ public class CityService : ICityService
             .Include(op => op.SourcesWrittenInTheCity)
             .AsQueryable();
 
+        IEnumerable<City> innerItems = query.Include(op => op.LocationOf)
+            .Include(op => op.BackgroundCityOf)
+            .Include(op => op.BirthPlaceOf)
+            .Include(op => op.DeathPlaceOf)
+            .Include(op => op.SourcesMentioningTheCity)
+            .Include(op => op.SourcesWrittenInTheCity).AsEnumerable();
+
         if(filter != null)
         {
             if(filter.Name != null)
             {
                 var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
-                query = query.Where(e => e.Name.ToLower().Replace(" ", "").
+                innerItems = innerItems.Where(e => e.Name.ToLower().Replace(" ", "").
                     Replace("\t", "").Contains(checkedString) || 
                     (e.AsciiName != null && e.AsciiName.ToLower().Replace(" ", "").
                     Replace("\t", "").Contains(checkedString)) ||
@@ -201,176 +232,62 @@ public class CityService : ICityService
                     .Contains(checkedString))));
             }
 
-            if(filter.LocationOf != null)
+            if(filter.LocationOf != null && filter.LocationOf.Count != 0)
             {
-                var innerItems = query.Include(op => op.LocationOf).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.LocationOf != null) 
                     && filter.LocationOf.
                         Any(fs => op.LocationOf.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Select(p => new CityFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AsciiName = p.AsciiName,
-                        Name = p.Name,
-                        AlternateNames = p.AlternateNames,
-                        GeoNamesId = p.GeoNamesId,
-                        CountryCode = p.CountryCode,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                    })
-                    .ToList();
-
-                Console.WriteLine("items", innerItems);
-
-                int totalCount1 = innerItems.Count;
-
-                return innerItems;
+                        );
             }
 
-            if(filter.BackgroundCityOf != null)
+            if(filter.BackgroundCityOf != null && filter.BackgroundCityOf.Count != 0)
             {
-                var innerItems = query.Include(op => op.BackgroundCityOf).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.BackgroundCityOf != null) 
                     && filter.BackgroundCityOf.
                         Any(fs => op.BackgroundCityOf.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Select(p => new CityFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AsciiName = p.AsciiName,
-                        Name = p.Name,
-                        AlternateNames = p.AlternateNames,
-                        GeoNamesId = p.GeoNamesId,
-                        CountryCode = p.CountryCode,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                    })
-                    .ToList();
-
-                Console.WriteLine("items", innerItems);
-
-                int totalCount1 = innerItems.Count;
-
-                return innerItems;
+                        );
             }
 
-            if(filter.BirthPlaceOf != null)
+            if(filter.BirthPlaceOf != null && filter.BirthPlaceOf.Count != 0)
             {
-                var innerItems = query.Include(op => op.BirthPlaceOf).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.BirthPlaceOf != null) 
                     && filter.BirthPlaceOf.
                         Any(fs => op.BirthPlaceOf.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Select(p => new CityFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AsciiName = p.AsciiName,
-                        Name = p.Name,
-                        AlternateNames = p.AlternateNames,
-                        GeoNamesId = p.GeoNamesId,
-                        CountryCode = p.CountryCode,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                    })
-                    .ToList();
-
-                Console.WriteLine("items", innerItems);
-
-                int totalCount1 = innerItems.Count;
-
-                return innerItems;
+                        );
             }
 
-            if(filter.DeathPlaceOf != null)
+            if(filter.DeathPlaceOf != null && filter.DeathPlaceOf.Count != 0)
             {
-                var innerItems = query.Include(op => op.DeathPlaceOf).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.DeathPlaceOf != null) 
                     && filter.DeathPlaceOf.
                         Any(fs => op.DeathPlaceOf.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Select(p => new CityFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AsciiName = p.AsciiName,
-                        Name = p.Name,
-                        AlternateNames = p.AlternateNames,
-                        GeoNamesId = p.GeoNamesId,
-                        CountryCode = p.CountryCode,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                    })
-                    .ToList();
-
-                Console.WriteLine("items", innerItems);
-
-                int totalCount1 = innerItems.Count;
-
-                return innerItems;
+                        );
             }
 
-            if(filter.SourcesMentioningTheCity != null)
+            if(filter.SourcesMentioningTheCity != null && filter.SourcesMentioningTheCity.Count != 0)
             {
-                var innerItems = query.Include(op => op.SourcesMentioningTheCity).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.SourcesMentioningTheCity != null) 
                     && filter.SourcesMentioningTheCity.
                         Any(fs => op.SourcesMentioningTheCity.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Select(p => new CityFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AsciiName = p.AsciiName,
-                        Name = p.Name,
-                        AlternateNames = p.AlternateNames,
-                        GeoNamesId = p.GeoNamesId,
-                        CountryCode = p.CountryCode,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                    })
-                    .ToList();
-
-                Console.WriteLine("items", innerItems);
-
-                int totalCount1 = innerItems.Count;
-
-                return innerItems;
+                        );
             }
 
-            if(filter.SourcesWrittenInTheCity != null)
+            if(filter.SourcesWrittenInTheCity != null && filter.SourcesWrittenInTheCity.Count != 0)
             {
-                var innerItems = query.Include(op => op.SourcesWrittenInTheCity).AsEnumerable()
+                innerItems = innerItems
                     .Where(op => (op.SourcesWrittenInTheCity != null) 
                     && filter.SourcesWrittenInTheCity.
                         Any(fs => op.SourcesWrittenInTheCity.Select(s => s.Id).Contains(fs))
-                        )
-                    .OrderBy(p => p.Id)  // Sort by Id (or other field)
-                    .Select(p => new CityFilterResponseDto
-                    {
-                        Id = p.Id,
-                        AsciiName = p.AsciiName,
-                        Name = p.Name,
-                        AlternateNames = p.AlternateNames,
-                        GeoNamesId = p.GeoNamesId,
-                        CountryCode = p.CountryCode,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                    })
-                    .ToList();
-
-                Console.WriteLine("items", innerItems);
-
-                int totalCount1 = innerItems.Count;
-
-                return innerItems;
+                        );
             }
         }
         
-        return await query
+        return innerItems
             .Select(p => new CityFilterResponseDto
                 {
                     Id = p.Id,
@@ -381,9 +298,15 @@ public class CityService : ICityService
                     CountryCode = p.CountryCode,
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
+                    NumberOfLocationOf = p.NumberOfLocationOf,
+                    NumberOfBackgroundCityOf = p.NumberOfBackgroundCityOf,
+                    NumberOfBirthPlaceOf = p.NumberOfBirthPlaceOf,
+                    NumberOfDeathPlaceOf = p.NumberOfDeathPlaceOf,
+                    NumberOfSourcesMentioningTheCity = p.NumberOfSourcesMentioningTheCity,
+                    NumberOfSourcesWrittenInTheCity = p.NumberOfSourcesWrittenInTheCity,
                 })
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<IEnumerable<CityMapDto>> GetAllForMapAsync()
@@ -396,32 +319,15 @@ public class CityService : ICityService
                 Name = e.Name,
                 Latitude = e.Latitude,
                 Longitude = e.Longitude,
-                NumberOfLocationOf = (e.LocationOf != null) ? e.LocationOf.Count : 0,
-                NumberOfBackgroundCityOf = (e.BackgroundCityOf != null) ? 
-                    e.BackgroundCityOf.Count : 0,
-                NumberOfBirthPlaceOf = (e.BirthPlaceOf != null) ? e.BirthPlaceOf.Count : 0,
-                NumberOfDeathPlaceOf = (e.DeathPlaceOf != null) ? e.DeathPlaceOf.Count : 0,
-                NumberOfSourcesMentioningTheCity = (e.SourcesMentioningTheCity != null) 
-                    ? e.SourcesMentioningTheCity.Count : 0,
-                NumberOfSourcesWrittenInTheCity = (e.SourcesWrittenInTheCity != null) 
-                    ? e.SourcesWrittenInTheCity.Count : 0,
+                NumberOfLocationOf = e.NumberOfLocationOf,
+                NumberOfBackgroundCityOf = e.NumberOfBackgroundCityOf,
+                NumberOfBirthPlaceOf = e.NumberOfBirthPlaceOf,
+                NumberOfDeathPlaceOf = e.NumberOfDeathPlaceOf,
+                NumberOfSourcesMentioningTheCity = e.NumberOfSourcesMentioningTheCity,
+                NumberOfSourcesWrittenInTheCity = e.NumberOfSourcesWrittenInTheCity,
 
             })
             .OrderBy(e => e.Id)
             .ToListAsync();
     }
-
-    // public int Id { get; set; }
-    // public string AsciiName { get; set; }
-    // public double? Latitude {get; set;}
-    // public double? Longitude {get; set;}
-    // // OrdinaryPerson Ids
-    // public int? NumberOfLocationOf {get; set;}
-    // public int? NumberOfBackgroundCityOf {get; set;}
-    // // UnordinaryPerson Ids
-    // public int? NumberOfBirthPlaceOf {get; set;}
-    // public int? NumberOfDeathPlaceOf {get; set;}
-    // // WrittenSource Ids
-    // public int? NumberOfSourcesMentioningTheCity {get; set;}
-    // public int? NumberOfSourcesWrittenInTheCity {get; set;}
 }

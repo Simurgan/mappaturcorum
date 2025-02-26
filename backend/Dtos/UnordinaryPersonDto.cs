@@ -82,11 +82,11 @@ public class UnordinaryPersonUpdateRequest
 
 public class UnordinaryPersonFilterDto 
 {
-    public string Name {get; set;}
-    public int? Religion {get; set;}
-    public int? Ethnicity {get; set;}
+    public string? Name {get; set;}
+    public List<int>? Religion {get; set;}
+    public List<int>? Ethnicity {get; set;}
     public List<int>? DeathYear {get; set;}
-    public int? DeathPlace {get; set;}
+    public List<int>? DeathPlace {get; set;}
     public List<int>? InteractionsWithOrdinary {get; set;}
 }
 

@@ -1,34 +1,32 @@
 services:
   web_api:
     container_name: mappa_backend
-    build: 
+    build:
       context: ./backend
       args:
         DATABASE_CONNECTION_STRING: ${DATABASE_CONNECTION_STRING}
     ports:
       - 8080:8080
-    depends_on:
-      db:
-        condition:  service_healthy
+    # depends_on:
+    #   db:
+    #     condition:  service_healthy
     # environment:
     #   DATABASE_CONNECTION_STRING: ${DATABASE_CONNECTION_STRING}
-  db:
-    image: postgres
-    container_name: mappa_db
-    ports:
-      - 5433:5432
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d MappaDB"]
-      interval: 5s
-      retries: 15
-      timeout: 3s
-
-volumes:
-  postgres_data:
-    
+  # db:
+  #   image: postgres
+  #   container_name: mappa_db
+  #   ports:
+  #     - 5433:5432
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres -d MappaDB"]
+  #     interval: 5s
+  #     retries: 15
+  #     timeout: 3s
+# volumes:
+#   postgres_data:
