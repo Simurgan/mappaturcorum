@@ -6,10 +6,8 @@ import Text from "@/views/components/text";
 import { useEffect, useState } from "react";
 
 import "./style.scss";
-import {
-  SubObjectPair,
-  WrittenSourceResponseItemType,
-} from "@/models/written-source";
+import { WrittenSourceResponseItemType } from "@/models/written-source";
+import { SubObjectPair } from "@/models/ordinary-people";
 
 const SourcesPage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);

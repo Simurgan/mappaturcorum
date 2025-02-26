@@ -8,7 +8,7 @@ export type AllWrittenSourcesResponseDataItem = {
   yearWritten?: number[];
   genre?: SubObjectPair;
   language?: SubObjectPair;
-}
+};
 
 export type WrittenSourceRequestBody = {
   pageSize: number;
@@ -20,11 +20,6 @@ export type WrittenSourceRequestBody = {
     deathPlace?: number[];
     interactionsWithOrdinary?: number[];
   };
-};
-
-export type SubObjectPair = {
-  id: number;
-  name: string;
 };
 
 export type WrittenSourceResponseItemType = {
