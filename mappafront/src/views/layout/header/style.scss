@@ -8,28 +8,30 @@ header.section.header-section {
   background-position: 0 0, 0 0.24rem;
   background-size: 100% 0.24rem, 100% 100%;
 
-  padding: 0.64rem 0 0.08rem;
+  padding: 0.56rem 0 0.16rem;
   position: relative;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
   .container {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: flex-end;
     gap: 0.36rem;
+
+    .logo-container {
+      width: 2rem;
+      padding-bottom: 0.16rem;
+
+      img.logo-image {
+        width: 100%;
+      }
+    }
 
     .header-content {
       width: 100%;
       display: flex;
       justify-content: space-between;
-
-      .logo-container {
-        width: 2rem;
-
-        img.logo-image {
-          width: 100%;
-        }
-      }
 
       .header-actions {
         display: flex;
@@ -67,6 +69,7 @@ header.section.header-section {
       display: flex;
       gap: 0.4rem;
       width: fit-content;
+      height: min-content;
 
       .nav-item {
         text-decoration: none;

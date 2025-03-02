@@ -8,11 +8,21 @@ import "./style.scss";
 
 const ContactPage = () => {
   return (
-    <div className="section contact-section">
+    <section className="section contact-section">
       <div className="container">
         <div className="contact-header">
-          <Text fs={36} fw={700} lh={125} color="burgundy">
+          <Text tag="h1" fs={36} fw={700} lh={125} color="burgundy">
             Contact
+          </Text>
+          <Text>
+            Please contact us if you have any feedback that you want to inform
+            us. We are looking forward to seeing your evaluations, comments,
+            criticism, suggestions and so on.
+          </Text>
+          <Text>
+            We are also open to receiveing requests from you to take place in
+            our project, and for future project ideas as well. Please contact us
+            if you would like to join us!
           </Text>
           <div className="contact-info">
             {/* <img src={mailIcon} width={24} height={18} /> */}
@@ -21,18 +31,18 @@ const ContactPage = () => {
               className="contact-email"
             >
               <Text fs={24} fw={400} lh={125} color="burgundy">
-                info@mappaanatolicum.com
+                info@mappateam.com
+              </Text>
+            </Link>
+            {/* <img src={phoneIcon} width={24} height={18} /> */}
+            <Link to={"tel:+905511127399"}>
+              <Text fs={24} fw={400} lh={125} color="burgundy">
+                +90 551 112 7399
               </Text>
             </Link>
           </div>
-          <div className="contact-info">
-            {/* <img src={phoneIcon} width={24} height={18} /> */}
-            <Text fs={24} fw={400} lh={125} color="burgundy">
-              +90 123 456 78 90
-            </Text>
-          </div>
         </div>
-        <div className="contact-form">
+        {/* <div className="contact-form">
           <Text fs={28} fw={700} lh={125} color="burgundy">
             Contact Us
           </Text>
@@ -59,9 +69,9 @@ const ContactPage = () => {
             </label>
             <textarea className="form-input text-area" id="message" />
           </div>
-        </div>
+        </div> */}
       </div>
-    </div>
+    </section>
   );
 };
 

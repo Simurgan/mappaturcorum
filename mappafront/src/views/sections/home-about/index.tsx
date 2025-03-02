@@ -11,14 +11,19 @@ const HomeAboutSection = () => {
           About the Project
         </Text>
         <Text tag="p" fw={300} fs={24} lh={125} isCenter={true} color="gray">
-          Mappa Anatolicorum is a digital humanities project for digitally
-          recreating the ordinary people of 1200-1450 Anatolia and their
-          ordinary lives with the map (GIS) and social network analysis. What
-          else? Mappa Anatolicum provides a rich data base not only for ordinary
-          people, but also for the sources mentioning about the 1200-1450
-          Anatolia, and their elaborate and complex relations with the
-          settlements in Anatolia.
+          Mappa Anatolicorum is a digital humanities project dedicated to
+          reconstructing the ordinary life of Late Medieval Anatolia1
+          (1200-1450). Starting its journey in March 2023, the project aims to
+          provide an extensive, well-structured database indexing the ordinary
+          people, primary sources, and settlements of the period. Mappa
+          Anatolicorum presents its data-base, which is built by data-mining of
+          the historical primary sources of the field of study of the project,
+          through social network analysis and geographical information systems
+          (GIS). A key goal of the project is to offer reliable, open-source
+          data to researchers and enthusiasts interested in the social fabric of
+          Medieval Anatolia.
         </Text>
+
         <Link to={Urls.About} className="read-more">
           <Text fw={300} fs={24} lh={125} isCenter={true}>
             Read more...

@@ -60,14 +60,30 @@ const MembersPage = () => {
 export default MembersPage;
 
 const MemberCard = (member: Member) => (
-  <div className="member-container">
-    <div className="image-container" />
+  <div
+    className={`member-container${
+      member.name === "Gökçe Yılmaz" || member.name === "Şeyma Sarı"
+        ? " reposition"
+        : member.name === "Said Yolcu"
+        ? " rereposition"
+        : member.name === "Burak Kızılay"
+        ? " rerereposition"
+        : ""
+    }`}
+  >
+    <div className="image-container">
+      <img src={member.image} alt="" />
+    </div>
     <Text fs={16} fw={500} lh={140} color="burgundy">
       {member.name}
     </Text>
-    <Text fs={12} fw={300} lh={125} classNames="member-description">
-      {member.role}
-    </Text>
+    <div className="member-descs">
+      {member.descs.map((desc) => (
+        <Text fs={12} fw={300} lh={125} classNames="member-description">
+          {desc}
+        </Text>
+      ))}
+    </div>
   </div>
 );
 
@@ -80,8 +96,8 @@ const teams: Team[] = [
         members: [
           {
             name: "Muzaffer Çakır",
-            role: "Founder and Coordinator",
-            image: "https://randomuser",
+            descs: ["Boğaziçi University", "History Student"],
+            image: require("@/assets/images/member-images/muzaffer.png"),
           },
         ],
       },
@@ -89,19 +105,14 @@ const teams: Team[] = [
         name: "Coordinators",
         members: [
           {
-            name: "Muzaffer Çakır",
-            role: "Founder and Coordinator",
-            image: "https://randomuser",
-          },
-          {
             name: "Emirhan Kuşaksız",
-            role: "Coordinator",
-            image: "https://randomuser",
+            descs: ["Boğaziçi University", "History Student"],
+            image: require("@/assets/images/member-images/emirhan.png"),
           },
           {
             name: "Mehmet Akif Top",
-            role: "Coordinator",
-            image: "https://randomuser",
+            descs: ["Istanbul University", "History Student"],
+            image: require("@/assets/images/member-images/akif.png"),
           },
         ],
       },
@@ -110,18 +121,26 @@ const teams: Team[] = [
         members: [
           {
             name: "İsmail Demirtaş",
-            role: "Researcher",
-            image: "https://randomuser",
+            descs: ["Boğaziçi University", "History Student"],
+            image: require("@/assets/images/member-images/ismail.png"),
           },
           {
             name: "Gökçe Yılmaz",
-            role: "Researcher",
-            image: "https://randomuser",
+            descs: [
+              "Boğaziçi University",
+              "History & Turkish Language and Literature",
+              "Double Major Student",
+            ],
+            image: require("@/assets/images/member-images/gokce.png"),
           },
           {
             name: "Şeyma Sarı",
-            role: "Researcher",
-            image: "https://randomuser",
+            descs: [
+              "Boğaziçi University",
+              "Turkish Language and Literature",
+              "Student",
+            ],
+            image: require("@/assets/images/member-images/seyma.png"),
           },
         ],
       },
@@ -135,18 +154,22 @@ const teams: Team[] = [
         members: [
           {
             name: "Ömer Şükrü Uyduran",
-            role: "Frontend Developer",
-            image: "https://randomuser",
-          },
-          {
-            name: "Burak Kızılay",
-            role: "Frontend Developer",
-            image: "https://randomuser",
+            descs: ["Boğaziçi University", "Computer Engineering", "Student"],
+            image: require("@/assets/images/member-images/omar.png"),
           },
           {
             name: "Said Yolcu",
-            role: "Backend Developer",
-            image: "https://randomuser",
+            descs: ["Boğaziçi University", "Computer Engineering", "Student"],
+            image: require("@/assets/images/member-images/said.png"),
+          },
+          {
+            name: "Burak Kızılay",
+            descs: [
+              "Manisa Celal Bayar University",
+              "Software Engineering",
+              "Master's Student",
+            ],
+            image: require("@/assets/images/member-images/burak.png"),
           },
         ],
       },
@@ -155,8 +178,8 @@ const teams: Team[] = [
         members: [
           {
             name: "Seher Doğan",
-            role: "Designer",
-            image: "https://randomuser",
+            descs: ["Hacettepe University", "Graphic Design Student"],
+            image: require("@/assets/images/member-images/seher.png"),
           },
         ],
       },

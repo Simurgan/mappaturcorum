@@ -1,0 +1,56 @@
+@use "@/assets/mixins.scss" as *;
+@use "@/assets/variables.scss" as *;
+
+.custom-mappa-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 9.5rem;
+  max-width: 100%;
+  height: 75%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 0px !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border: 8px solid $color-primary;
+  z-index: 10001 !important;
+  background-color: $color-secondary;
+}
+
+div.modal-content {
+  display: flex;
+  flex-direction: column;
+
+  .modal-close-button {
+    position: fixed;
+    right: 0.2rem;
+    top: 0.2rem;
+    background-color: transparent;
+    border: none;
+  }
+
+  div.content {
+    padding: 0.6rem 1rem;
+
+    .content-info {
+      .info-row {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding-top: 0.32rem;
+        gap: 0.32rem;
+
+        .data-field {
+          width: 50%;
+          text-transform: capitalize;
+        }
+        .data {
+          width: 50%;
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,6 @@ export type SubTeam = {
 
 export type Member = {
   name: string;
-  role: string;
+  descs: string[];
   image: string;
 };

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import linkedinLogo from "@/assets/icons/linkedin-logo.svg";
 import "./style.scss";
 import Text from "@/views/components/text";
 
@@ -19,7 +18,7 @@ const Footer = () => {
             </Text>
             <Link to="mailto:info@mappaanatolicum.com" className="mail-link">
               <Text fw={400} fs={14} lh={125} color="papirus">
-                info@mappaanatolicum.com
+                info@mappateam.com
               </Text>
             </Link>
           </address>
@@ -29,16 +28,16 @@ const Footer = () => {
             Follow us on
           </Text>
           <div className="social-icons flex items-center gap-[5px]">
-            <Link to="https://www.linkedin.com">
+            <Link to="https://www.linkedin.com/company/mappa-anatolicorum/">
               <img
-                src={linkedinLogo}
+                src={require("@/assets/icons/linkedin-2.ico")}
                 className="social-icon"
                 alt="LinkedIn Logo"
               />
             </Link>
-            <Link to="https://www.linkedin.com">
+            <Link to="https://x.com/manatolicorum">
               <img
-                src={linkedinLogo}
+                src={require("@/assets/icons/twitter-x-logo.png")}
                 className="social-icon"
                 alt="LinkedIn Logo"
               />
