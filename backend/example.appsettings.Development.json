@@ -1,0 +1,18 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Microsoft.AspNetCore.Authentication": "Debug",
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "db": "Host=<db_host_address>;Port=<port>;Database=<database_name>;Username=<db_user>;Password=<db_password>"
+  },
+  "JWT": {
+    "ValidAudience": "http://<valid_audience_host_address>:<port>",
+    "ValidIssuer": "http://<valid_issuer_host_address>:<port>",
+    "Secret": "<secret_string_to_create_jwt>",
+    "TokenExpirationInHours": 3
+  }
+}
