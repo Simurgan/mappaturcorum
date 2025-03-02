@@ -382,6 +382,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .Include(op => op.Language)
             .Include(op => op.OrdinaryPersons)
             .Include(op => op.UnordinaryPersons)
+            .Include(op => op.CitiesMentionedByTheSource)
+            .Include(op => op.CitiesWhereSourcesAreWritten)
             .AsQueryable();
 
         IEnumerable<WrittenSource> innerItems = query.AsEnumerable();
@@ -441,6 +443,24 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                         Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
                         );
             }
+
+            if (filter.CitiesMentionedByTheSource != null && filter.CitiesMentionedByTheSource.Count != 0)
+            {
+                innerItems = innerItems
+                    .Where(op => (op.CitiesMentionedByTheSource != null)
+                        && filter.CitiesMentionedByTheSource
+                            .Any(sid => op.CitiesMentionedByTheSource.Select(
+                                s => s.Id).Contains(sid)));
+            }
+
+            if (filter.CitiesWhereSourcesAreWritten != null && filter.CitiesWhereSourcesAreWritten.Count != 0)
+            {
+                innerItems = innerItems
+                    .Where(op => (op.CitiesWhereSourcesAreWritten != null)
+                        && filter.CitiesWhereSourcesAreWritten
+                            .Any(sid => op.CitiesWhereSourcesAreWritten.Select(
+                                s => s.Id).Contains(sid)));
+            }
         }
 
         int totalCount = innerItems.Count();
@@ -459,6 +479,8 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                 Language = _mapper.Map<LanguageDto>(p.Language),
                 OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
                 UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
+                CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
+                CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
             })
             .ToList();
 
