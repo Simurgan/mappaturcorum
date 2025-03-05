@@ -44,6 +44,9 @@ section.section.unordinary-section {
           color: $color-secondary;
           background-color: transparent;
         }
+        .action-input::placeholder {
+          color: #ededed;
+        }
       }
     }
 
