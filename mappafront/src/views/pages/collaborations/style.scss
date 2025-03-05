@@ -20,6 +20,20 @@ section.section.collaborations-section {
 
           li {
             font-size: 0.12rem;
+            padding-bottom: 0.08rem;
+            display: flex;
+            align-items: center;
+            gap: 0.08rem;
+
+            .collaborator-link {
+              text-decoration: none;
+              border-bottom: 1px solid transparent;
+              transition: border-color 0.3s ease-in-out;
+
+              &:hover {
+                border-bottom: 1px solid black;
+              }
+            }
           }
         }
       }
