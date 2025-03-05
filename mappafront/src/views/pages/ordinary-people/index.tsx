@@ -35,7 +35,7 @@ const OrdinaryPeoplePage = () => {
 
   const setInitialData = async () => {
     const response = await getOrdinaryPage({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: 1,
     });
 
@@ -48,7 +48,7 @@ const OrdinaryPeoplePage = () => {
   const updateData = async () => {
     const response = await getOrdinaryPage({
       pageNumber: tablePage,
-      pageSize: 10,
+      pageSize: 20,
     });
 
     if (response.status === 200) {

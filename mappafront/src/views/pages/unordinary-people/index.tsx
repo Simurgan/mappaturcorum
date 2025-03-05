@@ -34,7 +34,7 @@ const UnunordinaryPeoplePage = () => {
 
   const setInitialData = async () => {
     const response = await getUnordinaryPage({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: 1,
     });
 
@@ -60,7 +60,7 @@ const UnunordinaryPeoplePage = () => {
   const updateData = async () => {
     const response = await getUnordinaryPage({
       pageNumber: tablePage,
-      pageSize: 10,
+      pageSize: 20,
     });
 
     if (response.status === 200) {

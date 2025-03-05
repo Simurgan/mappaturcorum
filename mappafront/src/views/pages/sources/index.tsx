@@ -29,7 +29,7 @@ const SourcesPage = () => {
 
   const setInitialData = async () => {
     const response = await getWrittenSources({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: 1,
     });
 
@@ -42,7 +42,7 @@ const SourcesPage = () => {
   const updateData = async () => {
     const response = await getWrittenSources({
       pageNumber: tablePage,
-      pageSize: 10,
+      pageSize: 20,
     });
 
     if (response.status === 200) {
