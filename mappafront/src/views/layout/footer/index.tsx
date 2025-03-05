@@ -28,14 +28,17 @@ const Footer = () => {
             Follow us on
           </Text>
           <div className="social-icons flex items-center gap-[5px]">
-            <Link to="https://www.linkedin.com/company/mappa-anatolicorum/">
+            <Link
+              to="https://www.linkedin.com/company/mappa-anatolicorum/"
+              target="_blank"
+            >
               <img
                 src={require("@/assets/icons/linkedin-2.ico")}
                 className="social-icon"
                 alt="LinkedIn Logo"
               />
             </Link>
-            <Link to="https://x.com/manatolicorum">
+            <Link to="https://x.com/manatolicorum" target="_blank">
               <img
                 src={require("@/assets/icons/twitter-x-logo.png")}
                 className="social-icon"

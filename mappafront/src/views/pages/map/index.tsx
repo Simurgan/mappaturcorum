@@ -170,7 +170,7 @@ const MapPage = () => {
   const headerData = [
     "Name",
     "Alternate Name",
-    "Ethnonym",
+    "Ethnicity",
     "Religion",
     "Profession",
     "Gender",
