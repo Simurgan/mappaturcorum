@@ -131,7 +131,7 @@ const MapPage = () => {
 
   const getTableOrdinaryContent = async (cityId: number, page: number) => {
     const response = await getOrdinaryPage({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: page,
       filter: {
         location: [cityId],
@@ -150,7 +150,7 @@ const MapPage = () => {
         ? { citiesWhereSourcesAreWritten: [cityId] }
         : { citiesMentionedByTheSource: [cityId] };
     const response = await getWrittenSources({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: page,
       filter: subFilterForWrittenContent,
     });
