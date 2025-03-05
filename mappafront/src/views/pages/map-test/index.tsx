@@ -5,6 +5,15 @@ import { getCityMap } from "@/actions/map";
 import { CityMapResponseDataItem } from "@/models/map";
 import Text from "@/views/components/text";
 import "./style.scss";
+import ReactModal from "react-modal";
+import Button from "@/views/components/button";
+import Table from "@/views/components/table";
+import {
+  OrdinaryPageResponseDataItem,
+  SubObjectPair,
+} from "@/models/ordinary-people";
+import { WrittenSourceResponseItemType } from "@/models/written-source";
+import { getOrdinaryPage } from "@/actions/ordinary-people";
 
 type FilterConfig = {
   ordinaryPeople: {
@@ -53,19 +62,14 @@ type Filters = {
   };
 };
 
-const getIconSize = (count: number) => {
-  if (count > 80) {
-    return new L.Point(80, 80);
-  } else if (count > 50) {
-    return new L.Point(50, 50);
-  } else if (count > 20) {
-    return new L.Point(40, 40);
-  } else if (count > 10) {
-    return new L.Point(30, 30);
-  } else {
-    return new L.Point(count * 0.45 + 16, count * 0.45 + 16);
-  }
-};
+const headerData = [
+  "Name",
+  "Alternate Name",
+  "Ethnicity",
+  "Religion",
+  "Profession",
+  "Gender",
+];
 
 const MapTest = () => {
   const initializeFilters = (): Filters => {
@@ -81,6 +85,14 @@ const MapTest = () => {
   const [cityData, setCityData] = useState<CityMapResponseDataItem[]>([]);
   const [filters, setFilters] = useState<Filters>(initializeFilters());
   const [markers, setMarkers] = useState<CityMapResponseDataItem[]>([]);
+  const [selectedMarker, setSelectedMarker] =
+    useState<CityMapResponseDataItem>();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [tableData, setTableData] = useState<
+    OrdinaryPageResponseDataItem[] | WrittenSourceResponseItemType[]
+  >();
+  const [tablePage, setTablePage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>();
 
   const getInitialData = async () => {
     const response = await getCityMap();
@@ -158,9 +170,129 @@ const MapTest = () => {
     }));
   };
 
+  function openModal(marker: CityMapResponseDataItem) {
+    setSelectedMarker(marker);
+    setTablePage(1);
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {}
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  const getTableOrdinaryContent = async (cityId: number, page: number) => {
+    const response = await getOrdinaryPage({
+      pageSize: 20,
+      pageNumber: page,
+      filter: {
+        location: [cityId],
+      },
+    });
+
+    if (response.status === 200) {
+      setTableData(response.data.data);
+      setTotalPage(response.data.totalPages);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedMarker && tablePage !== undefined) {
+      getTableOrdinaryContent(selectedMarker.id, tablePage);
+    }
+  }, [tablePage, selectedMarker]);
+
   return (
     <section className="section map-section">
       <div className="container">
+        <ReactModal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          contentLabel="Example Modal"
+          overlayClassName="custom-overlay"
+          className="custom-modal"
+        >
+          <div className="modal-content">
+            <div className="modal-header">
+              <Text fs={16} fw={400} lh={125}>
+                {selectedMarker?.name}
+              </Text>
+              <Button onClick={closeModal} classNames="modal-close-button">
+                <Text fs={12} fw={700}>
+                  X
+                </Text>
+              </Button>
+            </div>
+            <Table
+              tableData={{
+                hasRowHover: true,
+                headers: headerData.map((cell) => (
+                  <Text fs={14} fw={500} lh={125} color="burgundy">
+                    {cell}
+                  </Text>
+                )),
+                rows: tableData?.map((item) => {
+                  const ordinaryCellText = [
+                    item.name,
+                    "alternateName" in item ? item.alternateName : "",
+                    "ethnicity" in item ? item.ethnicity?.name : "",
+                    "religion" in item ? item.religion?.name : "",
+                    "profession" in item ? item.profession?.name : "",
+                    "gender" in item ? item.gender?.name : "",
+                  ];
+                  const writtenCellText = [
+                    item.name,
+                    "ordinaryPersons" in item
+                      ? item.ordinaryPersons.map(
+                          (person: SubObjectPair) => person.name
+                        )
+                      : "",
+                    "unordinaryPersons" in item
+                      ? item.unordinaryPersons.map(
+                          (person: SubObjectPair) => person.name
+                        )
+                      : "",
+                    "alternateNames" in item
+                      ? item.alternateNames
+                          ?.map((name: string) => name)
+                          .join(", ")
+                      : "",
+                    "author" in item ? item.author : "",
+                    "yearWritten" in item
+                      ? item.yearWritten?.map((year: number) => year.toString())
+                      : "",
+                    "genre" in item ? item.genre?.name : "",
+                    "language" in item ? item.language?.name : "",
+                  ];
+                  let cellText = !filters.ordinaryPeople
+                    ? writtenCellText
+                    : ordinaryCellText;
+
+                  return {
+                    cells: cellText.map((cellText) => (
+                      <Text fs={12} fw={500} lh={125} color="dark-gray">
+                        {cellText}
+                      </Text>
+                    )),
+                    // onClick: () => openModal({}),
+                  };
+                }),
+              }}
+              paginationData={
+                totalPage && tablePage
+                  ? {
+                      currentPage: tablePage,
+                      setPage: setTablePage,
+                      totalPage: totalPage,
+                    }
+                  : undefined
+              }
+            />
+          </div>
+        </ReactModal>
+
         <div className="map-container">
           <MapContainer center={[39.83, 34.96]} zoom={6} scrollWheelZoom={true}>
             <TileLayer
@@ -180,8 +312,13 @@ const MapTest = () => {
                   })
                 }
                 eventHandlers={{
-                  mouseover: (event) => event.target.openPopup(),
-                  mouseout: (event) => event.target.closePopup(),
+                  click: () => openModal(item),
+                  mouseover: (event) => {
+                    event.target.openPopup();
+                  },
+                  mouseout: (event) => {
+                    event.target.closePopup();
+                  },
                 }}
               >
                 <Popup>
