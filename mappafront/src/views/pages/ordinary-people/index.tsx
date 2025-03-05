@@ -74,7 +74,7 @@ const OrdinaryPeoplePage = () => {
     "Profession",
     "Gender",
     "Sources",
-    "Interactions With Unordinary",
+    "Interactions With Notable",
     "Location",
   ];
 
@@ -361,7 +361,7 @@ const OrdinaryPeoplePage = () => {
                 selectedData.interactionsWithUnordinary.length > 0 && (
                   <div className="info-row">
                     <Text fs={16} fw={500} lh={125} classNames="data-field">
-                      Interactions With Unordinary People:
+                      Interactions With Notable People:
                     </Text>
                     <Text fs={14} fw={400} lh={125} classNames="data">
                       {selectedData.interactionsWithUnordinary
@@ -375,7 +375,7 @@ const OrdinaryPeoplePage = () => {
                 <>
                   <div className="info-row">
                     <Text fs={16} fw={500} lh={125} classNames="data-field">
-                      Interactions With Unordinary People (Explanation):
+                      Interactions With Notable People (Explanation):
                     </Text>
                     <Text fs={14} fw={400} lh={125} classNames="data">
                       {selectedData.interactionWithUnordinaryExplanation}

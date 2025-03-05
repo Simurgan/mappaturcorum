@@ -54,7 +54,7 @@ const SourcesPage = () => {
   const headerData = [
     "Name",
     "Ordinary Persons",
-    "Unordinary Persons",
+    "Notable Persons",
     "Alternate Names",
     "Author",
     "Year Written",
