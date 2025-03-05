@@ -150,9 +150,7 @@ const UnunordinaryPeoplePage = () => {
         <div className="modal-content">
           {/* Kapatma Butonu */}
           <Button onClick={closeModal} classNames="modal-close-button">
-            <Text fs={36} fw={400} color="burgundy">
-              X
-            </Text>
+            <img src={require("@/assets/icons/close-icon.svg")} />
           </Button>
 
           {/* Başlık */}
