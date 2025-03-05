@@ -10,6 +10,12 @@ export type SubTeam = {
 
 export type Member = {
   name: string;
+  socials: SocialType[];
   descs: string[];
   image: string;
+};
+
+export type SocialType = {
+  type: string;
+  url: string;
 };
