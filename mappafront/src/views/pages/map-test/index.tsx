@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import L from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { getCityMap } from "@/actions/map";
 import { CityMapResponseDataItem } from "@/models/map";
 import Text from "@/views/components/text";
@@ -71,6 +71,20 @@ const headerData = [
   "Profession",
   "Gender",
 ];
+
+const getIconSize = (count: number) => {
+  if (count > 100) return new L.Point(65, 65);
+  else if (count > 90) return new L.Point(60, 60);
+  else if (count > 80) return new L.Point(55, 55);
+  else if (count > 70) return new L.Point(50, 50);
+  else if (count > 60) return new L.Point(45, 45);
+  else if (count > 50) return new L.Point(40, 40);
+  else if (count > 40) return new L.Point(35, 35);
+  else if (count > 30) return new L.Point(30, 30);
+  else if (count > 20) return new L.Point(25, 25);
+  else if (count > 10) return new L.Point(20, 20);
+  else return new L.Point(20, 20);
+};
 
 const MapTest = () => {
   const initializeFilters = (): Filters => {
@@ -331,7 +345,13 @@ const MapTest = () => {
                   new L.Icon({
                     iconUrl: require("@/assets/icons/blue-marker.svg"),
                     iconRetinaUrl: require("@/assets/icons/blue-marker.svg"),
-                    iconSize: new L.Point(20, 20),
+                    iconSize: getIconSize(
+                      filters.ordinaryPeople
+                        ? item?.numberOfLocationOf!
+                        : filters.writtenSources.written
+                        ? item?.numberOfSourcesWrittenInTheCity!
+                        : item?.numberOfSourcesMentioningTheCity!
+                    ),
                     className: "leaflet-div-icon",
                   })
                 }
