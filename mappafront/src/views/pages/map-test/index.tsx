@@ -14,6 +14,7 @@ import {
 } from "@/models/ordinary-people";
 import { WrittenSourceResponseItemType } from "@/models/written-source";
 import { getOrdinaryPage } from "@/actions/ordinary-people";
+import { getWrittenSources } from "@/actions/written-source";
 
 type FilterConfig = {
   ordinaryPeople: {
@@ -197,9 +198,32 @@ const MapTest = () => {
     }
   };
 
+  const getTableWrittenContent = async (cityId: number, page: number) => {
+    const subFilterForWrittenContent = filters.writtenSources.written
+      ? { citiesWhereSourcesAreWritten: [cityId] }
+      : { citiesMentionedByTheSource: [cityId] };
+
+    const response = await getWrittenSources({
+      pageSize: 20,
+      pageNumber: page,
+      filter: { ...subFilterForWrittenContent },
+    });
+
+    if (response.status === 200) {
+      setTableData(response.data.data);
+      setTotalPage(response.data.totalPages);
+    }
+  };
+
   useEffect(() => {
-    if (selectedMarker && tablePage !== undefined) {
+    if (selectedMarker && tablePage !== undefined && filters.ordinaryPeople) {
       getTableOrdinaryContent(selectedMarker.id, tablePage);
+    } else if (
+      selectedMarker &&
+      tablePage !== undefined &&
+      !filters.ordinaryPeople
+    ) {
+      getTableWrittenContent(selectedMarker.id, tablePage);
     }
   }, [tablePage, selectedMarker]);
 
