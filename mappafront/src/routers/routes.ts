@@ -10,5 +10,6 @@ export enum Urls {
   Members = "/members",
   Publications = "/publications",
   Map = "/tools/map",
+  MapTest = "/tools/map-test",
   SocialNetwork = "/tools/social-network",
 }

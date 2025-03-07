@@ -5,6 +5,12 @@ import Text from "@/views/components/text";
 import { useEffect } from "react";
 import Button from "@/views/components/button";
 
+const socialIcons: { [key: string]: any } = {
+  linkedin: require("@/assets/icons/linkedin-logo.svg"),
+  email: require("@/assets/icons/email.svg"),
+  twitter: require("@/assets/icons/twitter-x-black-logo.svg"),
+};
+
 const MembersPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -84,6 +90,23 @@ const MemberCard = (member: Member) => (
         </Text>
       ))}
     </div>
+    <div className="social-container">
+      {member.socials?.map((social, index) => (
+        <a
+          key={index}
+          href={`${social.type === "email" ? "mailto:" : ""}${social.url}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src={socialIcons[social.type as string]}
+            width={16}
+            height={16}
+            alt={social.type}
+          />
+        </a>
+      ))}
+    </div>
   </div>
 );
 
@@ -96,8 +119,15 @@ const teams: Team[] = [
         members: [
           {
             name: "Muzaffer Çakır",
-            descs: ["Boğaziçi University", "History Student"],
+            descs: ["Boğaziçi University", "Undergraduate", "History"],
             image: require("@/assets/images/member-images/muzaffer.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/muzaffer-%C3%A7ak%C4%B1r-7897a026b/",
+              },
+              { type: "email", url: "muzaffercakir94@gmail.com" },
+            ],
           },
         ],
       },
@@ -106,13 +136,24 @@ const teams: Team[] = [
         members: [
           {
             name: "Emirhan Kuşaksız",
-            descs: ["Boğaziçi University", "History Student"],
+            descs: ["Boğaziçi University", "Undergraduate", "History"],
             image: require("@/assets/images/member-images/emirhan.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/emirhan-ku%C5%9Faks%C4%B1z-328962292/",
+              },
+              { type: "email", url: "emirhankusaksiz@gmail.com" },
+            ],
           },
           {
             name: "Mehmet Akif Top",
-            descs: ["Istanbul University", "History Student"],
+            descs: ["Istanbul University", "Undergraduate", "History"],
             image: require("@/assets/images/member-images/akif.png"),
+            socials: [
+              { type: "linkedin", url: "https://www.linkedin.com/in/akfmttp/" },
+              { type: "email", url: "akfmttp@gmail.com" },
+            ],
           },
         ],
       },
@@ -121,26 +162,43 @@ const teams: Team[] = [
         members: [
           {
             name: "İsmail Demirtaş",
-            descs: ["Boğaziçi University", "History Student"],
+            descs: ["Boğaziçi University", "Undergraduate", "History"],
             image: require("@/assets/images/member-images/ismail.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/ismail-zahid-demirta%C5%9F-2545a0353/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+              },
+              { type: "email", url: "izdemirtas751@gmail.com" },
+            ],
           },
           {
             name: "Gökçe Yılmaz",
             descs: [
-              "Boğaziçi University",
-              "History & Turkish Language and Literature",
-              "Double Major Student",
+              "Boğaziçi University",
+              "Undergraduate",
+              "Double Major: History & Turkish Language and Literature",
             ],
             image: require("@/assets/images/member-images/gokce.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/gokcenuryilmaz/",
+              },
+              { type: "email", url: "ylmzgokce2000@gmail.com" },
+            ],
           },
           {
             name: "Şeyma Sarı",
-            descs: [
-              "Boğaziçi University",
-              "Turkish Language and Literature",
-              "Student",
-            ],
+            descs: ["Boğaziçi University", "Graduate", "History"],
             image: require("@/assets/images/member-images/seyma.png"),
+            socials: [
+              {
+                type: "twitter",
+                url: "https://x.com/SeymaSar8/status/1857832565001871761",
+              },
+              { type: "email", url: "seymasari79@gmail.com" },
+            ],
           },
         ],
       },
@@ -154,22 +212,44 @@ const teams: Team[] = [
         members: [
           {
             name: "Ömer Şükrü Uyduran",
-            descs: ["Boğaziçi University", "Computer Engineering", "Student"],
+            descs: [
+              "Boğaziçi University",
+              "Undergraduate",
+              "Computer Engineering",
+            ],
             image: require("@/assets/images/member-images/omar.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/uyduranomar/",
+              },
+            ],
           },
           {
             name: "Said Yolcu",
-            descs: ["Boğaziçi University", "Computer Engineering", "Student"],
+            descs: ["Boğaziçi University", "Graduate", "Computer Engineering"],
             image: require("@/assets/images/member-images/said.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/mehmet-said-yolcu-a1aa41232/",
+              },
+            ],
           },
           {
             name: "Burak Kızılay",
             descs: [
               "Manisa Celal Bayar University",
+              "Graduate",
               "Software Engineering",
-              "Master's Student",
             ],
             image: require("@/assets/images/member-images/burak.png"),
+            socials: [
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/in/burak-kizilay/",
+              },
+            ],
           },
         ],
       },
@@ -178,8 +258,9 @@ const teams: Team[] = [
         members: [
           {
             name: "Seher Doğan",
-            descs: ["Hacettepe University", "Graphic Design Student"],
+            descs: ["Hacettepe University", "Undergraduate", "Graphic Design"],
             image: require("@/assets/images/member-images/seher.png"),
+            socials: [],
           },
         ],
       },

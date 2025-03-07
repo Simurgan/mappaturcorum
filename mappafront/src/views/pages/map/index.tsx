@@ -20,7 +20,17 @@ import { WrittenSourceResponseItemType } from "@/models/written-source";
 ReactModal.setAppElement("#root"); // For blocking not working modal styles in some browsers.
 
 const getIconSize = (count: number) => {
-  return new L.Point(count * 0.45 + 16, count * 0.45 + 16);
+  if (count > 80) {
+    return new L.Point(80, 80);
+  } else if (count > 50) {
+    return new L.Point(50, 50);
+  } else if (count > 20) {
+    return new L.Point(40, 40);
+  } else if (count > 10) {
+    return new L.Point(30, 30);
+  } else {
+    return new L.Point(count * 0.45 + 16, count * 0.45 + 16);
+  }
 };
 
 const MAIN_FILTERS = [
@@ -131,7 +141,7 @@ const MapPage = () => {
 
   const getTableOrdinaryContent = async (cityId: number, page: number) => {
     const response = await getOrdinaryPage({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: page,
       filter: {
         location: [cityId],
@@ -150,7 +160,7 @@ const MapPage = () => {
         ? { citiesWhereSourcesAreWritten: [cityId] }
         : { citiesMentionedByTheSource: [cityId] };
     const response = await getWrittenSources({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: page,
       filter: subFilterForWrittenContent,
     });
@@ -170,7 +180,7 @@ const MapPage = () => {
   const headerData = [
     "Name",
     "Alternate Name",
-    "Ethnonym",
+    "Ethnicity",
     "Religion",
     "Profession",
     "Gender",
@@ -188,93 +198,6 @@ const MapPage = () => {
   return (
     <section className="section map-section">
       <div className="container">
-        <ReactModal
-          isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          contentLabel="Example Modal"
-          overlayClassName="custom-overlay"
-          className="custom-modal"
-        >
-          <div className="modal-content">
-            <div className="modal-header">
-              <Text fs={16} fw={400} lh={125}>
-                {selectedMarker?.name}
-              </Text>
-              <Button onClick={closeModal} classNames="modal-close-button">
-                <Text fs={12} fw={700}>
-                  X
-                </Text>
-              </Button>
-            </div>
-            <Table
-              paginationData={
-                totalPage && tablePage
-                  ? {
-                      currentPage: tablePage,
-                      setPage: setTablePage,
-                      totalPage: totalPage,
-                    }
-                  : undefined
-              }
-              tableData={{
-                hasRowHover: true,
-                headers: headerData.map((cell) => (
-                  <Text fs={14} fw={500} lh={125} color="burgundy">
-                    {cell}
-                  </Text>
-                )),
-                rows: tableData?.map((item) => {
-                  const ordinaryCellText = [
-                    item.name,
-                    "alternateName" in item ? item.alternateName : "",
-                    "ethnicity" in item ? item.ethnicity?.name : "",
-                    "religion" in item ? item.religion?.name : "",
-                    "profession" in item ? item.profession?.name : "",
-                    "gender" in item ? item.gender?.name : "",
-                  ];
-                  const writtenCellText = [
-                    item.name,
-                    "ordinaryPersons" in item
-                      ? item.ordinaryPersons.map(
-                          (person: SubObjectPair) => person.name
-                        )
-                      : "",
-                    "unordinaryPersons" in item
-                      ? item.unordinaryPersons.map(
-                          (person: SubObjectPair) => person.name
-                        )
-                      : "",
-                    "alternateNames" in item
-                      ? item.alternateNames
-                          ?.map((name: string) => name)
-                          .join(", ")
-                      : "",
-                    "author" in item ? item.author : "",
-                    "yearWritten" in item
-                      ? item.yearWritten?.map((year: number) => year.toString())
-                      : "",
-                    "genre" in item ? item.genre?.name : "",
-                    "language" in item ? item.language?.name : "",
-                  ];
-
-                  let cellText =
-                    selectedMainFilter === "written"
-                      ? writtenCellText
-                      : ordinaryCellText;
-                  return {
-                    cells: cellText.map((cellText) => (
-                      <Text fs={12} fw={500} lh={125} color="dark-gray">
-                        {cellText}
-                      </Text>
-                    )),
-                    // onClick: () => openModal({}),
-                  };
-                }),
-              }}
-            />
-          </div>
-        </ReactModal>
         <div className="map-container">
           <MapContainer center={[39.83, 34.96]} zoom={6} scrollWheelZoom={true}>
             <TileLayer

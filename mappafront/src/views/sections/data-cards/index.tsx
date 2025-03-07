@@ -49,7 +49,7 @@ const DataCardsSection = () => {
                   isCenter={true}
                   color="burgundy"
                 >
-                  Unordinary People
+                  Notable People
                 </Text>
               </div>
             </div>
