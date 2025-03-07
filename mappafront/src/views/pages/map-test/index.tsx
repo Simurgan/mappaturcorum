@@ -91,8 +91,8 @@ const MapTest = () => {
     return {
       ordinaryPeople: false,
       writtenSources: {
-        mentioned: false,
-        written: true,
+        mentioned: true,
+        written: false,
       },
     };
   };
