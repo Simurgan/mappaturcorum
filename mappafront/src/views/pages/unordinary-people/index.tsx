@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import "./style.scss";
 import ReactModal from "react-modal";
 
-const UnunordinaryPeoplePage = () => {
+const UnordinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [selectedPersonId, setSelectedPersonId] = useState<number>();
   const [modalData, setModalData] = useState<UnordinaryPersonResponseType>();
@@ -206,4 +206,4 @@ const UnunordinaryPeoplePage = () => {
     </section>
   );
 };
-export default UnunordinaryPeoplePage;
+export default UnordinaryPeoplePage;

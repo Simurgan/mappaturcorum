@@ -1,24 +1,16 @@
 @use "@/assets/mixins.scss" as *;
 @use "@/assets/variables.scss" as *;
 
-section.section.unordinary-section {
+section.section.sources-section {
   padding-top: 0;
-  .container {
-    padding: 0;
-    margin: 0;
-    max-width: 100%;
-    width: 100%;
-
-    .page-head {
-      width: 100%;
-      height: 1.92rem;
+  .page-head {
+    background-color: $color-primary;
+    .container {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-left: 2rem;
-      background-color: $color-primary;
       gap: 0.4rem;
-
+      height: 1.92rem;
       .page-head-actions-container {
         display: flex;
         flex-direction: row;
@@ -49,7 +41,8 @@ section.section.unordinary-section {
         }
       }
     }
-
+  }
+  .container {
     .contect {
       width: 100%;
       height: 100%;

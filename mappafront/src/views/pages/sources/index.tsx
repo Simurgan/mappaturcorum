@@ -14,7 +14,6 @@ const SourcesPage = () => {
   const [selectedData, setSelectedData] =
     useState<WrittenSourceResponseItemType>();
   const [tableData, setTableData] = useState<WrittenSourceResponseItemType[]>();
-  console.log("🚀 ~ SourcesPage ~ tableData:", tableData);
   const [tablePage, setTablePage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
 
@@ -70,9 +69,9 @@ const SourcesPage = () => {
     updateData();
   }, [tablePage]);
   return (
-    <section className="section unordinary-section">
-      <div className="container">
-        <div className="page-head">
+    <section className="section sources-section">
+      <div className="page-head">
+        <div className="container">
           <Text fs={36} fw={700} lh={125} color="papirus">
             Sources
           </Text>
@@ -92,50 +91,52 @@ const SourcesPage = () => {
           </div>
         </div>
       </div>
-      <div className="content">
-        <Table
-          paginationData={
-            totalPage
-              ? {
-                  currentPage: tablePage,
-                  setPage: setTablePage,
-                  totalPage: totalPage,
-                }
-              : undefined
-          }
-          tableData={{
-            hasRowHover: true,
-            headers: headerData.map((cell) => (
-              <Text fs={14} fw={500} lh={125} color="burgundy">
-                {cell}
-              </Text>
-            )),
-            rows: tableData?.map((source: WrittenSourceResponseItemType) => {
-              const cellTexts = [
-                source.name,
-                source.ordinaryPersons.map(
-                  (person: SubObjectPair) => person.name
-                ),
-                source.unordinaryPersons.map(
-                  (person: SubObjectPair) => person.name
-                ),
-                source.alternateNames?.map((name: string) => name).join(", "),
-                source.author,
-                source.yearWritten?.map((year: number) => year.toString()),
-                source.genre?.name,
-                source.language?.name,
-              ];
-              return {
-                cells: cellTexts.map((cellText) => (
-                  <Text fs={12} fw={500} lh={125} color="dark-gray">
-                    {cellText! || "-"}
-                  </Text>
-                )),
-                onClick: () => openModal(source),
-              };
-            }),
-          }}
-        />
+      <div className="container">
+        <div className="content">
+          <Table
+            paginationData={
+              totalPage
+                ? {
+                    currentPage: tablePage,
+                    setPage: setTablePage,
+                    totalPage: totalPage,
+                  }
+                : undefined
+            }
+            tableData={{
+              hasRowHover: true,
+              headers: headerData.map((cell) => (
+                <Text fs={14} fw={500} lh={125} color="burgundy">
+                  {cell}
+                </Text>
+              )),
+              rows: tableData?.map((source: WrittenSourceResponseItemType) => {
+                const cellTexts = [
+                  source.name,
+                  source.ordinaryPersons.map(
+                    (person: SubObjectPair) => person.name
+                  ),
+                  source.unordinaryPersons.map(
+                    (person: SubObjectPair) => person.name
+                  ),
+                  source.alternateNames?.map((name: string) => name).join(", "),
+                  source.author,
+                  source.yearWritten?.map((year: number) => year.toString()),
+                  source.genre?.name,
+                  source.language?.name,
+                ];
+                return {
+                  cells: cellTexts.map((cellText) => (
+                    <Text fs={12} fw={500} lh={125} color="dark-gray">
+                      {cellText! || "-"}
+                    </Text>
+                  )),
+                  onClick: () => openModal(source),
+                };
+              }),
+            }}
+          />
+        </div>
       </div>
       <MappaModal
         isOpen={modalIsOpen}
