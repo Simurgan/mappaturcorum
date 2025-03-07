@@ -254,9 +254,6 @@ const MapTest = () => {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <Text fs={16} fw={400} lh={125}>
-                {selectedMarker?.name}
-              </Text>
               <Button onClick={closeModal} classNames="modal-close-button">
                 <Text fs={12} fw={700}>
                   X
