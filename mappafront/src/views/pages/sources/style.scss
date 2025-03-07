@@ -43,6 +43,8 @@ section.section.sources-section {
     }
   }
   .container {
+    display: flex;
+    flex-direction: column;
     .contect {
       width: 100%;
       height: 100%;

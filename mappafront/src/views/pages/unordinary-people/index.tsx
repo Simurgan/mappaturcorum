@@ -81,8 +81,8 @@ const UnordinaryPeoplePage = () => {
 
   return (
     <section className="section unordinary-section">
-      <div className="container">
-        <div className="page-head">
+      <div className="page-head">
+        <div className="container">
           <Text fs={36} fw={700} lh={125} color="papirus">
             Notable People
           </Text>
@@ -101,45 +101,48 @@ const UnordinaryPeoplePage = () => {
           </div>
         </div>
       </div>
-      <div className="content">
-        <Table
-          paginationData={
-            totalPage
-              ? {
-                  currentPage: tablePage,
-                  setPage: setTablePage,
-                  totalPage: totalPage,
-                }
-              : undefined
-          }
-          tableData={{
-            hasRowHover: true,
-            headers: headerData.map((cell) => (
-              <Text fs={14} fw={500} lh={125} color="burgundy">
-                {cell}
-              </Text>
-            )),
-            rows: tableData?.map((unordinary) => {
-              const cellTexts = [
-                unordinary.name,
-                unordinary.alternateName,
-                /* unordinary.gender || */
-                unordinary.ethnicity?.name,
-                unordinary.religion?.name,
-                /* unordinary.profession.name || */
-              ];
-              return {
-                cells: cellTexts.map((cellText) => (
-                  <Text fs={12} fw={500} lh={125} color="dark-gray">
-                    {cellText! || "-"}
-                  </Text>
-                )),
-                onClick: () => openModal(unordinary.id),
-              };
-            }),
-          }}
-        />
+      <div className="container">
+        <div className="content">
+          <Table
+            paginationData={
+              totalPage
+                ? {
+                    currentPage: tablePage,
+                    setPage: setTablePage,
+                    totalPage: totalPage,
+                  }
+                : undefined
+            }
+            tableData={{
+              hasRowHover: true,
+              headers: headerData.map((cell) => (
+                <Text fs={14} fw={500} lh={125} color="burgundy">
+                  {cell}
+                </Text>
+              )),
+              rows: tableData?.map((unordinary) => {
+                const cellTexts = [
+                  unordinary.name,
+                  unordinary.alternateName,
+                  /* unordinary.gender || */
+                  unordinary.ethnicity?.name,
+                  unordinary.religion?.name,
+                  /* unordinary.profession.name || */
+                ];
+                return {
+                  cells: cellTexts.map((cellText) => (
+                    <Text fs={12} fw={500} lh={125} color="dark-gray">
+                      {cellText! || "-"}
+                    </Text>
+                  )),
+                  onClick: () => openModal(unordinary.id),
+                };
+              }),
+            }}
+          />
+        </div>
       </div>
+
       <ReactModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
