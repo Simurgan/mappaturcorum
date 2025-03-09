@@ -3,7 +3,7 @@ import "./style.scss";
 import Button from "@/views/components/button";
 import Table from "@/views/components/table";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import MappaModal from "@/views/components/modal";
 import { getOrdinary, getOrdinaryPage } from "@/actions/ordinary-people";
 import {
@@ -14,15 +14,22 @@ import {
 import ReactModal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { Urls } from "@/routers/routes";
+import { useQuery } from "@tanstack/react-query";
 
 const OrdinaryPeoplePage = () => {
+  const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<SingleOrdinaryObject>();
-  const [tableData, setTableData] = useState<OrdinaryPageResponseDataItem[]>();
   const [tablePage, setTablePage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>();
 
-  const navigate = useNavigate();
+  const { isLoading, data } = useQuery({
+    queryKey: [tablePage, "ordinaryTable"],
+    queryFn: () =>
+      getOrdinaryPage({
+        pageNumber: tablePage,
+        pageSize: 20,
+      }),
+  });
 
   function openModal(data: OrdinaryPageResponseDataItem) {
     setIsOpen(true);
@@ -32,30 +39,6 @@ const OrdinaryPeoplePage = () => {
   function closeModal() {
     setIsOpen(false);
   }
-
-  const setInitialData = async () => {
-    const response = await getOrdinaryPage({
-      pageSize: 10,
-      pageNumber: 1,
-    });
-
-    if (response.status === 200) {
-      setTableData(response.data.data);
-      setTotalPage(response.data.totalPages);
-    }
-  };
-
-  const updateData = async () => {
-    const response = await getOrdinaryPage({
-      pageNumber: tablePage,
-      pageSize: 10,
-    });
-
-    if (response.status === 200) {
-      setTableData(response.data.data);
-      setTotalPage(response.data.totalPages);
-    }
-  };
 
   const getSingleOrdinary = async (ordinaryId: number) => {
     const response = await getOrdinary(ordinaryId);
@@ -78,13 +61,7 @@ const OrdinaryPeoplePage = () => {
     "Location",
   ];
 
-  useEffect(() => {
-    setInitialData();
-  }, []);
-
-  useEffect(() => {
-    updateData();
-  }, [tablePage]);
+  if (isLoading) return <Text>Yükleniyor!</Text>;
 
   return (
     <section className="section ordinary-section">
@@ -115,11 +92,11 @@ const OrdinaryPeoplePage = () => {
       <div className="content">
         <Table
           paginationData={
-            totalPage
+            data
               ? {
                   currentPage: tablePage,
                   setPage: setTablePage,
-                  totalPage: totalPage,
+                  totalPage: data.data.totalPages,
                 }
               : undefined
           }
@@ -130,7 +107,7 @@ const OrdinaryPeoplePage = () => {
                 {cell}
               </Text>
             )),
-            rows: tableData?.map((ordinary) => {
+            rows: data!.data!.data.map((ordinary) => {
               const cellTexts = [
                 ordinary.name,
                 ordinary.alternateName,
