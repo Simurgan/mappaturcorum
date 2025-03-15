@@ -134,11 +134,6 @@ const MapPage = () => {
     setMarkers(filteredData);
   }, [cityData, selectedMainFilter, selectedSubFilter]);
 
-  useEffect(() => {
-    console.log(markers);
-    console.log("markers");
-  }, [markers]);
-
   const getTableOrdinaryContent = async (cityId: number, page: number) => {
     const response = await getOrdinaryPage({
       pageSize: 20,
