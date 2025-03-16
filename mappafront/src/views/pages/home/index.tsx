@@ -16,7 +16,7 @@ const HomePage = () => {
               rgba(255, 249, 233, 0.650485) 98%,
               rgba(255, 249, 233, 0) 105%
               ), url(${require("@/assets/images/motif.jpg")})`,
-        backgroundRepeat: "no-repeat",
+        backgroundRepeat: "repeat-x",
         backgroundSize: "contain",
         backgroundPosition: "0 170%",
       }}

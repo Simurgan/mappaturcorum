@@ -46,7 +46,7 @@ const Header = () => {
           </NavLink>
           <NavLink to={Urls.Members} className={"nav-item"}>
             <Text tag="p" fw={500} fs={18} lh={125} color="burgundy">
-              Members
+              Team
             </Text>
           </NavLink>
           {/* <NavLink to={Urls.Publications} className={"nav-item"}>
