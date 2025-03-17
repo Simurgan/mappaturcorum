@@ -8,6 +8,7 @@ namespace Mappa.Dtos;
 public class WrittenSourceBaseDto
 {
     public int Id {get; set;}
+    [Required]
     public string Name {get; set;}
     
 }
@@ -17,8 +18,12 @@ public class WrittenSourceGeneralDto : WrittenSourceBaseDto
     public List<string>? AlternateNames {get; set;}
     public string? Author {get; set;}
     public List<int>? YearWritten {get; set;}
+    public int? ProbableYearWritten {get; set;}
     public GenreDto? Genre {get; set;}
     public LanguageDto? Language {get; set;}
+    public List<LanguageDto>? TranslatedLanguages {get; set;}
+    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}
+    public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
 }
 
 public class WrittenSourceDetailDto : WrittenSourceGeneralDto
@@ -79,23 +84,29 @@ public class WrittenSourceUpdateRequest
 
 public class WrittenSourceFilterDto
 {
-    public string? Name {get; set;}
+    // Name or YearWritten
+    public string SortingField {get; set;} = "Name";
+    public bool IsDescendingOrder {get; set;} = false;
     public List<int>? Genre {get; set;}
-    public List<int>? YearWritten {get; set;}
-    public string? Author {get; set;}
+    // public List<int>? YearWritten {get; set;}
+    // public string? Author {get; set;}
     public List<int>? Language {get; set;}
-    public List<int>? OrdinaryPersons {get; set;}
-    public List<int>? UnordinaryPersons {get; set;}
+    public List<int>? TranslatedLanguages {get; set;}
+    // public List<int>? OrdinaryPersons {get; set;}
+    // public List<int>? UnordinaryPersons {get; set;}
     public List<int>? CitiesMentionedByTheSource {get; set;}
     public List<int>? CitiesWhereSourcesAreWritten {get; set;}
 }
 
+public class WrittenSourceSearchDto
+{
+    public string? Name {get; set;}
+}
+
 public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto 
 {
-    public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;}
-    public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
-    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}
-    public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
+    // public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;}
+    // public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
 }
 
 public class WrittenSourceGraphDto : WrittenSourceBaseDto {}

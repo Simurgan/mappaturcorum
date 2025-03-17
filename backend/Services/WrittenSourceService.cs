@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Mappa.Services;
 
@@ -390,59 +391,65 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         if(filter != null)
         {
-            if(filter.Name != null)
-            {
-                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
-                query = query.Where(e =>  e.Name.ToLower().Replace(" ", "").Replace("\t", "").
-                    Contains(checkedString) || ((e.AlternateNames != null)
-                    && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "").
-                    Contains(checkedString))));
-            }
+            // if(filter.Name != null)
+            // {
+            //     var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+            //     query = query.Where(e =>  e.Name.ToLower().Replace(" ", "").Replace("\t", "").
+            //         Contains(checkedString) || ((e.AlternateNames != null)
+            //         && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "").
+            //         Contains(checkedString))));
+            // }
 
             if(filter.Genre != null && filter.Genre.Count != 0) 
                 query = query.Where(op => op.Genre != null && filter.Genre.Contains(op.Genre.Id));
 
-            if(filter.YearWritten != null && filter.YearWritten.Count != 0)
-            {
-                if(filter.YearWritten.Count == 1)
-                    query = query.Where(op => op.ProbableYearWritten != null && 
-                        (op.ProbableYearWritten >= filter.YearWritten[0]));
-                else // For case 2, further elements are ignored
-                    query = query.Where(op => op.ProbableYearWritten != null && 
-                        (op.ProbableYearWritten >= filter.YearWritten[0]) && 
-                        (op.ProbableYearWritten <= filter.YearWritten[1]));
-            }
+            // if(filter.YearWritten != null && filter.YearWritten.Count != 0)
+            // {
+            //     if(filter.YearWritten.Count == 1)
+            //         query = query.Where(op => op.ProbableYearWritten != null && 
+            //             (op.ProbableYearWritten >= filter.YearWritten[0]));
+            //     else // For case 2, further elements are ignored
+            //         query = query.Where(op => op.ProbableYearWritten != null && 
+            //             (op.ProbableYearWritten >= filter.YearWritten[0]) && 
+            //             (op.ProbableYearWritten <= filter.YearWritten[1]));
+            // }
 
-            if(filter.Author != null)
-            {
-                var checkedString = filter.Author.ToLower().Replace(" ", "").Replace(" ","");
-                query = query.Where(op => op.Author != null && (op.Author.ToLower()
-                    .Replace(" ", "").Replace(" ","").Contains(checkedString)));
-            }
+            // if(filter.Author != null)
+            // {
+            //     var checkedString = filter.Author.ToLower().Replace(" ", "").Replace(" ","");
+            //     query = query.Where(op => op.Author != null && (op.Author.ToLower()
+            //         .Replace(" ", "").Replace(" ","").Contains(checkedString)));
+            // }
                 
             
             if(filter.Language != null && filter.Language.Count != 0)
-                query = query.Where(op => op.Language != null && filter.Language.Contains(op.Language.Id));
+                query = query.Where(op => op.Language != null && 
+                    filter.Language.Contains(op.Language.Id));
+
+            if(filter.TranslatedLanguages != null && filter.TranslatedLanguages.Count != 0)
+                query = query.Where(e => e.TranslatedLanguages != null &&
+                    filter.TranslatedLanguages.Any(tl => e.TranslatedLanguages
+                    .Select(etl => etl.Id).Contains(tl)));
 
             innerItems = query.AsEnumerable();
         
-            if(filter.OrdinaryPersons != null && filter.OrdinaryPersons.Count != 0)
-            {
-                innerItems = innerItems
-                    .Where(op => (op.OrdinaryPersons != null) 
-                    && filter.OrdinaryPersons.
-                        Any(fs => op.OrdinaryPersons.Select(s => s.Id).Contains(fs))
-                        );
-            }
+            // if(filter.OrdinaryPersons != null && filter.OrdinaryPersons.Count != 0)
+            // {
+            //     innerItems = innerItems
+            //         .Where(op => (op.OrdinaryPersons != null) 
+            //         && filter.OrdinaryPersons.
+            //             Any(fs => op.OrdinaryPersons.Select(s => s.Id).Contains(fs))
+            //             );
+            // }
         
-            if(filter.UnordinaryPersons != null && filter.UnordinaryPersons.Count != 0)
-            {
-                innerItems = innerItems
-                    .Where(op => (op.UnordinaryPersons != null) 
-                    && filter.UnordinaryPersons.
-                        Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
-                        );
-            }
+            // if(filter.UnordinaryPersons != null && filter.UnordinaryPersons.Count != 0)
+            // {
+            //     innerItems = innerItems
+            //         .Where(op => (op.UnordinaryPersons != null) 
+            //         && filter.UnordinaryPersons.
+            //             Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
+            //             );
+            // }
 
             if (filter.CitiesMentionedByTheSource != null && filter.CitiesMentionedByTheSource.Count != 0)
             {
@@ -465,24 +472,54 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         int totalCount = innerItems.Count();
 
-        var items = innerItems
+        var itemsPreOrder = innerItems
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(p => new WrittenSourceFilterResponseDto
             {
                 Id = p.Id,
+                Name = p.Name,
                 AlternateNames = p.AlternateNames,
                 Author = p.Author,
                 YearWritten = p.YearWritten,
+                ProbableYearWritten = p.ProbableYearWritten,
                 Genre = _mapper.Map<GenreDto>(p.Genre),
                 Language = _mapper.Map<LanguageDto>(p.Language),
-                OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
-                UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
+                TranslatedLanguages = _mapper.Map<List<LanguageDto>>(p.TranslatedLanguages),
+                // OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
+                // UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
                 CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
                 CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
-            })
-            .ToList();
+            });
+
+        List<WrittenSourceFilterResponseDto> items;
+
+        if(filter == null)
+        {
+            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+        }
+        else if(filter.SortingField == "Name" && !filter.IsDescendingOrder)
+        {
+            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+        }
+        else if(filter.SortingField == "Name" && filter.IsDescendingOrder)
+        {
+            items = itemsPreOrder.OrderByDescending(e => e.Name).ToList();
+        }
+        else if(filter.SortingField == "YearWritten" && !filter.IsDescendingOrder)
+        {
+            items = itemsPreOrder.OrderBy(e => e.ProbableYearWritten).ToList();
+        }
+        else if(filter.SortingField == "YearWritten" && filter.IsDescendingOrder)
+        {
+            items = itemsPreOrder.OrderByDescending(e => e.ProbableYearWritten).ToList();
+        }
+        else
+        {
+            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+        }
+            
 
         return new PaginationResponse<WrittenSourceFilterResponseDto>
         {
