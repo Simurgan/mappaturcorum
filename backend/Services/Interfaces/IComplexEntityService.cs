@@ -3,7 +3,8 @@ using Mappa.Dtos;
 namespace Mappa.Services;
 
 public interface IComplexEntityService<TEntity, TGeneralDto, TDetailDto, 
-    TCreateRequest, TUpdateRequest, TFilterDto, TFilterResponseDto, TGraphDto>
+    TCreateRequest, TUpdateRequest, TFilterDto, TFilterResponseDto, TGraphDto,
+    TSearchDto, TSearchResponseDto>
 {
     Task<IEnumerable<TGeneralDto>> GetAllAsync();
     Task<TDetailDto> GetByIdAsync(int id);
@@ -11,6 +12,8 @@ public interface IComplexEntityService<TEntity, TGeneralDto, TDetailDto,
     Task<TDetailDto> UpdateAsync(int id, TUpdateRequest request);
     Task<bool> DeleteAsync(int id);
     Task<PaginationResponse<TFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize,
-        TFilterDto filter);
+        TFilterDto filter, string sortingField, bool isDescendingOrder);
     Task<IEnumerable<TGraphDto>> GetAllForGraphAsync();
+    Task<PaginationResponse<TSearchResponseDto>> GetSearchAsync(int pageNumber, 
+        int pageSize, TSearchDto search, string sortingField, bool isDescendingOrder);
 }

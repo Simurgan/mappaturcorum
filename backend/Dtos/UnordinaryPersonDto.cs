@@ -108,3 +108,7 @@ public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto
     public List<int>? InteractionsWithUnordinaryB{get; set;}
     public List<int>? InteractionsWithOrdinary{get; set;}
 }
+
+public class UnordinaryPersonSearchDto {}
+
+public class UnordinaryPersonSearchResponseDto {}

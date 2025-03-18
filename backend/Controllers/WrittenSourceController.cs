@@ -3,6 +3,7 @@ using Mappa.Services;
 using Mappa.Dtos;
 using Mappa.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mappa.Controllers;
 
@@ -12,13 +13,14 @@ public class WrittenSourceController : ControllerBase
 {
     private readonly IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, 
         WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest,
-        WrittenSourceFilterDto, WrittenSourceFilterResponseDto, WrittenSourceGraphDto>
+        WrittenSourceFilterDto, WrittenSourceFilterResponseDto, WrittenSourceGraphDto,
+        WrittenSourceSearchDto, WrittenSourceSearchResponseDto>
         _service;
 
     public WrittenSourceController(IComplexEntityService<WrittenSource, 
         WrittenSourceGeneralDto,WrittenSourceDetailDto, WrittenSourceCreateRequest, 
         WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
-        WrittenSourceGraphDto> 
+        WrittenSourceGraphDto, WrittenSourceSearchDto, WrittenSourceSearchResponseDto> 
         service)
     {
         _service = service;
@@ -40,7 +42,8 @@ public class WrittenSourceController : ControllerBase
 
     [HttpPost]
     [Route("page")]
-    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<WrittenSourceFilterDto> filter)
+    public async Task<IActionResult> GetPage([FromBody] 
+        PaginationRequest<WrittenSourceFilterDto> filter)
     {
         if (filter.PageNumber < 1 || filter.PageSize < 1)
         {
@@ -50,7 +53,7 @@ public class WrittenSourceController : ControllerBase
         try
         {
             var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
-                filter.PageSize, filter.Filter);
+                filter.PageSize, filter.Filter, filter.SortingField, filter.IsDescendingOrder);
 
             return Ok(paginatedResult);
         }
@@ -137,5 +140,32 @@ public class WrittenSourceController : ControllerBase
     //         return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
     //     }
     // }
+
+    [HttpPost]
+    [Route("search")]
+    public async Task<IActionResult> GetSearch([FromBody] 
+        PaginationRequest<WrittenSourceSearchDto> search)
+    {
+        if (search.PageNumber < 1 || search.PageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0.");
+        }
+        
+        try
+        {
+            var paginatedResult = await _service.GetSearchAsync(search.PageNumber, 
+                search.PageSize, search.Filter, search.SortingField, search.IsDescendingOrder);
+
+            return Ok(paginatedResult);
+        }
+        catch(ArgumentException ex) when (ex.Message.Contains($"Filter is not provided."))
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+        }
+    }
 
 }

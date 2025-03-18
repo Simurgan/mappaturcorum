@@ -12,7 +12,7 @@ namespace Mappa.Services;
 public class WrittenSourceService : IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
     WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
-    WrittenSourceGraphDto>
+    WrittenSourceGraphDto, WrittenSourceSearchDto, WrittenSourceSearchResponseDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -71,7 +71,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             LibraryInformation = entity.LibraryInformation,
             OtherInformation = entity.OtherInformation,
             RemarkableWorksOnTheBook = entity.RemarkableWorksOnTheBook,
-            Image = entity.Image,
+            // Image = entity.Image,
             TranslatedLanguages = _mapper.Map<List<LanguageDto>>(entity.TranslatedLanguages),
             CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(entity.CitiesMentionedByTheSource),
             CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(entity.CitiesWhereSourcesAreWritten),
@@ -184,7 +184,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             LibraryInformation = writtenSource.LibraryInformation,
             OtherInformation = writtenSource.OtherInformation,
             RemarkableWorksOnTheBook = writtenSource.RemarkableWorksOnTheBook,
-            Image = writtenSource.Image,
+            // Image = writtenSource.Image,
             TranslatedLanguages = _mapper.Map<List<LanguageDto>>(writtenSource.TranslatedLanguages),
             CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesMentionedByTheSource),
             CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesWhereSourcesAreWritten)
@@ -336,7 +336,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             LibraryInformation = writtenSource.LibraryInformation,
             OtherInformation = writtenSource.OtherInformation,
             RemarkableWorksOnTheBook = writtenSource.RemarkableWorksOnTheBook,
-            Image = writtenSource.Image,
+            // Image = writtenSource.Image,
             TranslatedLanguages = _mapper.Map<List<LanguageDto>>(writtenSource.TranslatedLanguages),
             CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesMentionedByTheSource),
             CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(writtenSource.CitiesWhereSourcesAreWritten)
@@ -376,13 +376,15 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
     }
     
     public async Task<PaginationResponse<WrittenSourceFilterResponseDto>> GetPageAsync(
-        int pageNumber, int pageSize, WrittenSourceFilterDto filter)
+        int pageNumber, int pageSize, WrittenSourceFilterDto filter, string sortingField,
+        bool isDescendingOrder)
     {
         var query = _dbContext.Set<WrittenSource>()
             .Include(op => op.Genre)
             .Include(op => op.Language)
-            .Include(op => op.OrdinaryPersons)
-            .Include(op => op.UnordinaryPersons)
+            .Include(op => op.TranslatedLanguages)
+            // .Include(op => op.OrdinaryPersons)
+            // .Include(op => op.UnordinaryPersons)
             .Include(op => op.CitiesMentionedByTheSource)
             .Include(op => op.CitiesWhereSourcesAreWritten)
             .AsQueryable();
@@ -472,8 +474,29 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         int totalCount = innerItems.Count();
 
-        var itemsPreOrder = innerItems
-            .OrderBy(p => p.Id)  // Sort by Id (or other field)
+
+        if(sortingField == "Name" && !isDescendingOrder)
+        {
+            innerItems = innerItems.OrderBy(e => e.Name);
+        }
+        else if(sortingField == "Name" && isDescendingOrder)
+        {
+            innerItems = innerItems.OrderByDescending(e => e.Name);
+        }
+        else if(sortingField == "YearWritten" && !isDescendingOrder)
+        {
+            innerItems = innerItems.OrderBy(e => e.ProbableYearWritten);
+        }
+        else if(sortingField == "YearWritten" && isDescendingOrder)
+        {
+            innerItems = innerItems.OrderByDescending(e => e.ProbableYearWritten);
+        }
+        else
+        {
+            innerItems = innerItems.OrderBy(e => e.Name);
+        }
+
+        List<WrittenSourceFilterResponseDto> items = innerItems
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(p => new WrittenSourceFilterResponseDto
@@ -491,35 +514,7 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                 // UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
                 CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
                 CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
-            });
-
-        List<WrittenSourceFilterResponseDto> items;
-
-        if(filter == null)
-        {
-            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
-        }
-        else if(filter.SortingField == "Name" && !filter.IsDescendingOrder)
-        {
-            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
-        }
-        else if(filter.SortingField == "Name" && filter.IsDescendingOrder)
-        {
-            items = itemsPreOrder.OrderByDescending(e => e.Name).ToList();
-        }
-        else if(filter.SortingField == "YearWritten" && !filter.IsDescendingOrder)
-        {
-            items = itemsPreOrder.OrderBy(e => e.ProbableYearWritten).ToList();
-        }
-        else if(filter.SortingField == "YearWritten" && filter.IsDescendingOrder)
-        {
-            items = itemsPreOrder.OrderByDescending(e => e.ProbableYearWritten).ToList();
-        }
-        else
-        {
-            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
-        }
-            
+            }).ToList();
 
         return new PaginationResponse<WrittenSourceFilterResponseDto>
         {
@@ -533,5 +528,91 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
     public Task<IEnumerable<WrittenSourceGraphDto>> GetAllForGraphAsync()
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<PaginationResponse<WrittenSourceSearchResponseDto>> GetSearchAsync(
+        int pageNumber, int pageSize, WrittenSourceSearchDto search, 
+        string sortingField, bool isDescendingOrder)
+    {
+        var query = _dbContext.Set<WrittenSource>()
+            .Include(op => op.Genre)
+            .Include(op => op.Language)
+            .Include(op => op.TranslatedLanguages)
+            // .Include(op => op.OrdinaryPersons)
+            // .Include(op => op.UnordinaryPersons)
+            .Include(op => op.CitiesMentionedByTheSource)
+            .Include(op => op.CitiesWhereSourcesAreWritten)
+            .AsQueryable();
+
+        IEnumerable<WrittenSource> innerItems = query.AsEnumerable();
+
+        if(search != null)
+        {
+            if(search.Name != null)
+            {
+                var checkedString = search.Name.ToLower().Replace(" ", "").Replace("\t", "")
+                    .Replace("\n","");
+                query = query.Where(e =>  e.Name.ToLower().Replace(" ", "").Replace("\t", "")
+                    .Replace("\n","").Contains(checkedString) || ((e.AlternateNames != null)
+                    && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "")
+                    .Replace("\n","").Contains(checkedString))) || (e.Author != null && 
+                    e.Author.ToLower().Replace(" ", "").Replace("\t", "").Replace("\n","")
+                    .Contains(checkedString)));
+            }
+
+            innerItems = query.AsEnumerable();
+        }
+
+        int totalCount = innerItems.Count();
+
+        if(sortingField == "Name" && !isDescendingOrder)
+        {
+            innerItems = innerItems.OrderBy(e => e.Name);
+        }
+        else if(sortingField == "Name" && isDescendingOrder)
+        {
+            innerItems = innerItems.OrderByDescending(e => e.Name);
+        }
+        else if(sortingField == "YearWritten" && !isDescendingOrder)
+        {
+            innerItems = innerItems.OrderBy(e => e.ProbableYearWritten);
+        }
+        else if(sortingField == "YearWritten" && isDescendingOrder)
+        {
+            innerItems = innerItems.OrderByDescending(e => e.ProbableYearWritten);
+        }
+        else
+        {
+            innerItems = innerItems.OrderBy(e => e.Name);
+        }
+
+        List<WrittenSourceSearchResponseDto> items = innerItems
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new WrittenSourceSearchResponseDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                AlternateNames = p.AlternateNames,
+                Author = p.Author,
+                YearWritten = p.YearWritten,
+                ProbableYearWritten = p.ProbableYearWritten,
+                Genre = _mapper.Map<GenreDto>(p.Genre),
+                Language = _mapper.Map<LanguageDto>(p.Language),
+                TranslatedLanguages = _mapper.Map<List<LanguageDto>>(p.TranslatedLanguages),
+                // OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
+                // UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
+                CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
+                CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
+            }).ToList();
+
+
+        return new PaginationResponse<WrittenSourceSearchResponseDto>
+        {
+            Data = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+        };
     }
 }

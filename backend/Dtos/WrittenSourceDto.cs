@@ -9,37 +9,33 @@ public class WrittenSourceBaseDto
 {
     public int Id {get; set;}
     [Required]
-    public string Name {get; set;}
+    public string Name {get; set;}//
     
 }
 
 public class WrittenSourceGeneralDto : WrittenSourceBaseDto
 {
-    public List<string>? AlternateNames {get; set;}
-    public string? Author {get; set;}
-    public List<int>? YearWritten {get; set;}
+    public List<string>? AlternateNames {get; set;}//
+    public string? Author {get; set;}//
+    public List<int>? YearWritten {get; set;}//
     public int? ProbableYearWritten {get; set;}
-    public GenreDto? Genre {get; set;}
-    public LanguageDto? Language {get; set;}
-    public List<LanguageDto>? TranslatedLanguages {get; set;}
-    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}
-    public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
+    public GenreDto? Genre {get; set;}//
+    public LanguageDto? Language {get; set;}//
+    public List<LanguageDto>? TranslatedLanguages {get; set;}//
+    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}//
+    public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}//
 }
 
 public class WrittenSourceDetailDto : WrittenSourceGeneralDto
 {
-    public string? KnownCopies {get; set;}
-    public string? SurvivedCopies {get; set;}
-    public string? LibraryInformation {get; set;}
-    public string? OtherInformation {get; set;}
-    public string? RemarkableWorksOnTheBook {get; set;}
-    public string? Image {get; set;}
-    public List<LanguageDto>? TranslatedLanguages {get; set;}
-    public List<CityBaseDto>? CitiesMentionedByTheSource {get; set;}
-    public List<CityBaseDto>? CitiesWhereSourcesAreWritten {get; set;}
+    public string? KnownCopies {get; set;}//
+    public string? SurvivedCopies {get; set;}//
+    public string? LibraryInformation {get; set;}//
+    public string? OtherInformation {get; set;}//
+    public string? RemarkableWorksOnTheBook {get; set;}//
+    //public string? Image {get; set;}
     public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;} 
-    public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;} 
-    public int? ProbableYearWritten {get; set;}
+    public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
 }
 
 public class WrittenSourceCreateRequest
@@ -84,9 +80,6 @@ public class WrittenSourceUpdateRequest
 
 public class WrittenSourceFilterDto
 {
-    // Name or YearWritten
-    public string SortingField {get; set;} = "Name";
-    public bool IsDescendingOrder {get; set;} = false;
     public List<int>? Genre {get; set;}
     // public List<int>? YearWritten {get; set;}
     // public string? Author {get; set;}
@@ -108,5 +101,7 @@ public class WrittenSourceFilterResponseDto : WrittenSourceGeneralDto
     // public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;}
     // public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
 }
+
+public class WrittenSourceSearchResponseDto: WrittenSourceGeneralDto {}
 
 public class WrittenSourceGraphDto : WrittenSourceBaseDto {}

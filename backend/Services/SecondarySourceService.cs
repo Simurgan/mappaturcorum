@@ -10,7 +10,7 @@ namespace Mappa.Services;
 public class SecondarySourceService : IComplexEntityService<SecondarySource, 
     SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
     SecondarySourceUpdateRequest, SecondarySourceFilterDto, SecondarySourceFilterResponseDto,
-    SecondarySourceGraphDto>
+    SecondarySourceGraphDto, SecondarySourceSearchDto, SecondarySourceSearchResponseDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -239,12 +239,17 @@ public class SecondarySourceService : IComplexEntityService<SecondarySource,
         return true;
     }
 
-    public Task<PaginationResponse<SecondarySourceFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize, SecondarySourceFilterDto filter)
+    public Task<IEnumerable<SecondarySourceGraphDto>> GetAllForGraphAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<SecondarySourceGraphDto>> GetAllForGraphAsync()
+    public Task<PaginationResponse<SecondarySourceFilterResponseDto>> GetPageAsync(int pageNumber, int pageSize, SecondarySourceFilterDto filter, string sortingField, bool isDescendingOrder)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<PaginationResponse<SecondarySourceSearchResponseDto>> GetSearchAsync(int pageNumber, int pageSize, SecondarySourceSearchDto search, string sortingField, bool isDescendingOrder)
     {
         throw new NotImplementedException();
     }
