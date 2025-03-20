@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Urls } from "@/routers/routes";
 import Layout from "@/views/layout/layout";
 import ToolLayout from "@/views/layout/tool-layout";
-import MapPage from "@/views/pages/map";
 import SocialNetworkPage from "@/views/pages/social-network";
 import HomePage from "@/views/pages/home";
 import AboutPage from "@/views/pages/about";
@@ -14,6 +13,8 @@ import SourcesPage from "@/views/pages/sources";
 import MembersPage from "@/views/pages/members";
 import ProjectHistoryPage from "@/views/pages/project-history";
 import CollaborationsPage from "@/views/pages/collaborations";
+import MapTest from "@/views/pages/map-test";
+import MapPage from "@/views/pages/map";
 // import PublicationsPage from "@/views/pages/publications";
 
 const MainRouter = () => {
@@ -51,6 +52,7 @@ const Router = () => {
       </Route>
       <Route element={<ToolLayout />}>
         <Route element={<MapPage />} path={Urls.Map} />
+        <Route element={<MapTest />} path={Urls.MapTest} />
         <Route element={<SocialNetworkPage />} path={Urls.SocialNetwork} />
       </Route>
     </Routes>

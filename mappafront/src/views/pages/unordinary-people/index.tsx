@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import "./style.scss";
 import ReactModal from "react-modal";
 
-const UnunordinaryPeoplePage = () => {
+const UnordinaryPeoplePage = () => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [selectedPersonId, setSelectedPersonId] = useState<number>();
   const [modalData, setModalData] = useState<UnordinaryPersonResponseType>();
@@ -34,7 +34,7 @@ const UnunordinaryPeoplePage = () => {
 
   const setInitialData = async () => {
     const response = await getUnordinaryPage({
-      pageSize: 10,
+      pageSize: 20,
       pageNumber: 1,
     });
 
@@ -60,7 +60,7 @@ const UnunordinaryPeoplePage = () => {
   const updateData = async () => {
     const response = await getUnordinaryPage({
       pageNumber: tablePage,
-      pageSize: 10,
+      pageSize: 20,
     });
 
     if (response.status === 200) {
@@ -81,12 +81,12 @@ const UnunordinaryPeoplePage = () => {
 
   return (
     <section className="section unordinary-section">
-      <div className="container">
-        <div className="page-head">
+      <div className="page-head">
+        <div className="container">
           <Text fs={36} fw={700} lh={125} color="papirus">
-            Unordinary People
+            Notable People
           </Text>
-          {/* <div className="page-head-actions-container">
+          <div className="page-head-actions-container">
             <Button classNames="action-button">
               <Text fs={20} fw={500} lh={125} color="burgundy">
                 Map
@@ -98,48 +98,51 @@ const UnunordinaryPeoplePage = () => {
               </Text>
             </Button>
             <input placeholder="Search on map.." className="action-input" />
-          </div> */}
+          </div>
         </div>
       </div>
-      <div className="content">
-        <Table
-          paginationData={
-            totalPage
-              ? {
-                  currentPage: tablePage,
-                  setPage: setTablePage,
-                  totalPage: totalPage,
-                }
-              : undefined
-          }
-          tableData={{
-            hasRowHover: true,
-            headers: headerData.map((cell) => (
-              <Text fs={14} fw={500} lh={125} color="burgundy">
-                {cell}
-              </Text>
-            )),
-            rows: tableData?.map((unordinary) => {
-              const cellTexts = [
-                unordinary.name,
-                unordinary.alternateName,
-                /* unordinary.gender || */
-                unordinary.ethnicity?.name,
-                unordinary.religion?.name,
-                /* unordinary.profession.name || */
-              ];
-              return {
-                cells: cellTexts.map((cellText) => (
-                  <Text fs={12} fw={500} lh={125} color="dark-gray">
-                    {cellText! || "-"}
-                  </Text>
-                )),
-                onClick: () => openModal(unordinary.id),
-              };
-            }),
-          }}
-        />
+      <div className="container">
+        <div className="content">
+          <Table
+            paginationData={
+              totalPage
+                ? {
+                    currentPage: tablePage,
+                    setPage: setTablePage,
+                    totalPage: totalPage,
+                  }
+                : undefined
+            }
+            tableData={{
+              hasRowHover: true,
+              headers: headerData.map((cell) => (
+                <Text fs={14} fw={500} lh={125} color="burgundy">
+                  {cell}
+                </Text>
+              )),
+              rows: tableData?.map((unordinary) => {
+                const cellTexts = [
+                  unordinary.name,
+                  unordinary.alternateName,
+                  /* unordinary.gender || */
+                  unordinary.ethnicity?.name,
+                  unordinary.religion?.name,
+                  /* unordinary.profession.name || */
+                ];
+                return {
+                  cells: cellTexts.map((cellText) => (
+                    <Text fs={12} fw={500} lh={125} color="dark-gray">
+                      {cellText! || "-"}
+                    </Text>
+                  )),
+                  onClick: () => openModal(unordinary.id),
+                };
+              }),
+            }}
+          />
+        </div>
       </div>
+
       <ReactModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -150,9 +153,7 @@ const UnunordinaryPeoplePage = () => {
         <div className="modal-content">
           {/* Kapatma Butonu */}
           <Button onClick={closeModal} classNames="modal-close-button">
-            <Text fs={36} fw={400} color="burgundy">
-              X
-            </Text>
+            <img src={require("@/assets/icons/close-icon.svg")} />
           </Button>
 
           {/* Başlık */}
@@ -208,4 +209,4 @@ const UnunordinaryPeoplePage = () => {
     </section>
   );
 };
-export default UnunordinaryPeoplePage;
+export default UnordinaryPeoplePage;

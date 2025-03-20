@@ -3,20 +3,13 @@
 
 section.section.unordinary-section {
   padding-top: 0;
-  .container {
-    padding: 0;
-    margin: 0;
-    max-width: 100%;
-    width: 100%;
-
-    .page-head {
-      width: 100%;
+  .page-head {
+    background-color: $color-primary;
+    .container {
       height: 1.92rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-left: 2rem;
-      background-color: $color-primary;
       gap: 0.4rem;
 
       .page-head-actions-container {
@@ -44,9 +37,16 @@ section.section.unordinary-section {
           color: $color-secondary;
           background-color: transparent;
         }
+        .action-input::placeholder {
+          color: #ededed;
+        }
       }
     }
+  }
 
+  .container {
+    display: flex;
+    flex-direction: column;
     .contect {
       width: 100%;
       height: 100%;
