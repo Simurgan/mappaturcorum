@@ -1,5 +1,5 @@
 import { Member } from "@/models/members";
-import Text from "../text";
+import Text from "@/views/components/text";
 
 const socialIcons: { [key: string]: any } = {
   linkedin: require("@/assets/icons/linkedin-logo.svg"),

@@ -4,7 +4,7 @@ import Text from "@/views/components/text";
 import { useEffect } from "react";
 import Button from "@/views/components/button";
 import { Teams } from "@/static/members";
-import MemberCard from "@/views/components/member-card";
+import MemberCard from "./member-card";
 
 const MembersPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
