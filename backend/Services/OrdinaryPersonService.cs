@@ -11,10 +11,9 @@ using System.Diagnostics;
 namespace Mappa.Services;
 
 public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson, 
-    OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
-    OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto,
-    OrdinaryPersonFilterResponseDto, OrdinaryPersonGraphDto, OrdinaryPersonSearchDto,
-    OrdinaryPersonSearchResponseDto>
+    OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, 
+    OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto,
+    OrdinaryPersonFilterResponseDto, OrdinaryPersonGraphDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -517,8 +516,7 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
     }
 
     public async Task<PaginationResponse<OrdinaryPersonFilterResponseDto>> GetPageAsync(
-        int pageNumber, int pageSize, OrdinaryPersonFilterDto? filter, string sortingField,
-        bool isDescendingOrder)
+        int pageNumber, int pageSize, OrdinaryPersonFilterDto? filter)
     {
         var query = _dbContext.Set<OrdinaryPerson>()
             .Include(op => op.Religion).Include(op => op.Ethnicity)
@@ -635,10 +633,5 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             })
             .OrderBy(op => op.Id)
             .ToListAsync();
-    }
-
-    public Task<PaginationResponse<OrdinaryPersonSearchResponseDto>> GetSearchAsync(int pageNumber, int pageSize, OrdinaryPersonSearchDto search, string sortingField, bool isDescendingOrder)
-    {
-        throw new NotImplementedException();
     }
 }

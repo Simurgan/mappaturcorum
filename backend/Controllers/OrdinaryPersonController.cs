@@ -12,15 +12,14 @@ public class OrdinaryPersonController : ControllerBase
 {
     private readonly IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, 
         OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
-        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, 
-        OrdinaryPersonFilterResponseDto, OrdinaryPersonGraphDto,
-        OrdinaryPersonSearchDto, OrdinaryPersonSearchResponseDto>
+        OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
+        OrdinaryPersonGraphDto>
         _service;
 
     public OrdinaryPersonController(IComplexEntityService<OrdinaryPerson, 
         OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
         OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
-        OrdinaryPersonGraphDto, OrdinaryPersonSearchDto, OrdinaryPersonSearchResponseDto> 
+        OrdinaryPersonGraphDto> 
         service)
     {
         _service = service;
@@ -67,7 +66,7 @@ public class OrdinaryPersonController : ControllerBase
         try
         {
             var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
-                filter.PageSize, filter.Filter, filter.SortingField, filter.IsDescendingOrder);
+                filter.PageSize, filter.Filter);
 
             return Ok(paginatedResult);
         }

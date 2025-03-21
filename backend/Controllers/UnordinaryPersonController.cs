@@ -13,14 +13,13 @@ public class UnordinaryPersonController : ControllerBase
     private readonly IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, 
         UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
         UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
-        UnordinaryPersonGraphDto, UnordinaryPersonSearchDto, UnordinaryPersonSearchResponseDto>
+        UnordinaryPersonGraphDto>
         _service;
 
     public UnordinaryPersonController(IComplexEntityService<UnordinaryPerson, 
         UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
         UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest,
-        UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto, 
-        UnordinaryPersonGraphDto, UnordinaryPersonSearchDto, UnordinaryPersonSearchResponseDto> 
+        UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto> 
         service)
     {
         _service = service;
@@ -67,7 +66,7 @@ public class UnordinaryPersonController : ControllerBase
         try
         {
             var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
-                filter.PageSize, filter.Filter, filter.SortingField, filter.IsDescendingOrder);
+                filter.PageSize, filter.Filter);
 
             return Ok(paginatedResult);
         }

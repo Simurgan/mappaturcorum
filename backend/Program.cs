@@ -80,23 +80,19 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
     WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
-    WrittenSourceGraphDto, WrittenSourceSearchDto, WrittenSourceSearchResponseDto>, 
-    WrittenSourceService>();
+    WrittenSourceGraphDto>, WrittenSourceService>();
 builder.Services.AddScoped<IComplexEntityService<SecondarySource, 
     SecondarySourceGeneralDto, SecondarySourceDetailDto, SecondarySourceCreateRequest, 
     SecondarySourceUpdateRequest, SecondarySourceFilterDto, SecondarySourceFilterResponseDto,
-    SecondarySourceGraphDto, SecondarySourceSearchDto, SecondarySourceSearchResponseDto>, 
-    SecondarySourceService>();
+    SecondarySourceGraphDto>, SecondarySourceService>();
 builder.Services.AddScoped<IComplexEntityService<OrdinaryPerson, 
     OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
     OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto, 
-    OrdinaryPersonGraphDto, OrdinaryPersonSearchDto, OrdinaryPersonSearchResponseDto>, 
-    OrdinaryPersonService>();
+    OrdinaryPersonGraphDto>, OrdinaryPersonService>();
 builder.Services.AddScoped<IComplexEntityService<UnordinaryPerson, 
     UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
     UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto,
-    UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto, 
-    UnordinaryPersonSearchDto, UnordinaryPersonSearchResponseDto>, UnordinaryPersonService>();
+    UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto>, UnordinaryPersonService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
