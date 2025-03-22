@@ -52,6 +52,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             .Include(ws => ws.InteractionsWithOrdinary)
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
+            .Include(ws => ws.BirthPlace)
             .Include(ws => ws.InteractionsWithUnordinaryA)
             .Include(ws => ws.InteractionsWithUnordinaryB)
             .Include(ws => ws.Sources)
@@ -60,25 +61,27 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         if (entity == null)
             throw new ArgumentException($"Entity with ID {id} not found.");
 
+        var interactionsWithUnordinaryMerged = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryA);
+        interactionsWithUnordinaryMerged.AddRange(_mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryB));
+
         return new UnordinaryPersonDetailDto
         {
             Id = entity.Id,
             Name = entity.Name,
             Religion = _mapper.Map<ReligionDto>(entity.Religion),
             Ethnicity = _mapper.Map<EthnicityDto>(entity.Ethnicity),
+            BirthYear = entity.BirthYear,
             DeathYear = entity.DeathYear,
             DeathPlace = _mapper.Map<CityBaseDto>(entity.DeathPlace),
             InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.InteractionsWithOrdinary),
             AlternateName = entity.AlternateName,
-            BirthYear = entity.BirthYear,
             ProbableBirthYear = entity.ProbableBirthYear,
             ProbableDeathYear = entity.ProbableDeathYear,
             Description = entity.Description,
             Profession = _mapper.Map<ProfessionDto>(entity.Profession),
             Gender = _mapper.Map<GenderDto>(entity.Gender),
             BirthPlace = _mapper.Map<CityBaseDto>(entity.BirthPlace),
-            InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryA),
-            InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryB),
+            InteractionsWithUnordinary = interactionsWithUnordinaryMerged,
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(entity.Sources),
             Depiction = entity.Depiction,
         };
@@ -197,6 +200,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         _dbContext.Set<UnordinaryPerson>().Add(unordinaryPerson);
         await _dbContext.SaveChangesAsync();
 
+        var interactionsWithUnordinaryMerged = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA);
+        interactionsWithUnordinaryMerged.AddRange(_mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB));
+
         return new UnordinaryPersonDetailDto
         {
             Id = unordinaryPerson.Id,
@@ -213,8 +219,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
             InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithOrdinary),
-            InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA),
-            InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
+            InteractionsWithUnordinary = interactionsWithUnordinaryMerged,
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
             Depiction = unordinaryPerson.Depiction,
@@ -377,6 +382,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
 
         await _dbContext.SaveChangesAsync();
 
+        var interactionsWithUnordinaryMerged = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA);
+        interactionsWithUnordinaryMerged.AddRange(_mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB));
+
         return new UnordinaryPersonDetailDto
         {
             Id = unordinaryPerson.Id,
@@ -393,8 +401,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
             InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithOrdinary),
-            InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA),
-            InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
+            InteractionsWithUnordinary = interactionsWithUnordinaryMerged,
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
             Depiction = unordinaryPerson.Depiction,

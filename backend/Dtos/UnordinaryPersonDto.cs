@@ -28,8 +28,7 @@ public class UnordinaryPersonDetailDto : UnordinaryPersonGeneralDto
     public string? Description {get; set;}
     public GenderDto? Gender {get; set;}
     public CityBaseDto? BirthPlace {get; set;}
-    public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryA {get; set;}
-    public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryB {get; set;}
+    public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinary {get; set;}
     public List<WrittenSourceBaseDto>? Sources {get; set;}
     public string? Depiction {get; set;}
 }
