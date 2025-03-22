@@ -136,3 +136,5 @@ public class OrdinaryPersonGraphDto: OrdinaryPersonBaseDto
     public List<int>? InteractionsWithOrdinaryA{get; set;}
     public List<int>? InteractionsWithOrdinaryB{get; set;}
 }
+
+public class OrdinaryPersonSearchDto {}

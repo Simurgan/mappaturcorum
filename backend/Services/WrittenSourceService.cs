@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Mappa.Services;
 
 public class WrittenSourceService : IComplexEntityService<WrittenSource, 
     WrittenSourceGeneralDto, WrittenSourceDetailDto, WrittenSourceCreateRequest, 
-    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
-    WrittenSourceGraphDto>
+    WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterSearchResponseDto,
+    WrittenSourceGraphDto, WrittenSourceSearchDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -374,14 +375,27 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         return true;
     }
     
-    public async Task<PaginationResponse<WrittenSourceFilterResponseDto>> GetPageAsync(
+    public async Task<PaginationResponse<WrittenSourceFilterSearchResponseDto>> GetPageAsync(
         int pageNumber, int pageSize, WrittenSourceFilterDto filter)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<WrittenSourceGraphDto>> GetAllForGraphAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<PaginationResponse<WrittenSourceFilterSearchResponseDto>> GetPageAsync(
+        int pageNumber, int pageSize, string sortingField, bool isDescendingOrder, 
+        WrittenSourceFilterDto filter, WrittenSourceSearchDto search)
     {
         var query = _dbContext.Set<WrittenSource>()
             .Include(op => op.Genre)
             .Include(op => op.Language)
-            .Include(op => op.OrdinaryPersons)
-            .Include(op => op.UnordinaryPersons)
+            .Include(op => op.TranslatedLanguages)
+            // .Include(op => op.OrdinaryPersons)
+            // .Include(op => op.UnordinaryPersons)
             .Include(op => op.CitiesMentionedByTheSource)
             .Include(op => op.CitiesWhereSourcesAreWritten)
             .AsQueryable();
@@ -390,59 +404,65 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         if(filter != null)
         {
-            if(filter.Name != null)
-            {
-                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
-                query = query.Where(e =>  e.Name.ToLower().Replace(" ", "").Replace("\t", "").
-                    Contains(checkedString) || ((e.AlternateNames != null)
-                    && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "").
-                    Contains(checkedString))));
-            }
+            // if(filter.Name != null)
+            // {
+            //     var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+            //     query = query.Where(e =>  e.Name.ToLower().Replace(" ", "").Replace("\t", "").
+            //         Contains(checkedString) || ((e.AlternateNames != null)
+            //         && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "").Replace("\t", "").
+            //         Contains(checkedString))));
+            // }
 
             if(filter.Genre != null && filter.Genre.Count != 0) 
                 query = query.Where(op => op.Genre != null && filter.Genre.Contains(op.Genre.Id));
 
-            if(filter.YearWritten != null && filter.YearWritten.Count != 0)
-            {
-                if(filter.YearWritten.Count == 1)
-                    query = query.Where(op => op.ProbableYearWritten != null && 
-                        (op.ProbableYearWritten >= filter.YearWritten[0]));
-                else // For case 2, further elements are ignored
-                    query = query.Where(op => op.ProbableYearWritten != null && 
-                        (op.ProbableYearWritten >= filter.YearWritten[0]) && 
-                        (op.ProbableYearWritten <= filter.YearWritten[1]));
-            }
+            // if(filter.YearWritten != null && filter.YearWritten.Count != 0)
+            // {
+            //     if(filter.YearWritten.Count == 1)
+            //         query = query.Where(op => op.ProbableYearWritten != null && 
+            //             (op.ProbableYearWritten >= filter.YearWritten[0]));
+            //     else // For case 2, further elements are ignored
+            //         query = query.Where(op => op.ProbableYearWritten != null && 
+            //             (op.ProbableYearWritten >= filter.YearWritten[0]) && 
+            //             (op.ProbableYearWritten <= filter.YearWritten[1]));
+            // }
 
-            if(filter.Author != null)
-            {
-                var checkedString = filter.Author.ToLower().Replace(" ", "").Replace(" ","");
-                query = query.Where(op => op.Author != null && (op.Author.ToLower()
-                    .Replace(" ", "").Replace(" ","").Contains(checkedString)));
-            }
+            // if(filter.Author != null)
+            // {
+            //     var checkedString = filter.Author.ToLower().Replace(" ", "").Replace(" ","");
+            //     query = query.Where(op => op.Author != null && (op.Author.ToLower()
+            //         .Replace(" ", "").Replace(" ","").Contains(checkedString)));
+            // }
                 
             
             if(filter.Language != null && filter.Language.Count != 0)
-                query = query.Where(op => op.Language != null && filter.Language.Contains(op.Language.Id));
+                query = query.Where(op => op.Language != null && 
+                    filter.Language.Contains(op.Language.Id));
+
+            if(filter.TranslatedLanguages != null && filter.TranslatedLanguages.Count != 0)
+                query = query.Where(e => e.TranslatedLanguages != null &&
+                    filter.TranslatedLanguages.Any(tl => e.TranslatedLanguages
+                    .Select(etl => etl.Id).Contains(tl)));
 
             innerItems = query.AsEnumerable();
         
-            if(filter.OrdinaryPersons != null && filter.OrdinaryPersons.Count != 0)
-            {
-                innerItems = innerItems
-                    .Where(op => (op.OrdinaryPersons != null) 
-                    && filter.OrdinaryPersons.
-                        Any(fs => op.OrdinaryPersons.Select(s => s.Id).Contains(fs))
-                        );
-            }
+            // if(filter.OrdinaryPersons != null && filter.OrdinaryPersons.Count != 0)
+            // {
+            //     innerItems = innerItems
+            //         .Where(op => (op.OrdinaryPersons != null) 
+            //         && filter.OrdinaryPersons.
+            //             Any(fs => op.OrdinaryPersons.Select(s => s.Id).Contains(fs))
+            //             );
+            // }
         
-            if(filter.UnordinaryPersons != null && filter.UnordinaryPersons.Count != 0)
-            {
-                innerItems = innerItems
-                    .Where(op => (op.UnordinaryPersons != null) 
-                    && filter.UnordinaryPersons.
-                        Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
-                        );
-            }
+            // if(filter.UnordinaryPersons != null && filter.UnordinaryPersons.Count != 0)
+            // {
+            //     innerItems = innerItems
+            //         .Where(op => (op.UnordinaryPersons != null) 
+            //         && filter.UnordinaryPersons.
+            //             Any(fs => op.UnordinaryPersons.Select(s => s.Id).Contains(fs))
+            //             );
+            // }
 
             if (filter.CitiesMentionedByTheSource != null && filter.CitiesMentionedByTheSource.Count != 0)
             {
@@ -463,38 +483,84 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             }
         }
 
+        if(search != null)
+        {
+            if(search.Keyword != null)
+            {
+                var checkedString = search.Keyword.ToLower().Replace(" ", "")
+                    .Replace("\t", "").Replace("\n", "");
+                innerItems = innerItems.Where(e =>  e.Name.ToLower().Replace(" ", "")
+                    .Replace("\t", "").Replace("\n", "")
+                    .Contains(checkedString) || 
+                    (e.AlternateNames != null
+                    && e.AlternateNames.Any(a => a.ToLower().Replace(" ", "")
+                    .Replace("\t", "").Replace("\n", "")
+                    .Contains(checkedString))) || 
+                    (e.Author != null 
+                    && e.Author.ToLower().Replace(" ", "")
+                    .Replace("\t", "").Replace("\n", "")
+                    .Contains(checkedString)));
+            }
+
+        }
+
         int totalCount = innerItems.Count();
 
-        var items = innerItems
+        var itemsPreOrder = innerItems
             .OrderBy(p => p.Id)  // Sort by Id (or other field)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(p => new WrittenSourceFilterResponseDto
+            .Select(p => new WrittenSourceFilterSearchResponseDto
             {
                 Id = p.Id,
+                Name = p.Name,
                 AlternateNames = p.AlternateNames,
                 Author = p.Author,
                 YearWritten = p.YearWritten,
+                ProbableYearWritten = p.ProbableYearWritten,
                 Genre = _mapper.Map<GenreDto>(p.Genre),
                 Language = _mapper.Map<LanguageDto>(p.Language),
-                OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
-                UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
+                TranslatedLanguages = _mapper.Map<List<LanguageDto>>(p.TranslatedLanguages),
+                // OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
+                // UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
                 CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
                 CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
-            })
-            .ToList();
+            });
 
-        return new PaginationResponse<WrittenSourceFilterResponseDto>
+        List<WrittenSourceFilterSearchResponseDto> items;
+
+        if(filter == null)
+        {
+            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+        }
+        else if(sortingField == "Name" && !isDescendingOrder)
+        {
+            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+        }
+        else if(sortingField == "Name" && isDescendingOrder)
+        {
+            items = itemsPreOrder.OrderByDescending(e => e.Name).ToList();
+        }
+        else if(sortingField == "YearWritten" && !isDescendingOrder)
+        {
+            items = itemsPreOrder.OrderBy(e => e.ProbableYearWritten).ToList();
+        }
+        else if(sortingField == "YearWritten" && isDescendingOrder)
+        {
+            items = itemsPreOrder.OrderByDescending(e => e.ProbableYearWritten).ToList();
+        }
+        else
+        {
+            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+        }
+            
+
+        return new PaginationResponse<WrittenSourceFilterSearchResponseDto>
         {
             Data = items,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalCount = totalCount,
         };
-    }
-
-    public Task<IEnumerable<WrittenSourceGraphDto>> GetAllForGraphAsync()
-    {
-        throw new NotImplementedException();
     }
 }

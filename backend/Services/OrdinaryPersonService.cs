@@ -13,7 +13,7 @@ namespace Mappa.Services;
 public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson, 
     OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, 
     OrdinaryPersonCreateRequest, OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto,
-    OrdinaryPersonFilterResponseDto, OrdinaryPersonGraphDto>
+    OrdinaryPersonFilterResponseDto, OrdinaryPersonGraphDto, OrdinaryPersonSearchDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -633,5 +633,12 @@ public class OrdinaryPersonService : IComplexEntityService<OrdinaryPerson,
             })
             .OrderBy(op => op.Id)
             .ToListAsync();
+    }
+
+    public Task<PaginationResponse<OrdinaryPersonFilterResponseDto>> GetPageAsync(
+        int pageNumber, int pageSize, string SortingField, bool IsDescendingOrder, 
+        OrdinaryPersonFilterDto filter, OrdinaryPersonSearchDto search)
+    {
+        throw new NotImplementedException();
     }
 }
