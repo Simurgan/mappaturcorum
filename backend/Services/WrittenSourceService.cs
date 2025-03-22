@@ -28,17 +28,24 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         return await _dbContext.Set<WrittenSource>()
             .Include(ws => ws.Genre)
             .Include(ws => ws.Language)
-            .Select(e => new WrittenSourceGeneralDto
+            .Include(ws => ws.TranslatedLanguages)
+            .Include(ws => ws.CitiesMentionedByTheSource)
+            .Include(ws => ws.CitiesWhereSourcesAreWritten)
+            .Select(p => new WrittenSourceGeneralDto
             {
-                Id = e.Id,
-                Name = e.Name,
-                AlternateNames = e.AlternateNames,
-                Author = e.Author,
-                YearWritten = e.YearWritten,
-                Genre = _mapper.Map<GenreDto>(e.Genre),
-                Language = _mapper.Map<LanguageDto>(e.Language)
+                Id = p.Id,
+                Name = p.Name,
+                AlternateNames = p.AlternateNames,
+                Author = p.Author,
+                YearWritten = p.YearWritten,
+                ProbableYearWritten = p.ProbableYearWritten,
+                Genre = _mapper.Map<GenreDto>(p.Genre),
+                Language = _mapper.Map<LanguageDto>(p.Language),
+                TranslatedLanguages = _mapper.Map<List<LanguageDto>>(p.TranslatedLanguages),
+                CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
+                CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
             })
-            .OrderBy(ws => ws.Id)
+            .OrderBy(ws => ws.Name)
             .ToListAsync();
     }
 
@@ -394,8 +401,6 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
             .Include(op => op.Genre)
             .Include(op => op.Language)
             .Include(op => op.TranslatedLanguages)
-            // .Include(op => op.OrdinaryPersons)
-            // .Include(op => op.UnordinaryPersons)
             .Include(op => op.CitiesMentionedByTheSource)
             .Include(op => op.CitiesWhereSourcesAreWritten)
             .AsQueryable();
@@ -507,9 +512,6 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
         int totalCount = innerItems.Count();
 
         var itemsPreOrder = innerItems
-            .OrderBy(p => p.Id)  // Sort by Id (or other field)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
             .Select(p => new WrittenSourceFilterSearchResponseDto
             {
                 Id = p.Id,
@@ -521,8 +523,6 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
                 Genre = _mapper.Map<GenreDto>(p.Genre),
                 Language = _mapper.Map<LanguageDto>(p.Language),
                 TranslatedLanguages = _mapper.Map<List<LanguageDto>>(p.TranslatedLanguages),
-                // OrdinaryPersons = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.OrdinaryPersons),
-                // UnordinaryPersons = _mapper.Map<List<UnordinaryPersonBaseDto>>(p.UnordinaryPersons),
                 CitiesMentionedByTheSource = _mapper.Map<List<CityBaseDto>>(p.CitiesMentionedByTheSource),
                 CitiesWhereSourcesAreWritten = _mapper.Map<List<CityBaseDto>>(p.CitiesWhereSourcesAreWritten),
             });
@@ -531,27 +531,39 @@ public class WrittenSourceService : IComplexEntityService<WrittenSource,
 
         if(filter == null)
         {
-            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+            items = itemsPreOrder.OrderBy(e => e.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize).ToList();
         }
         else if(sortingField == "Name" && !isDescendingOrder)
         {
-            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+            items = itemsPreOrder.OrderBy(e => e.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize).ToList();
         }
         else if(sortingField == "Name" && isDescendingOrder)
         {
-            items = itemsPreOrder.OrderByDescending(e => e.Name).ToList();
+            items = itemsPreOrder.OrderByDescending(e => e.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize).ToList();
         }
         else if(sortingField == "YearWritten" && !isDescendingOrder)
         {
-            items = itemsPreOrder.OrderBy(e => e.ProbableYearWritten).ToList();
+            items = itemsPreOrder.OrderBy(e => e.ProbableYearWritten)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize).ToList();
         }
         else if(sortingField == "YearWritten" && isDescendingOrder)
         {
-            items = itemsPreOrder.OrderByDescending(e => e.ProbableYearWritten).ToList();
+            items = itemsPreOrder.OrderByDescending(e => e.ProbableYearWritten)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize).ToList();
         }
         else
         {
-            items = itemsPreOrder.OrderBy(e => e.Name).ToList();
+            items = itemsPreOrder.OrderBy(e => e.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize).ToList();
         }
             
 

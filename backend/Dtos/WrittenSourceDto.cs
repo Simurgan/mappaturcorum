@@ -83,8 +83,6 @@ public class WrittenSourceFilterDto
     public List<int>? Genre {get; set;}
     public List<int>? Language {get; set;}
     public List<int>? TranslatedLanguages {get; set;}
-    // public List<int>? OrdinaryPersons {get; set;}
-    // public List<int>? UnordinaryPersons {get; set;}
     public List<int>? CitiesMentionedByTheSource {get; set;}
     public List<int>? CitiesWhereSourcesAreWritten {get; set;}
 }
@@ -94,10 +92,6 @@ public class WrittenSourceSearchDto
     public string? Keyword {get; set;}
 }
 
-public class WrittenSourceFilterSearchResponseDto : WrittenSourceGeneralDto 
-{
-    // public List<OrdinaryPersonBaseDto>? OrdinaryPersons {get; set;}
-    // public List<UnordinaryPersonBaseDto>? UnordinaryPersons {get; set;}
-}
+public class WrittenSourceFilterSearchResponseDto : WrittenSourceGeneralDto {}
 
 public class WrittenSourceGraphDto : WrittenSourceBaseDto {}
