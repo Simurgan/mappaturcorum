@@ -92,7 +92,7 @@ builder.Services.AddScoped<IComplexEntityService<OrdinaryPerson,
 builder.Services.AddScoped<IComplexEntityService<UnordinaryPerson, 
     UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
     UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto,
-    UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto, UnordinaryPersonSearchDto>, 
+    UnordinaryPersonFilterSearchResponseDto, UnordinaryPersonGraphDto, UnordinaryPersonSearchDto>, 
     UnordinaryPersonService>();
 
 builder.Services.AddControllers();

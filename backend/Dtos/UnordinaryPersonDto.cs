@@ -13,20 +13,21 @@ public class UnordinaryPersonGeneralDto : UnordinaryPersonBaseDto
 {
     public ReligionDto? Religion {get; set;}
     public EthnicityDto? Ethnicity {get; set;}
+    public List<int>? BirthYear {get; set;}
+    public int? ProbableBirthYear {get; set;}
     public List<int>? DeathYear {get; set;}
-    public CityBaseDto? DeathPlace {get; set;}
-    public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinary {get; set;}
-
+    public int? ProbableDeathYear {get; set;}
+    // public CityBaseDto? DeathPlace {get; set;}
+    // public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinary {get; set;}
+    public ProfessionDto? Profession {get; set;}
 }
 
 public class UnordinaryPersonDetailDto : UnordinaryPersonGeneralDto
 {
+    public CityBaseDto? DeathPlace {get; set;}
+    public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinary {get; set;}
     public string? AlternateName {get; set;}
-    public List<int>? BirthYear {get; set;}
-    public int? ProbableBirthYear {get; set;}
-    public int? ProbableDeathYear {get; set;}
     public string? Description {get; set;}
-    public ProfessionDto? Profession {get; set;}
     public GenderDto? Gender {get; set;}
     public CityBaseDto? BirthPlace {get; set;}
     public List<UnordinaryPersonBaseDto>? InteractionsWithUnordinaryA {get; set;}
@@ -82,18 +83,22 @@ public class UnordinaryPersonUpdateRequest
 
 public class UnordinaryPersonFilterDto 
 {
-    public string? Name {get; set;}
-    public List<int>? Religion {get; set;}
+    public List<int>? Gender {get; set;}
     public List<int>? Ethnicity {get; set;}
-    public List<int>? DeathYear {get; set;}
-    public List<int>? DeathPlace {get; set;}
+    public List<int>? Religion {get; set;}
+    public List<int>? Profession {get; set;}
+    // public List<int>? DeathYear {get; set;}
+    // public List<int>? DeathPlace {get; set;}
     public List<int>? InteractionsWithOrdinary {get; set;}
+    public List<int>? Sources {get; set;}
 }
 
-public class UnordinaryPersonFilterResponseDto : UnordinaryPersonGeneralDto 
+public class UnordinaryPersonSearchDto 
 {
-    public string? AlternateName {get; set;}
+    public string? Keyword {get; set;}
 }
+
+public class UnordinaryPersonFilterSearchResponseDto : UnordinaryPersonGeneralDto {}
 
 public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto 
 {
@@ -108,5 +113,3 @@ public class UnordinaryPersonGraphDto: UnordinaryPersonBaseDto
     public List<int>? InteractionsWithUnordinaryB{get; set;}
     public List<int>? InteractionsWithOrdinary{get; set;}
 }
-
-public class UnordinaryPersonSearchDto {}
