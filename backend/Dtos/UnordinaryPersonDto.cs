@@ -14,16 +14,14 @@ public class UnordinaryPersonGeneralDto : UnordinaryPersonBaseDto
     public ReligionDto? Religion {get; set;}
     public EthnicityDto? Ethnicity {get; set;}
     public List<int>? BirthYear {get; set;}
-    public int? ProbableBirthYear {get; set;}
     public List<int>? DeathYear {get; set;}
-    public int? ProbableDeathYear {get; set;}
-    // public CityBaseDto? DeathPlace {get; set;}
-    // public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinary {get; set;}
     public ProfessionDto? Profession {get; set;}
 }
 
 public class UnordinaryPersonDetailDto : UnordinaryPersonGeneralDto
 {
+    public int? ProbableBirthYear {get; set;}
+    public int? ProbableDeathYear {get; set;}
     public CityBaseDto? DeathPlace {get; set;}
     public List<OrdinaryPersonBaseDto>? InteractionsWithOrdinary {get; set;}
     public string? AlternateName {get; set;}

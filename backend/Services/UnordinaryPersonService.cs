@@ -36,9 +36,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                 Religion = _mapper.Map<ReligionDto>(e.Religion),
                 Ethnicity = _mapper.Map<EthnicityDto>(e.Ethnicity),
                 BirthYear = e.BirthYear,
-                ProbableBirthYear = e.ProbableBirthYear,
                 DeathYear = e.DeathYear,
-                ProbableDeathYear = e.ProbableDeathYear,
                 Profession = _mapper.Map<ProfessionDto>(e.Profession)
             })
             .OrderBy(up => up.Name)
@@ -567,9 +565,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
                 Religion = _mapper.Map<ReligionDto>(p.Religion),
                 Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
                 BirthYear = p.BirthYear,
-                ProbableBirthYear = p.ProbableBirthYear,
                 DeathYear = p.DeathYear,
-                ProbableDeathYear = p.ProbableDeathYear,
                 Profession = _mapper.Map<ProfessionDto>(p.Profession)
             });
 
