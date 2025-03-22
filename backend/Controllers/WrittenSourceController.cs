@@ -12,13 +12,14 @@ public class WrittenSourceController : ControllerBase
 {
     private readonly IComplexEntityService<WrittenSource, WrittenSourceGeneralDto, 
         WrittenSourceDetailDto, WrittenSourceCreateRequest, WrittenSourceUpdateRequest,
-        WrittenSourceFilterDto, WrittenSourceFilterResponseDto, WrittenSourceGraphDto>
+        WrittenSourceFilterDto, WrittenSourceFilterSearchResponseDto, 
+        WrittenSourceGraphDto, WrittenSourceSearchDto>
         _service;
 
     public WrittenSourceController(IComplexEntityService<WrittenSource, 
         WrittenSourceGeneralDto,WrittenSourceDetailDto, WrittenSourceCreateRequest, 
-        WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterResponseDto,
-        WrittenSourceGraphDto> 
+        WrittenSourceUpdateRequest, WrittenSourceFilterDto, WrittenSourceFilterSearchResponseDto,
+        WrittenSourceGraphDto, WrittenSourceSearchDto> 
         service)
     {
         _service = service;
@@ -40,17 +41,19 @@ public class WrittenSourceController : ControllerBase
 
     [HttpPost]
     [Route("page")]
-    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<WrittenSourceFilterDto> filter)
+    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<
+        WrittenSourceFilterDto, WrittenSourceSearchDto> filterSearch)
     {
-        if (filter.PageNumber < 1 || filter.PageSize < 1)
+        if (filterSearch.PageNumber < 1 || filterSearch.PageSize < 1)
         {
             return BadRequest("Page number and page size must be greater than 0.");
         }
         
         try
         {
-            var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
-                filter.PageSize, filter.Filter);
+            var paginatedResult = await _service.GetPageAsync(filterSearch.PageNumber, 
+                filterSearch.PageSize, filterSearch.SortingField, filterSearch.IsDescendingOrder,
+                filterSearch.Filter, filterSearch.Search);
 
             return Ok(paginatedResult);
         }
