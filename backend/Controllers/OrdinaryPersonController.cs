@@ -13,13 +13,13 @@ public class OrdinaryPersonController : ControllerBase
     private readonly IComplexEntityService<OrdinaryPerson, OrdinaryPersonGeneralDto, 
         OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
         OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
-        OrdinaryPersonGraphDto>
+        OrdinaryPersonGraphDto, OrdinaryPersonSearchDto>
         _service;
 
     public OrdinaryPersonController(IComplexEntityService<OrdinaryPerson, 
         OrdinaryPersonGeneralDto, OrdinaryPersonDetailDto, OrdinaryPersonCreateRequest, 
         OrdinaryPersonUpdateRequest, OrdinaryPersonFilterDto, OrdinaryPersonFilterResponseDto,
-        OrdinaryPersonGraphDto> 
+        OrdinaryPersonGraphDto, OrdinaryPersonSearchDto> 
         service)
     {
         _service = service;

@@ -10,8 +10,8 @@ namespace Mappa.Services;
 
 public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson, 
     UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
-    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
-    UnordinaryPersonGraphDto>
+    UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterSearchResponseDto,
+    UnordinaryPersonGraphDto, UnordinaryPersonSearchDto>
 {
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -25,21 +25,21 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
     public async Task<IEnumerable<UnordinaryPersonGeneralDto>> GetAllAsync()
     {
         return await _dbContext.Set<UnordinaryPerson>()
-            .Include(up => up.Religion)
-            .Include(up => up.Ethnicity)
-            .Include(up => up.DeathPlace)
-            .Include(up => up.InteractionsWithOrdinary)
+            .Include(op => op.Religion).Include(op => op.Ethnicity)
+            .Include(op => op.Profession)
+            // .Include(up => up.DeathPlace)
+            // .Include(up => up.InteractionsWithOrdinary)
             .Select(e => new UnordinaryPersonGeneralDto
             {
                 Id = e.Id,
                 Name = e.Name,
                 Religion = _mapper.Map<ReligionDto>(e.Religion),
                 Ethnicity = _mapper.Map<EthnicityDto>(e.Ethnicity),
+                BirthYear = e.BirthYear,
                 DeathYear = e.DeathYear,
-                DeathPlace = _mapper.Map<CityBaseDto>(e.DeathPlace),
-                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(e.InteractionsWithOrdinary),
+                Profession = _mapper.Map<ProfessionDto>(e.Profession)
             })
-            .OrderBy(up => up.Id)
+            .OrderBy(up => up.Name)
             .ToListAsync();
     }
 
@@ -52,6 +52,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             .Include(ws => ws.InteractionsWithOrdinary)
             .Include(ws => ws.Profession)
             .Include(ws => ws.Gender)
+            .Include(ws => ws.BirthPlace)
             .Include(ws => ws.InteractionsWithUnordinaryA)
             .Include(ws => ws.InteractionsWithUnordinaryB)
             .Include(ws => ws.Sources)
@@ -60,25 +61,27 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         if (entity == null)
             throw new ArgumentException($"Entity with ID {id} not found.");
 
+        var interactionsWithUnordinaryMerged = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryA);
+        interactionsWithUnordinaryMerged.AddRange(_mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryB));
+
         return new UnordinaryPersonDetailDto
         {
             Id = entity.Id,
             Name = entity.Name,
             Religion = _mapper.Map<ReligionDto>(entity.Religion),
             Ethnicity = _mapper.Map<EthnicityDto>(entity.Ethnicity),
+            BirthYear = entity.BirthYear,
             DeathYear = entity.DeathYear,
             DeathPlace = _mapper.Map<CityBaseDto>(entity.DeathPlace),
             InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(entity.InteractionsWithOrdinary),
             AlternateName = entity.AlternateName,
-            BirthYear = entity.BirthYear,
             ProbableBirthYear = entity.ProbableBirthYear,
             ProbableDeathYear = entity.ProbableDeathYear,
             Description = entity.Description,
             Profession = _mapper.Map<ProfessionDto>(entity.Profession),
             Gender = _mapper.Map<GenderDto>(entity.Gender),
             BirthPlace = _mapper.Map<CityBaseDto>(entity.BirthPlace),
-            InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryA),
-            InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(entity.InteractionsWithUnordinaryB),
+            InteractionsWithUnordinary = interactionsWithUnordinaryMerged,
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(entity.Sources),
             Depiction = entity.Depiction,
         };
@@ -197,6 +200,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         _dbContext.Set<UnordinaryPerson>().Add(unordinaryPerson);
         await _dbContext.SaveChangesAsync();
 
+        var interactionsWithUnordinaryMerged = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA);
+        interactionsWithUnordinaryMerged.AddRange(_mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB));
+
         return new UnordinaryPersonDetailDto
         {
             Id = unordinaryPerson.Id,
@@ -213,8 +219,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
             InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithOrdinary),
-            InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA),
-            InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
+            InteractionsWithUnordinary = interactionsWithUnordinaryMerged,
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
             Depiction = unordinaryPerson.Depiction,
@@ -377,6 +382,9 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
 
         await _dbContext.SaveChangesAsync();
 
+        var interactionsWithUnordinaryMerged = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA);
+        interactionsWithUnordinaryMerged.AddRange(_mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB));
+
         return new UnordinaryPersonDetailDto
         {
             Id = unordinaryPerson.Id,
@@ -393,8 +401,7 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             Gender = _mapper.Map<GenderDto>(unordinaryPerson.Gender),
             Sources = _mapper.Map<List<WrittenSourceBaseDto>>(unordinaryPerson.Sources),
             InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithOrdinary),
-            InteractionsWithUnordinaryA = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryA),
-            InteractionsWithUnordinaryB = _mapper.Map<List<UnordinaryPersonBaseDto>>(unordinaryPerson.InteractionsWithUnordinaryB),
+            InteractionsWithUnordinary = interactionsWithUnordinaryMerged,
             BirthPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.BirthPlace),
             DeathPlace = _mapper.Map<CityBaseDto>(unordinaryPerson.DeathPlace),
             Depiction = unordinaryPerson.Depiction,
@@ -431,85 +438,10 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
         return true;
     }
     
-    public async Task<PaginationResponse<UnordinaryPersonFilterResponseDto>> GetPageAsync(
-        int pageNumber, int pageSize, UnordinaryPersonFilterDto? filter)
+    public async Task<PaginationResponse<UnordinaryPersonFilterSearchResponseDto>> 
+        GetPageAsync(int pageNumber, int pageSize, UnordinaryPersonFilterDto? filter)
     {
-        var query = _dbContext.Set<UnordinaryPerson>()
-            .Include(op => op.Religion).Include(op => op.Ethnicity)
-            .Include(op => op.DeathPlace)
-            .Include(op => op.InteractionsWithOrdinary)
-            .AsQueryable();
-
-        IEnumerable<UnordinaryPerson> innerItems = query.AsEnumerable();
-
-        if(filter != null)
-        {
-            if(filter.Name != null)
-            {
-                var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
-                query = query.Where(e => e.Name.ToLower().Replace(" ", "").
-                    Replace("\t", "").Contains(checkedString) || (e.AlternateName != null)
-                    && e.AlternateName.ToLower().Replace(" ", "").Replace("\t", "").
-                    Contains(checkedString));
-            }
-            if(filter.Religion != null && filter.Religion.Count != 0) 
-                query = query.Where(op => op.Religion != null && filter.Religion.Contains(op.Religion.Id));
-
-            if(filter.Ethnicity != null && filter.Ethnicity.Count != 0)
-                query = query.Where(op => op.Ethnicity != null && filter.Ethnicity.Contains(op.Ethnicity.Id));
-
-            if(filter.DeathYear != null && filter.DeathYear.Count != 0)
-            {
-                if(filter.DeathYear.Count == 1)
-                    query = query.Where(op => op.ProbableDeathYear != null && 
-                        (op.ProbableDeathYear >= filter.DeathYear[0]));
-                else // For case 2, further elements are ignored
-                    query = query.Where(op => op.ProbableDeathYear != null && 
-                        (op.ProbableDeathYear >= filter.DeathYear[0]) && 
-                        (op.ProbableDeathYear <= filter.DeathYear[1]));
-            }
-            
-            if(filter.DeathPlace != null && filter.DeathPlace.Count != 0)
-                query = query.Where(op => op.DeathPlace != null && filter.DeathPlace.Contains(op.DeathPlace.Id));
-
-            innerItems = query.AsEnumerable();
-        
-            if(filter.InteractionsWithOrdinary != null && filter.InteractionsWithOrdinary.Count != 0)
-            {
-                innerItems = innerItems
-                    .Where(op => (op.InteractionsWithOrdinary != null) 
-                    && filter.InteractionsWithOrdinary.
-                        Any(fs => op.InteractionsWithOrdinary.Select(s => s.Id).Contains(fs))
-                        );
-            }
-        }
-
-        int totalCount = innerItems.Count();
-
-        var items = innerItems
-            .OrderBy(p => p.Id)  // Sort by Id (or other field)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .Select(p => new UnordinaryPersonFilterResponseDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Religion = _mapper.Map<ReligionDto>(p.Religion),
-                Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
-                DeathYear = p.DeathYear,
-                DeathPlace = _mapper.Map<CityBaseDto>(p.DeathPlace),
-                InteractionsWithOrdinary = _mapper.Map<List<OrdinaryPersonBaseDto>>(p.InteractionsWithOrdinary),
-                AlternateName = p.AlternateName,
-            })
-            .ToList();
-
-        return new PaginationResponse<UnordinaryPersonFilterResponseDto>
-        {
-            Data = items,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            TotalCount = totalCount,
-        };
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<UnordinaryPersonGraphDto>> GetAllForGraphAsync()
@@ -536,5 +468,148 @@ public class UnordinaryPersonService : IComplexEntityService<UnordinaryPerson,
             })
             .OrderBy(up => up.Id)
             .ToListAsync();
+    }
+
+    public async Task<PaginationResponse<UnordinaryPersonFilterSearchResponseDto>> GetPageAsync(
+        int pageNumber, int pageSize, string sortingField, bool isDescendingOrder, 
+        UnordinaryPersonFilterDto filter, UnordinaryPersonSearchDto search)
+    {
+        var query = _dbContext.Set<UnordinaryPerson>()
+            .Include(op => op.Religion).Include(op => op.Ethnicity)
+            .Include(op => op.Profession)
+            // .Include(op => op.DeathPlace)
+            .Include(op => op.InteractionsWithOrdinary)
+            .Include(op => op.Sources)
+            .AsQueryable();
+
+        IEnumerable<UnordinaryPerson> innerItems = query.AsEnumerable();
+
+        if(filter != null)
+        {
+            // if(filter.Name != null)
+            // {
+            //     var checkedString = filter.Name.ToLower().Replace(" ", "").Replace("\t", "");
+            //     query = query.Where(e => e.Name.ToLower().Replace(" ", "").
+            //         Replace("\t", "").Contains(checkedString) || (e.AlternateName != null)
+            //         && e.AlternateName.ToLower().Replace(" ", "").Replace("\t", "").
+            //         Contains(checkedString));
+            // }
+
+            if(filter.Gender != null && filter.Gender.Count != 0)
+                query = query.Where(e => e.Gender!= null && filter.Gender.Contains(e.Gender.Id));
+         
+            if(filter.Ethnicity != null && filter.Ethnicity.Count != 0)
+                query = query.Where(op => op.Ethnicity != null && filter.Ethnicity.Contains(op.Ethnicity.Id));   
+
+            if(filter.Religion != null && filter.Religion.Count != 0) 
+                query = query.Where(op => op.Religion != null && filter.Religion.Contains(op.Religion.Id));
+
+            if(filter.Profession != null && filter.Profession.Count != 0)
+                query = query.Where(op => op.Profession != null && filter.Profession.Contains(op.Profession.Id));
+
+            // if(filter.DeathYear != null && filter.DeathYear.Count != 0)
+            // {
+            //     if(filter.DeathYear.Count == 1)
+            //         query = query.Where(op => op.ProbableDeathYear != null && 
+            //             (op.ProbableDeathYear >= filter.DeathYear[0]));
+            //     else // For case 2, further elements are ignored
+            //         query = query.Where(op => op.ProbableDeathYear != null && 
+            //             (op.ProbableDeathYear >= filter.DeathYear[0]) && 
+            //             (op.ProbableDeathYear <= filter.DeathYear[1]));
+            // }
+            
+            // if(filter.DeathPlace != null && filter.DeathPlace.Count != 0)
+            //     query = query.Where(op => op.DeathPlace != null && filter.DeathPlace.Contains(op.DeathPlace.Id));
+
+            innerItems = query.AsEnumerable();
+        
+            if(filter.InteractionsWithOrdinary != null && filter.InteractionsWithOrdinary.Count != 0)
+            {
+                innerItems = innerItems
+                    .Where(op => (op.InteractionsWithOrdinary != null) 
+                    && filter.InteractionsWithOrdinary.
+                        Any(fs => op.InteractionsWithOrdinary.Select(s => s.Id).Contains(fs))
+                        );
+            }
+        
+            if(filter.Sources != null && filter.Sources.Count != 0)
+            {
+                innerItems = innerItems
+                    .Where(op => (op.Sources != null) && filter.Sources.
+                        Any(fs => op.Sources.Select(s => s.Id).Contains(fs))
+                        );
+            }
+        }
+
+        if(search != null)
+        {
+            if(search.Keyword != null)
+            {
+                var checkedString = search.Keyword.ToLower().Replace(" ", "")
+                    .Replace("\t", "").Replace("\n", "");
+
+                innerItems = innerItems.Where(e => e.Name.ToLower().Replace(" ", "").
+                    Replace("\t", "").Replace("\n", "").Contains(checkedString) 
+                    || 
+                    ((e.AlternateName != null)
+                    && e.AlternateName.ToLower().Replace(" ", "").Replace("\t", "")
+                    .Replace("\n","").Contains(checkedString))
+                    ||
+                    ((e.Description != null)
+                    && e.Description.ToLower().Replace(" ", "").Replace("\t", "")
+                    .Replace("\n","").Contains(checkedString))
+                    );
+            }
+        }
+
+        int totalCount = innerItems.Count();
+
+        var itemsPreOrder = innerItems
+            .Select(p => new UnordinaryPersonFilterSearchResponseDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Religion = _mapper.Map<ReligionDto>(p.Religion),
+                Ethnicity = _mapper.Map<EthnicityDto>(p.Ethnicity),
+                BirthYear = p.BirthYear,
+                DeathYear = p.DeathYear,
+                Profession = _mapper.Map<ProfessionDto>(p.Profession)
+            });
+
+        List<UnordinaryPersonFilterSearchResponseDto> items;
+
+        // if(filter == null)
+        // {
+        //     items = itemsPreOrder.OrderBy(e => e.Name)
+        //     .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        // }
+        // else if(sortingField == "Name" && !isDescendingOrder)
+        // {
+        //     items = itemsPreOrder.OrderBy(e => e.Name)
+        //     .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        // }
+        // else if(sortingField == "Name" && isDescendingOrder)
+        // {
+        //     items = itemsPreOrder.OrderByDescending(e => e.Name)
+        //     .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        // }
+        // else
+        // {
+        //     items = itemsPreOrder.OrderBy(e => e.Name)
+        //     .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        // }
+
+        // As there is currently only a single sorting criteriion, there is no need 
+        // for flow control
+        items = itemsPreOrder.OrderBy(e => e.Name)
+        .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+        return new PaginationResponse<UnordinaryPersonFilterSearchResponseDto>
+        {
+            Data = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+        };
     }
 }

@@ -12,14 +12,15 @@ public class UnordinaryPersonController : ControllerBase
 {
     private readonly IComplexEntityService<UnordinaryPerson, UnordinaryPersonGeneralDto, 
         UnordinaryPersonDetailDto, UnordinaryPersonCreateRequest, 
-        UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto,
-        UnordinaryPersonGraphDto>
+        UnordinaryPersonUpdateRequest, UnordinaryPersonFilterDto, UnordinaryPersonFilterSearchResponseDto,
+        UnordinaryPersonGraphDto, UnordinaryPersonSearchDto>
         _service;
 
     public UnordinaryPersonController(IComplexEntityService<UnordinaryPerson, 
         UnordinaryPersonGeneralDto, UnordinaryPersonDetailDto, 
         UnordinaryPersonCreateRequest, UnordinaryPersonUpdateRequest,
-        UnordinaryPersonFilterDto, UnordinaryPersonFilterResponseDto, UnordinaryPersonGraphDto> 
+        UnordinaryPersonFilterDto, UnordinaryPersonFilterSearchResponseDto, 
+        UnordinaryPersonGraphDto, UnordinaryPersonSearchDto> 
         service)
     {
         _service = service;
@@ -56,7 +57,8 @@ public class UnordinaryPersonController : ControllerBase
 
     [HttpPost]
     [Route("page")]
-    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<UnordinaryPersonFilterDto> filter)
+    public async Task<IActionResult> GetPage([FromBody] PaginationRequest<
+        UnordinaryPersonFilterDto, UnordinaryPersonSearchDto> filter)
     {
         if (filter.PageNumber < 1 || filter.PageSize < 1)
         {
@@ -66,7 +68,8 @@ public class UnordinaryPersonController : ControllerBase
         try
         {
             var paginatedResult = await _service.GetPageAsync(filter.PageNumber, 
-                filter.PageSize, filter.Filter);
+                filter.PageSize, filter.SortingField, filter.IsDescendingOrder, 
+                filter.Filter, filter.Search);
 
             return Ok(paginatedResult);
         }
